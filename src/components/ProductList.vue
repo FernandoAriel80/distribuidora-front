@@ -18,10 +18,12 @@ const products = ref([]);
 const fetchProducts = async () => {
     try {
         const response = await api.get('/api/products');
-        products.value = response.data;
+        // Accede específicamente a `response.data.product`
+        products.value = response.data.product;
     } catch (error) {
         console.error('Error fetching products:', error);
     }
 };
+
 onMounted(fetchProducts);
 </script>
