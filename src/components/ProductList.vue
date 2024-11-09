@@ -11,7 +11,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import api from './api';
+import api from '../app';
 
 const products = ref([]);
 
@@ -23,6 +23,5 @@ const fetchProducts = async () => {
         console.error('Error fetching products:', error);
     }
 };
-
 onMounted(fetchProducts);
 </script>
