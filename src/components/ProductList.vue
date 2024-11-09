@@ -18,7 +18,6 @@ const products = ref([]);
 const fetchProducts = async () => {
     try {
         const response = await api.get('/api/products');
-        // Accede específicamente a `response.data.product`
         products.value = response.data.product;
     } catch (error) {
         console.error('Error fetching products:', error);
