@@ -22,7 +22,7 @@ const fetchProducts = async () => {
         products.value = response.data;
         console.log( products.value.products);
     } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching productsaa:', error);
     }
    
 };
