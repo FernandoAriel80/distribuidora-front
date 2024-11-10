@@ -2,7 +2,7 @@
     <div>
         <h1>Lista de Productos</h1>
         <ul>
-            <li v-for="product in products" :key="product.id">
+            <li v-for="product in products.products" :key="product.id">
                 {{ product.name }} - ${{ product.price }}
             </li>
         </ul>
@@ -18,7 +18,7 @@ const products = ref([]);
 const fetchProducts = async () => {
     try {
         const response = await api.get('/api/products');
-        products.value = response.data.product;
+        products.value = response.data;
     } catch (error) {
         console.error('Error fetching products:', error);
     }
