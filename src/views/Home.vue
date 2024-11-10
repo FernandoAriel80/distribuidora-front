@@ -1,12 +1,14 @@
-<!-- src/App.vue -->
+
 <template>
   <div id="app">
+      <Layout/>
       <ProductList />
   </div>
 </template>
 
 <script setup>
-import ProductList from './components/ProductList.vue';
+import ProductList from '../components/ProductList.vue';
+import Layout from '@/layout/Layout.vue';
 </script>
 
 <style>
