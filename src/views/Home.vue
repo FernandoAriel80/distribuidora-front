@@ -30,7 +30,6 @@ const fetchProducts = async () => {
    }
 };
 
-// Fetch initial data
 fetchProducts();
 
 watch([search, sort, category], () => {
