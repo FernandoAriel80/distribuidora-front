@@ -1,26 +1,23 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import axios from 'axios';
+import api from '../app';
 
 const router = useRouter();
 const route = useRoute();
 
-// Variables reactivas
 const cart_quantity = ref(0);
-const user = ref(null); // Información del usuario autenticado
-const isAuthenticated = ref(false); // Estado de autenticación
+const user = ref(null);
+const isAuthenticated = ref(false); 
 
-// Obtener información del usuario y carrito al montar el componente
 onMounted(async () => {
     try {
-        // Petición para obtener datos del usuario autenticado
-        const response = await axios.get('/api/user');
+        const response = await api.get('/api/user');
         user.value = response.data.user;
         isAuthenticated.value = true;
 
         // Petición para obtener datos del carrito (si existe)
-     /*    const cartResponse = await axios.get('/api/cart');
+     /*    const cartResponse = await api.get('/api/cart');
         cart_quantity.value = cartResponse.data.cart.length; */
     } catch (error) {
         console.error('Error fetching user or cart data:', error);
@@ -28,10 +25,9 @@ onMounted(async () => {
     }
 });
 
-// Función para cerrar sesión
 const logout = async () => {
     try {
-        await axios.post('/api/logout');
+        await api.post('/api/logout');
         isAuthenticated.value = false;
         user.value = null;
         cart_quantity.value = 0;

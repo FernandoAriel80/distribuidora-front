@@ -1,21 +1,11 @@
 <script setup>
-//import ProductList from './components/ProductList.vue';
-import Layout from '@/layout/Layout.vue';
-import ViewHome from '../src/views/Home.vue';
+import Layout from './layout/Layout.vue';
 </script>
 
 <template>
   <div id="app">
       <Layout/>
-      <ViewHome/>
-      <!-- <ProductList /> -->
+      <router-view></router-view>
   </div>
 </template>
 
-<!-- <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  text-align: center;
-  margin-top: 60px;
-}
-</style> -->

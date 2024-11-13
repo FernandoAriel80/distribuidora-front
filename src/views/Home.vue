@@ -21,7 +21,6 @@ const fetchProducts = async () => {
             sort: sort.value,
          },
       });
-      console.log(response.data)
       products.value = response.data.products.data;
       links.value = response.data.products.links;
       categories.value = response.data.categories;
