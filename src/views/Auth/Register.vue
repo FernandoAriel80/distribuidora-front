@@ -57,31 +57,31 @@ const submit = async () => {
       <div class="mb-6">
         <TextInput 
           name="Nombre" 
-          v-model="form.value.name" 
-          :message="form.value.errors.name" 
+          v-model="form.name" 
+          :message="form.errors.name" 
         />
         <TextInput 
           name="Apellido" 
-          v-model="form.value.last_name" 
-          :message="form.value.errors.last_name" 
+          v-model="form.last_name" 
+          :message="form.errors.last_name" 
         />
         <TextInput 
           name="Correo" 
           type="email" 
-          v-model="form.value.email" 
-          :message="form.value.errors.email" 
+          v-model="form.email" 
+          :message="form.errors.email" 
         />
         <TextInput 
           name="Contraseña" 
           type="password" 
-          v-model="form.value.password" 
-          :message="form.value.errors.password" 
+          v-model="form.password" 
+          :message="form.errors.password" 
         />
         <TextInput 
           name="Confirmar Contraseña" 
           type="password" 
-          v-model="form.value.password_confirmation" 
-          :message="form.value.errors.password_confirmation" 
+          v-model="form.password_confirmation" 
+          :message="form.errors.password_confirmation" 
         />
 
         <div>
@@ -89,7 +89,7 @@ const submit = async () => {
             ¿Ya tienes cuenta? 
             <router-link to="/login" class="text-link text-blue-400">Iniciar Sesión</router-link>
           </p>
-          <FormButton :name="'Registrarse'" :progress="form.value.progress" />
+          <FormButton :name="'Registrarse'" :progress="form.progress" />
         </div>
       </div>
     </form>

@@ -12,18 +12,18 @@ const isAuthenticated = ref(false);
 
 onMounted(async () => {
     try {
-        const response = await api.get('/api/user');
+        const response = await api.get('/api/layout');
         user.value = response.data.user;
         isAuthenticated.value = true;
 
-        // Petición para obtener datos del carrito (si existe)
-     /*    const cartResponse = await api.get('/api/cart');
-        cart_quantity.value = cartResponse.data.cart.length; */
+      /*   // Petición para obtener datos del carrito (si existe)
+        const cartResponse = await api.get('/api/cart');
+        cart_quantity.value = cartResponse.data.cart.length;  */
     } catch (error) {
         console.error('Error fetching user or cart data:', error);
         isAuthenticated.value = false;
     }
-});
+}); 
 
 const logout = async () => {
     try {
