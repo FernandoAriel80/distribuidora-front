@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import api from '../../app';
 import TextInput from '../../components/TextInput.vue';
-import FormButton from '../../Components/FormButton.vue';
+import FormButton from '../../components/FormButton.vue';
 import { useRouter } from 'vue-router'; 
 import { useAuth } from '../../composables/UserAuth';
 /* 
@@ -31,6 +31,7 @@ const submit = async () => {
         remember: form.value.remember,
     });
     localStorage.setItem('token', response.data.token);
+    localStorage.setItem('user', response.data.name);
     await fetchUser();
     router.push({ name: 'home' });
   } catch (error) {

@@ -7,41 +7,28 @@ import SearchInput from '../../../components/SearchInput.vue';
 import Modal from '../../../components/Modal.vue';
 import ModalAsk from '../../../components/ModalAsk.vue';
 import CreateProduct from './Create.vue'
-import UpdateProduct from './Edit.vue'
+import EditProduct from './Edit.vue'
 import { debounce } from 'lodash';
 
-const props = defineProps({
-    categories: {
-        type: Object,
-        required: true
-    },
-    types: {
-        type: Object,
-        required: true,
-    },
-    searchTerm: String
-});
-
 const products = ref([]);
-const search = ref(props.searchTerm || '');
+const search = ref('');
 const pagination = ref(null);
-console.log(products)
-async function fetchPage(url = '/api/admin/products') {
+const loading = ref(true);
+
+const fetchPage = async (url = '/api/admin/products') => {
     try {
-        const response = await api.get(url, /* {
+        const response = await api.get(url, {
             params: {
                 search: search.value,
-                category: category.value,
-                sort: sort.value,
             },
-        },  */
+        },
         {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
+        loading.value = false;
         products.value = response.data.products.data;
-        categories.value = response.data.categories;
         pagination.value = {
             current_page: response.data.products.current_page,
             last_page: response.data.products.last_page,
@@ -54,17 +41,17 @@ async function fetchPage(url = '/api/admin/products') {
 }
 
 onMounted(() => {
-    fetchPage();
+   fetchPage();
 });
 
-
-const searchDebounced = debounce(() => {
-    fetchPage(1, search.value);
-}, 300);
-
-watch(search, () => {
+watch([search], () => {
     searchDebounced();
 });
+
+ const searchDebounced = debounce(() => {
+    fetchPage();
+}, 300);
+ 
 
 const showModalCreate = ref(false);
 const showModalEdit = ref(false);
@@ -89,90 +76,143 @@ const closeModalAlertYes = async () => {
     try {
         await api.delete(`/api/products/${currentProduct.value.id}`);
         showAlert.value = false;
-        loadProducts();
+        //loadProducts();
     } catch (error) {
         console.error('Error eliminando el producto:', error);
     }
 };
 
+
+
+const handleProductCreated = () => {
+    closeModalCreate();
+    //fetchPage();
+};
+
 const closeModalAlert = () => {
     showAlert.value = false;
 };
-
-// Crear y actualizar productos (ejecutado desde componentes hijos)
-const handleProductCreated = () => {
-    closeModalCreate();
-    loadProducts();
-};
-
 const handleProductUpdated = () => {
     closeModalEdit();
-    loadProducts();
+    //fetchPage();
 };
 </script>
 
 <template>
     <div>
-        <!-- Botón para cargar un producto y modal de creación -->
+
         <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Cargar Producto</button>
         <Modal :isOpen="showModalCreate" :closeModal="closeModalCreate">
-            <CreateProduct :categories="props.categories" :types="props.types" @actionExecuted="handleProductCreated" />
+            <CreateProduct @actionExecuted="handleProductCreated" />
         </Modal>
 
-        <!-- Modal de edición de producto -->
         <div v-if="currentProduct">
             <Modal :isOpen="showModalEdit" :closeModal="closeModalEdit">
-                <UpdateProduct :product="currentProduct" :categories="props.categories" :types="props.types"
+                <EditProduct :product="currentProduct" :categories="props.categories" :types="props.types"
                     @actionExecuted="handleProductUpdated" />
             </Modal>
         </div>
 
-        <!-- Modal de confirmación de eliminación -->
         <ModalAsk :isOpen="showAlert" :closeNo="closeModalAlert" :closeYes="closeModalAlertYes"
             message="¿Está seguro de eliminar este producto?" />
 
-        <!-- Campo de búsqueda -->
-        <SearchInput v-model:searchValue="search" />
-
-        <!-- Lista de productos -->
-        <div v-if="products.length">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID
-                        </th>
-                        <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Nombre</th>
-                        <!-- Otras columnas según el diseño original -->
-                        <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Editar</th>
-                        <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="product in products" :key="product.id">
-                        <td class="px-2 py-3 text-sm text-gray-900">{{ product.catalog_id }}</td>
-                        <td class="px-2 py-3 text-sm text-gray-500">{{ product.name }}</td>
-                        <!-- Otras celdas de datos del producto -->
-                        <td class="px-2 py-3 text-sm text-gray-500">
-                            <button @click="openModalEdit(product)"
-                                class="bg-blue-500 text-white px-3 py-1 rounded text-xs">Editar</button>
-                        </td>
-                        <td class="px-2 py-3 text-sm text-gray-500">
-                            <button @click="openModalAlert(product.id)"
-                                class="bg-red-500 text-white px-3 py-1 rounded text-xs">Eliminar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Paginación -->
-            <!--  <Pagination class="mt-4" :links="pagination.value.links" @page-changed="loadProducts" /> -->
-            <Pagination :pagination="pagination" :fetchPage="fetchPage" />
+        <div v-if="loading" class="m-10">
+            <h1>CARGANDO CONTENIDO.....</h1>
         </div>
         <div v-else>
-            <p>No se encontraron productos</p>
+            <div v-if="products.length" class="mr-10 ml-10">
+                <SearchInput v-model:searchValue="search" />
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    ID
+                                </th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nombre</th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Descripción</th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Precio por Bulto</th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Precio por Unidad</th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    % Off
+                                </th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Precio Oferta</th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Precio Anterior</th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Stock
+                                </th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Imagen</th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Categoría</th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tipo
+                                </th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Editar</th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr v-for="product in products" :key="product.id">
+                                <td class="px-2 py-3 text-sm text-gray-900">{{ product.catalog_id }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500">{{ product.name }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500">{{ product.description }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500">{{ product.bulk_unit_price }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500">{{ product.unit_price }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500">
+                                    {{ product.percent_off === null ? product.percent_off : '%' + product.percent_off }}
+                                </td>
+                                <td class="px-2 py-3 text-sm text-gray-500">{{ product.price_offer }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500">{{ product.old_price }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500">
+                                    {{ product.stock === 1 ? 'SI' : 'NO' }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500">
+                                    <ImagePreview class="w-16 h-16" :src="`/storage/${product.image_url}`"
+                                        alt="Imagen del producto" />
+                                </td>
+                                <td class="px-2 py-3 text-sm text-gray-500">{{ product.category.name }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500">{{ product.type.name }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500">
+                                    <button @click="openModalEdit(product)"
+                                        class="bg-blue-500 text-white px-3 py-1 rounded text-xs">
+                                        Editar
+                                    </button>
+                                </td>
+                                <td class="px-2 py-3 text-sm text-gray-500">
+                                    <button @click="openModalAlert(product.id)"
+                                        class="bg-red-500 text-white px-3 py-1 rounded text-xs">Eliminar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <Pagination :pagination="pagination" :fetchPage="fetchPage" />
+            </div>
+            <div v-else>
+                <p>No se encontraron productos</p>
+            </div>
         </div>
     </div>
 </template>

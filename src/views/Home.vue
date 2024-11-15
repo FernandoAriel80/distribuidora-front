@@ -10,10 +10,10 @@ const message = ref('');
 const search = ref('');
 const category = ref('');
 const sort = ref('rel');
-
+const loading = ref(true);
 const pagination = ref(null);
 
-async function fetchPage(url = '/api/') {
+const fetchPage = async (url = '/api/') => {
    try {
       const response = await api.get(url, {
          params: {
@@ -30,6 +30,7 @@ async function fetchPage(url = '/api/') {
          next_page_url: response.data.products.next_page_url,
          prev_page_url: response.data.products.prev_page_url,
       };
+      loading.value = false;
    } catch (error) {
       console.error('Error al obtener productos:', error);
    }
@@ -92,34 +93,39 @@ const addToCart = async (id, type) => {
                   <option value="hPrice">Precio: Más caro</option>
                </select>
             </div>
-            <div v-if="products.length > 0">
-               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                  <div v-for="product in products" :key="product.id"
-                     class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col justify-between w-56">
-                     <div>
-                        <img :src="`/storage/${product.image_url}`" alt="Imagen del producto"
-                           class="w-full h-60 object-cover rounded-t-lg">
-                        <div class="p-2">
-                           <h2 class="text-sm font-semibold text-gray-800 mb-1">{{ product.name }}</h2>
-                           <p class="text-gray-500 text-xs mb-1">{{ product.description }}</p>
-                           <div class="flex items-center justify-between mb-2">
-                              <span v-if="product.offer" class="text-green-600 font-bold text-xs">Oferta: ${{
-                                 product.price_offer }}</span>
-                              <span v-else class="text-gray-800 font-bold text-xs">Precio: ${{ product.unit_price
-                                 }}</span>
-                           </div>
-                        </div>
-                     </div>
-                     <button @click="addToCart(product.id, product.catalog_id)"
-                        class="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-lg text-xs font-semibold">
-                        Añadir al carrito
-                     </button>
-                  </div>
-               </div>
-               <Pagination :pagination="pagination" :fetchPage="fetchPage" />
+            <div v-if="loading">
+               <h1>CARGANDO CONTENIDO......</h1>
             </div>
             <div v-else>
-               <h1>No hay productos</h1>
+               <div v-if="products.length > 0">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                     <div v-for="product in products" :key="product.id"
+                        class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col justify-between w-56">
+                        <div>
+                           <img :src="`/storage/${product.image_url}`" alt="Imagen del producto"
+                              class="w-full h-60 object-cover rounded-t-lg">
+                           <div class="p-2">
+                              <h2 class="text-sm font-semibold text-gray-800 mb-1">{{ product.name }}</h2>
+                              <p class="text-gray-500 text-xs mb-1">{{ product.description }}</p>
+                              <div class="flex items-center justify-between mb-2">
+                                 <span v-if="product.offer" class="text-green-600 font-bold text-xs">Oferta: ${{
+                                    product.price_offer }}</span>
+                                 <span v-else class="text-gray-800 font-bold text-xs">Precio: ${{ product.unit_price
+                                    }}</span>
+                              </div>
+                           </div>
+                        </div>
+                        <button @click="addToCart(product.id, product.catalog_id)"
+                           class="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-lg text-xs font-semibold">
+                           Añadir al carrito
+                        </button>
+                     </div>
+                  </div>
+                  <Pagination :pagination="pagination" :fetchPage="fetchPage" />
+               </div>
+               <div v-else>
+                  <h1>No hay productos</h1>
+               </div>
             </div>
 
          </section>
