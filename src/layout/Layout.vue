@@ -3,8 +3,11 @@ import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import api from '../app';
 import { useAuth } from '../composables/UserAuth';
-const { user, logout } = useAuth();
+const { logout } = useAuth();
 
+const props = defineProps({
+    user: String
+})
 const router = useRouter();
 const route = useRoute();
 
@@ -21,9 +24,9 @@ const isAuthenticated = ref(false);
                     <h1>LOGO</h1>
                 </div>
 
-                <div v-if="user?.name" class="flex space-x-6 ml-auto">
+                <div v-if="props.user?.name" class="flex space-x-6 ml-auto">
                     <router-link to="/">Inicio</router-link>
-                    <h1 class="title">{{ user?.name }}</h1>
+                    <h1 class="title">{{ props.user?.name }}</h1>
 
                     <router-link to="/cart" class="bg-blue-500 text-white">
                         <div>{{ cart_quantity }} Carrito</div>
@@ -31,8 +34,8 @@ const isAuthenticated = ref(false);
 
                     <button  @click="logout" class="nav-link">Cerrar Sesión</button>
 
-                    <div v-if="user?.role === 'admin' || user?.role === 'super_admin'">
-                        <router-link to="/admin">Administración</router-link>
+                    <div v-if="props.user?.role === 'admin' || props.user?.role === 'super_admin'">
+                        <router-link to="/menu">Administración</router-link>
                     </div>
                 </div>
 
