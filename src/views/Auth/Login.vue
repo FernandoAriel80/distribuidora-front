@@ -5,11 +5,7 @@ import TextInput from '../../components/TextInput.vue';
 import FormButton from '../../components/FormButton.vue';
 import { useRouter } from 'vue-router'; 
 import { useAuth } from '../../composables/UserAuth';
-/* 
-const form = ref({
-    email: '',
-    password: ''
-}); */
+
 const form = ref({
   email: '',
   password: '',
@@ -30,8 +26,9 @@ const submit = async () => {
         password: form.value.password,
         remember: form.value.remember,
     });
-    localStorage.setItem('token', response.data.token);
-    localStorage.setItem('user', response.data.name);
+    if (localStorage.getItem('token') == null) {
+      localStorage.setItem('token', response.data.token);
+    }
     await fetchUser();
     router.push({ name: 'home' });
   } catch (error) {

@@ -43,7 +43,7 @@ const fetchPage = async (url = '/api/admin/products') => {
 onMounted(() => {
    fetchPage();
 });
-
+console.log(products.value)
 watch([search], () => {
     searchDebounced();
 });
@@ -76,7 +76,7 @@ const closeModalAlertYes = async () => {
     try {
         await api.delete(`/api/products/${currentProduct.value.id}`);
         showAlert.value = false;
-        //loadProducts();
+        //fetchPage();
     } catch (error) {
         console.error('Error eliminando el producto:', error);
     }
@@ -86,7 +86,7 @@ const closeModalAlertYes = async () => {
 
 const handleProductCreated = () => {
     closeModalCreate();
-    //fetchPage();
+    fetchPage();
 };
 
 const closeModalAlert = () => {
@@ -175,7 +175,7 @@ const handleProductUpdated = () => {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="product in products" :key="product.id">
+                            <tr v-for="product in products.data" :key="product.id">
                                 <td class="px-2 py-3 text-sm text-gray-900">{{ product.catalog_id }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.name }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.description }}</td>

@@ -2,7 +2,8 @@
 import Layout from './layout/Layout.vue';
 import { useAuth } from './composables/UserAuth';
 const { user,fetchUser } = useAuth();
-if (!user) {
+
+if (user.value == null) {
   fetchUser();
 }
 </script>
