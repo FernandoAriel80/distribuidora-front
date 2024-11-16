@@ -1,8 +1,9 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import api from '../app';
-import SearchInput from '../components/SearchInput.vue';
-import Pagination from '../components/Pagination.vue';
+import api from '@/app';
+import { BASE_URL } from '@/config';
+import SearchInput from '@/components/SearchInput.vue';
+import Pagination from '@/components/Pagination.vue';
 
 const products = ref([]);
 const categories = ref([]);
@@ -102,7 +103,7 @@ const addToCart = async (id, type) => {
                      <div v-for="product in products" :key="product.id"
                         class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col justify-between w-56">
                         <div>
-                           <img :src="`/storage/${product.image_url}`" alt="Imagen del producto"
+                           <img :src="`${BASE_URL}/storage/${product.image_url}`" alt="Imagen del producto"
                               class="w-full h-60 object-cover rounded-t-lg">
                            <div class="p-2">
                               <h2 class="text-sm font-semibold text-gray-800 mb-1">{{ product.name }}</h2>

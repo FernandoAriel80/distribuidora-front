@@ -1,11 +1,12 @@
 <script setup>
-import api from '../../../app';
+import api from '@/app';
+import { BASE_URL } from '@/config';
 import { ref, defineProps, watch, onMounted } from 'vue';
-import ImagePreview from '../../../components/ImagePreview.vue';
-import Pagination from '../../../components/Pagination.vue';
-import SearchInput from '../../../components/SearchInput.vue';
-import Modal from '../../../components/Modal.vue';
-import ModalAsk from '../../../components/ModalAsk.vue';
+import ImagePreview from '@/components/ImagePreview.vue';
+import Pagination from '@/components/Pagination.vue';
+import SearchInput from '@/components/SearchInput.vue';
+import Modal from '@/components/Modal.vue';
+import ModalAsk from '@/components/ModalAsk.vue';
 import CreateProduct from './Create.vue'
 import EditProduct from './Edit.vue'
 import { debounce } from 'lodash';
@@ -22,11 +23,11 @@ const fetchPage = async (url = '/api/admin/products') => {
                 search: search.value,
             },
         },
-        {
-            headers: {
+            {
+                headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
+                }
+            });
         loading.value = false;
         products.value = response.data.products.data;
         pagination.value = {
@@ -41,17 +42,17 @@ const fetchPage = async (url = '/api/admin/products') => {
 }
 
 onMounted(() => {
-   fetchPage();
+    fetchPage();
 });
-console.log(products.value)
+
 watch([search], () => {
     searchDebounced();
 });
 
- const searchDebounced = debounce(() => {
+const searchDebounced = debounce(() => {
     fetchPage();
 }, 300);
- 
+
 
 const showModalCreate = ref(false);
 const showModalEdit = ref(false);
@@ -175,7 +176,7 @@ const handleProductUpdated = () => {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="product in products.data" :key="product.id">
+                            <tr v-for="product in products" :key="product.id">
                                 <td class="px-2 py-3 text-sm text-gray-900">{{ product.catalog_id }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.name }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.description }}</td>
@@ -189,7 +190,7 @@ const handleProductUpdated = () => {
                                 <td class="px-2 py-3 text-sm text-gray-500">
                                     {{ product.stock === 1 ? 'SI' : 'NO' }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">
-                                    <ImagePreview class="w-16 h-16" :src="`/storage/${product.image_url}`"
+                                    <ImagePreview class="w-16 h-16" :src="`${BASE_URL}/storage/${product.image_url}`"
                                         alt="Imagen del producto" />
                                 </td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.category.name }}</td>

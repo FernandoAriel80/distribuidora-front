@@ -1,8 +1,9 @@
 <script setup>
-import TextInput from '../../../components/TextInput.vue';
-import FormButton from '../../../components/FormButton.vue';
-import FormSelect from '../../../components/FormSelect.vue';
-import api from '../../../app'
+import TextInput from '@/components/TextInput.vue';
+import FormButton from '@/components/FormButton.vue';
+import FormSelect from '@/components/FormSelect.vue';
+import ImagePreview from '@/components/ImagePreview.vue';
+import api from '@/app'
 import { onMounted, ref } from 'vue';
 
 const form = ref({
@@ -12,12 +13,12 @@ const form = ref({
     unit_price: '',
     bulk_unit_price: '',
     bulk_unit: '',
-    percent_off: null,
+    percent_off: '',
     offer: false,
     price_offer: '',
     old_price: '',
     stock: true,
-    image_url: '',
+    image_url: null,
     category_id: '',
     type_id: '',
 });
@@ -45,11 +46,19 @@ onMounted(() => {
 });
 
 const emit = defineEmits(['actionExecuted']);
+const srcImg = ref(null);
+
 const change = (e) => {
     form.image_url = e.target.files[0];
+    srcImg.value = URL.createObjectURL(e.target.files[0]);
+  /*   let file = e.target.files[0];
+    let reader = new FileReader()
+    reader.onloadend = (file) =>{
+        form.image_url = reader.result
+    }
+    reader.readAsDataURL(file) */
+    console.log( form.image_url)
 };
-
-
 const submit = async () => {
     try {
         const response = await api.post('/api/admin/products/create', {
@@ -64,7 +73,7 @@ const submit = async () => {
                 price_offer: form.value.price_offer,
                 old_price: form.value.old_price,
                 stock: form.value.stock,
-                image_url: form.value.image_url,
+                image_url: form.image_url,
                 category_id: form.value.category_id,
                 type_id: form.value.type_id,
             },
@@ -124,11 +133,21 @@ const submit = async () => {
                     <!--  <small class="error" v-if="form.errors.price_offer">{{ form.errors.description }}</small> -->
                 </div>
 
-                <div class="flex flex-col space-y-2 m-1">
+               <!--  <div class="flex flex-col space-y-2 m-1">
                     <label for="image_url" class="text-sm font-medium text-gray-700">Foto producto</label>
                     <input type="file" id="image_url" @input="change"
                         class="text-sm p-2 border border-gray-300 rounded-md" />
-                    <!--   <p class="text-red-500 text-sm">{{ form.errors.image_url }}</p> -->
+                </div> -->
+                <div class="flex flex-col space-y-2 m-1">
+                    <div v-if="srcImg">
+                        <ImagePreview class="mb-2 w-32 h-32" :src="srcImg" alt="Imagen del producto" />
+                    </div>
+                    <div class="flex flex-col space-y-2 m-1">
+                        <label for="image_url" class="text-sm font-medium text-gray-700">Foto producto</label>
+                        <input type="file" id="image_url" @change="change"
+                            class="text-sm p-2 border border-gray-300 rounded-md" />
+                        <!--<p class="text-red-500 text-sm">{{ form.errors.image_url }}</p> -->
+                    </div>
                 </div>
             </div>
             <div>

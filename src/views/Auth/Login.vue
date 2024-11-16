@@ -1,10 +1,10 @@
 <script setup>
 import { ref } from 'vue';
-import api from '../../app';
-import TextInput from '../../components/TextInput.vue';
-import FormButton from '../../components/FormButton.vue';
+import api from '@/app';
+import TextInput from '@/components/TextInput.vue';
+import FormButton from '@/components/FormButton.vue';
 import { useRouter } from 'vue-router'; 
-import { useAuth } from '../../composables/UserAuth';
+import { useAuth } from '@/composables/UserAuth';
 
 const form = ref({
   email: '',
