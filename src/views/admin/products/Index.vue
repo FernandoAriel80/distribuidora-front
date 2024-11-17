@@ -133,6 +133,10 @@ const handleProductUpdated = () => {
                                 </th>
                                 <th
                                     class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Cod. Barras
+                                </th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Nombre</th>
                                 <th
                                     class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -178,6 +182,7 @@ const handleProductUpdated = () => {
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="product in products" :key="product.id">
                                 <td class="px-2 py-3 text-sm text-gray-900">{{ product.catalog_id }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-900">{{ product.barcode }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.name }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.description }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.bulk_unit_price }}</td>
@@ -189,10 +194,11 @@ const handleProductUpdated = () => {
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.old_price }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">
                                     {{ product.stock === 1 ? 'SI' : 'NO' }}</td>
-                                <td class="px-2 py-3 text-sm text-gray-500">
-                                    <ImagePreview class="w-16 h-16" :src="`${BASE_URL}/storage/${product.image_url}`"
-                                        alt="Imagen del producto" />
+                                <td class="px-2 py-3 text-sm text-gray-500 w-auto h-auto overflow-hidden text-center">
+                                    <ImagePreview class="w-16 h-16 max-w-16 max-h-16 object-contain"
+                                        :src="`${BASE_URL}/storage/${product.image_url}`" alt="Imagen del producto" />
                                 </td>
+
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.category.name }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.type.name }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">

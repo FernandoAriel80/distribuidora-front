@@ -8,6 +8,7 @@ import { onMounted, ref } from 'vue';
 
 const form = ref({
     catalog_id: '',
+    barcode: '',
     name: '',
     description: '',
     unit_price: '',
@@ -49,13 +50,19 @@ const emit = defineEmits(['actionExecuted']);
 const srcImg = ref(null);
 
 const change = (e) => {
-    form.value.image_url = e.target.files[0];
-    srcImg.value = URL.createObjectURL(e.target.files[0]);
+    if(form.value.image_url == undefined || form.value.image_url == ""){
+        form.value.image_url = e.target.files[0];
+        srcImg.value = URL.createObjectURL(e.target.files[0]);
+    }else{
+        form.value.image_url = e.target.files[0];
+        srcImg.value = URL.createObjectURL(e.target.files[0]);
+    }
 };
 const submit = async () => {
     try {
         const formData = new FormData();
         formData.append('catalog_id', form.value.catalog_id);
+        formData.append('barcode', form.value.barcode);
         formData.append('name', form.value.name);
         formData.append('description', form.value.description);
         formData.append('unit_price', form.value.unit_price);
@@ -79,7 +86,6 @@ const submit = async () => {
             });
         emit('actionExecuted');
         console.log(response.data);
-        console.log(form.value);
     } catch (error) {
         console.error('Error al crear producto:', error);
     }
@@ -103,6 +109,7 @@ const submit = async () => {
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                 <TextInput name="ID producto" v-model="form.catalog_id" />
+                <TextInput name="Codigo de barras" v-model="form.barcode" />
                 <TextInput name="Nombre producto" v-model="form.name" />
                 <formSelect name="Undiad de medida" v-model="form.type_id" :datas="types" />
                 <formSelect name="Seleccione Categoria" v-model="form.category_id" :datas="categories" />
