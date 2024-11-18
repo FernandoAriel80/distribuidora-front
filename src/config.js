@@ -1,2 +1,2 @@
 
-export const BASE_URL = import.meta.env.VITE_LOCAL_API_BASE_URL; 
+export const BASE_URL = "distribuidora-back-production.up.railway.app"; 
