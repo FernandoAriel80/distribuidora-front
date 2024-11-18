@@ -118,7 +118,7 @@ const handleProductUpdated = () => {
 
         <div v-if="currentProduct">
             <Modal :isOpen="showModalEdit" :closeModal="closeModalEdit">
-                <EditProduct @actionExecuted="handleProductUpdated" />
+                <EditProduct @actionExecuted="handleProductUpdated" :products="currentProduct"/>
             </Modal>
         </div>
 

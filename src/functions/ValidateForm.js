@@ -1,4 +1,3 @@
-import { result } from "lodash";
 
 export const validateForm = (fields, errors, form, validateFunction) => {
     let message = [];
@@ -64,9 +63,12 @@ export const validateProduct = (field, errors, form) => {
             return errors.name;
 
         case 'description':
-            errors.description = form.value.description && typeof form.value.description === 'string'
+            const description = form.value.description;
+            const isValidString = typeof description === 'string' && /^[a-zA-Z0-9.,\s:"']*$/.test(description);
+
+            errors.description = isValidString
                 ? ''
-                : 'La descripción debe ser un texto.';
+                : 'La descripción solo debe contener texto y algunos caracteres permitidos.';
             return errors.description;
 
         case 'unit_price':
