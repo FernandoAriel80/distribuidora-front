@@ -1,19 +1,17 @@
-<!-- src/App.vue -->
+<script setup>
+import Layout from './layout/Layout.vue';
+import { useAuth } from './composables/UserAuth';
+const { user,fetchUser } = useAuth();
+
+if (user.value == null) {
+  fetchUser();
+}
+</script>
+
 <template>
   <div id="app">
-      <ProductList />
+      <Layout :user="user"/>
+      <router-view></router-view>
   </div>
 </template>
 
-<script setup>
-import ProductList from './components/ProductList.vue';
-</script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  text-align: center;
-/*   color: #2c3e50; */
-  margin-top: 60px;
-}
-</style>

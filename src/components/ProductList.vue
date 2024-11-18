@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
     <div>
         <h1>Lista de Productos</h1>
@@ -9,10 +10,12 @@
     </div>
 </template>
 
+=======
+>>>>>>> rama1
 <script setup>
-import { ref, onMounted } from 'vue';
-import api from '../app';
+import { defineProps } from 'vue';
 
+<<<<<<< HEAD
 const products = ref([]);
 
 const fetchProducts = async () => {
@@ -28,4 +31,21 @@ const fetchProducts = async () => {
 };
 
 onMounted(fetchProducts);
+=======
+const props = defineProps({
+  products: {
+    type: Array,
+    required: true
+  }
+});
+>>>>>>> rama1
 </script>
+
+<template>
+    <ul>
+      <li v-for="product in products" :key="product.id">
+        {{ product.name }}
+      </li>
+    </ul>
+  </template>
+  
