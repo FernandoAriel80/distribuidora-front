@@ -36,7 +36,6 @@ const errors = reactive({
     percent_off: '',
     offer: false,
     price_offer: '',
-    old_price: '',
     stock: true,
     image_url: '',
     category_id: '',
@@ -47,18 +46,18 @@ const fields = [
     'catalog_id',
     'barcode',
     'name',
- /*    'description',
+    'category_id',
+    'type_id',
     'unit_price',
+    'description',
     'bulk_unit_price',
     'bulk_unit',
     'percent_off',
     'offer',
     'price_offer',
-    'old_price',
     'stock',
     'image_url',
-    'category_id',
-    'type_id' */
+
 ];
 
 const categories = ref([]);
@@ -96,10 +95,8 @@ const change = (e) => {
     }
 };
 const submit = async () => {
+    const result = validateForm(fields, errors, form, validateProduct);
     try {
-        const result = validateForm(fields, errors, form, validateProduct);
-        console.log(result)
-        console.log(errors)
         if (result) {
             const formData = new FormData();
             formData.append('catalog_id', form.value.catalog_id);
@@ -153,19 +150,24 @@ const submit = async () => {
                 <TextInput name="ID producto" v-model="form.catalog_id" :message="errors.catalog_id" />
                 <TextInput name="Codigo de barras" v-model="form.barcode" :message="errors.barcode" />
                 <TextInput name="Nombre producto" v-model="form.name" :message="errors.name" />
-                <FormSelect name="Undiad de medida" v-model="form.type_id" :datas="types" />
-                <FormSelect name="Seleccione Categoria" v-model="form.category_id" :datas="categories" />
+                <FormSelect name="Undiad de medida" v-model="form.type_id" :datas="types" :message="errors.type_id" />
+                <FormSelect name="Seleccione Categoria" v-model="form.category_id" :datas="categories"
+                    :message="errors.category_id" />
                 <div v-if="form.offer">
                     <TextInput name="Porcentaje de descuento (no obligatorio)" v-model="form.percent_off" />
                     <TextInput name="Precio oferta" v-model="form.price_offer" />
+                    <TextInput v-if="form.type_id == 1" name="Precio unico por bulto en oferta"
+                        v-model="form.bulk_unit_price" :message="errors.bulk_unit_price" />
                 </div>
                 <div v-else-if="(!form.offer && form.type_id == 1)">
-                    <TextInput name="Precio por unidad" v-model="form.unit_price" />
-                    <TextInput name="Precio unico por bulto" v-model="form.bulk_unit_price" />
-                    <TextInput name="Cantidad de unidad por bulto" v-model="form.bulk_unit" />
+                    <TextInput name="Precio por unidad" v-model="form.unit_price" :message="errors.unit_price" />
+                    <TextInput name="Precio unico por bulto" v-model="form.bulk_unit_price"
+                        :message="errors.bulk_unit_price" />
+                    <TextInput name="Cantidad de unidad por bulto" v-model="form.bulk_unit"
+                        :message="errors.bulk_unit" />
                 </div>
                 <div v-else-if="!form.offer">
-                    <TextInput name="Precio" v-model="form.unit_price" />
+                    <TextInput name="Precio" v-model="form.unit_price" :message="errors.unit_price" />
                 </div>
             </div>
             <div class="">
@@ -187,7 +189,7 @@ const submit = async () => {
                         <label for="image_url" class="text-sm font-medium text-gray-700">Foto producto</label>
                         <input type="file" id="image_url" @change="change"
                             class="text-sm p-2 border border-gray-300 rounded-md" />
-                        <!--<p class="text-red-500 text-sm">{{ form.errors.image_url }}</p> -->
+                        <p class="text-red-500 text-sm">{{ errors.image_url }}</p>
                     </div>
                 </div>
             </div>

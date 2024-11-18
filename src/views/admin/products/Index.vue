@@ -74,10 +74,19 @@ const openModalAlert = (id) => {
 };
 
 const closeModalAlertYes = async () => {
+    const url = '/api/admin/products/' + currentProduct.value.id
+    console.log(url)
     try {
-        await api.delete(`/api/products/${currentProduct.value.id}`);
+        const response = await api.delete(url,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            },
+        );
+        console.log(response.data)
         showAlert.value = false;
-        //fetchPage();
+        fetchPage();
     } catch (error) {
         console.error('Error eliminando el producto:', error);
     }
@@ -95,7 +104,7 @@ const closeModalAlert = () => {
 };
 const handleProductUpdated = () => {
     closeModalEdit();
-    //fetchPage();
+    fetchPage();
 };
 </script>
 
@@ -109,8 +118,7 @@ const handleProductUpdated = () => {
 
         <div v-if="currentProduct">
             <Modal :isOpen="showModalEdit" :closeModal="closeModalEdit">
-                <EditProduct :product="currentProduct" :categories="props.categories" :types="props.types"
-                    @actionExecuted="handleProductUpdated" />
+                <EditProduct @actionExecuted="handleProductUpdated" />
             </Modal>
         </div>
 
