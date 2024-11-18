@@ -35,7 +35,7 @@
                placeholder:text-slate-500 focus:ring-2 focus:ring-inset
                 focus:ring-blue-500 sm:text-sm bg-white mb-2"
          />
-         <small class="error" v-if="props.message">{{ props.message }}</small>
+         <small class="error text-red-500" v-if="props.message">{{ props.message }}</small>
      </div>
  </template>
  

@@ -3,8 +3,9 @@ import TextInput from '@/components/TextInput.vue';
 import FormButton from '@/components/FormButton.vue';
 import FormSelect from '@/components/FormSelect.vue';
 import ImagePreview from '@/components/ImagePreview.vue';
+import { validateForm, validateProduct } from '@/functions/ValidateForm';
 import api from '@/app'
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, reactive } from 'vue';
 
 const form = ref({
     catalog_id: '',
@@ -23,6 +24,42 @@ const form = ref({
     category_id: '',
     type_id: '',
 });
+
+const errors = reactive({
+    catalog_id: '',
+    barcode: '',
+    name: '',
+    description: '',
+    unit_price: '',
+    bulk_unit_price: '',
+    bulk_unit: '',
+    percent_off: '',
+    offer: false,
+    price_offer: '',
+    old_price: '',
+    stock: true,
+    image_url: '',
+    category_id: '',
+    type_id: '',
+});
+
+const fields = [
+    'catalog_id',
+    'barcode',
+    'name',
+ /*    'description',
+    'unit_price',
+    'bulk_unit_price',
+    'bulk_unit',
+    'percent_off',
+    'offer',
+    'price_offer',
+    'old_price',
+    'stock',
+    'image_url',
+    'category_id',
+    'type_id' */
+];
 
 const categories = ref([]);
 const types = ref([]);
@@ -50,42 +87,47 @@ const emit = defineEmits(['actionExecuted']);
 const srcImg = ref(null);
 
 const change = (e) => {
-    if(form.value.image_url == undefined || form.value.image_url == ""){
+    if (form.value.image_url == undefined || form.value.image_url == "") {
         form.value.image_url = e.target.files[0];
         srcImg.value = URL.createObjectURL(e.target.files[0]);
-    }else{
+    } else {
         form.value.image_url = e.target.files[0];
         srcImg.value = URL.createObjectURL(e.target.files[0]);
     }
 };
 const submit = async () => {
     try {
-        const formData = new FormData();
-        formData.append('catalog_id', form.value.catalog_id);
-        formData.append('barcode', form.value.barcode);
-        formData.append('name', form.value.name);
-        formData.append('description', form.value.description);
-        formData.append('unit_price', form.value.unit_price);
-        formData.append('bulk_unit_price', form.value.bulk_unit_price);
-        formData.append('bulk_unit', form.value.bulk_unit);
-        formData.append('percent_off', form.value.percent_off);
-        formData.append('offer', form.value.offer);
-        formData.append('price_offer', form.value.price_offer);
-        formData.append('old_price', form.value.old_price);
-        formData.append('stock', form.value.stock);
-        formData.append('image_url', form.value.image_url); 
-        formData.append('category_id', form.value.category_id);
-        formData.append('type_id', form.value.type_id);
+        const result = validateForm(fields, errors, form, validateProduct);
+        console.log(result)
+        console.log(errors)
+        if (result) {
+            const formData = new FormData();
+            formData.append('catalog_id', form.value.catalog_id);
+            formData.append('barcode', form.value.barcode);
+            formData.append('name', form.value.name);
+            formData.append('description', form.value.description);
+            formData.append('unit_price', form.value.unit_price);
+            formData.append('bulk_unit_price', form.value.bulk_unit_price);
+            formData.append('bulk_unit', form.value.bulk_unit);
+            formData.append('percent_off', form.value.percent_off);
+            formData.append('offer', form.value.offer);
+            formData.append('price_offer', form.value.price_offer);
+            formData.append('old_price', form.value.old_price);
+            formData.append('stock', form.value.stock);
+            formData.append('image_url', form.value.image_url);
+            formData.append('category_id', form.value.category_id);
+            formData.append('type_id', form.value.type_id);
 
-        const response = await api.post('/api/admin/products/create', formData,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-        emit('actionExecuted');
-        console.log(response.data);
+            const response = await api.post('/api/admin/products/create', formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+            emit('actionExecuted');
+            console.log(response.data);
+        }
     } catch (error) {
         console.error('Error al crear producto:', error);
     }
@@ -108,11 +150,11 @@ const submit = async () => {
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                <TextInput name="ID producto" v-model="form.catalog_id" />
-                <TextInput name="Codigo de barras" v-model="form.barcode" />
-                <TextInput name="Nombre producto" v-model="form.name" />
-                <formSelect name="Undiad de medida" v-model="form.type_id" :datas="types" />
-                <formSelect name="Seleccione Categoria" v-model="form.category_id" :datas="categories" />
+                <TextInput name="ID producto" v-model="form.catalog_id" :message="errors.catalog_id" />
+                <TextInput name="Codigo de barras" v-model="form.barcode" :message="errors.barcode" />
+                <TextInput name="Nombre producto" v-model="form.name" :message="errors.name" />
+                <FormSelect name="Undiad de medida" v-model="form.type_id" :datas="types" />
+                <FormSelect name="Seleccione Categoria" v-model="form.category_id" :datas="categories" />
                 <div v-if="form.offer">
                     <TextInput name="Porcentaje de descuento (no obligatorio)" v-model="form.percent_off" />
                     <TextInput name="Precio oferta" v-model="form.price_offer" />
