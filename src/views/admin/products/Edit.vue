@@ -16,22 +16,22 @@ const props = defineProps({
 });
 
 const form = ref({
-    catalog_id: props.products.catalog_id == null? '' : props.products.catalog_id,
-    barcode: props.products.barcode == null? '' : props.products.barcode,
-    name: props.products.name == null? '' : props.products.name,
-    description: props.products.description == null? '' : props.products.description,
-    unit_price: props.products.unit_price == null? '' : props.products.unit_price,
-    bulk_unit_price: props.products.bulk_unit_price == null? '' : props.products.bulk_unit_price,
-    bulk_unit: props.products.bulk_unit == null? '' : props.products.bulk_unit,
-    percent_off: props.products.percent_off == null? '' : props.products.percent_off,
+    catalog_id: props.products.catalog_id == null ? '' : props.products.catalog_id,
+    barcode: props.products.barcode == null ? '' : props.products.barcode,
+    name: props.products.name == null ? '' : props.products.name,
+    description: props.products.description == null ? '' : props.products.description,
+    unit_price: props.products.unit_price == null ? '' : props.products.unit_price,
+    bulk_unit_price: props.products.bulk_unit_price == null ? '' : props.products.bulk_unit_price,
+    bulk_unit: props.products.bulk_unit == null ? '' : props.products.bulk_unit,
+    percent_off: props.products.percent_off == null ? '' : props.products.percent_off,
     offer: props.products.offer === 1 ? true : false,
-    price_offer: props.products.price_offer == null? '' : props.products.price_offer,
-    old_price: props.products.old_price == null? '' : props.products.old_price,
+    price_offer: props.products.price_offer == null ? '' : props.products.price_offer,
+    old_price: props.products.old_price == null ? '' : props.products.old_price,
     stock: props.products.stock === 1 ? true : false,
     image_url: '',
     image_aux: props.products.image_url,
-    category_id: props.products.category_id == null? '' : props.products.category_id,
-    type_id: props.products.type_id == null? '' : props.products.type_id,
+    category_id: props.products.category_id == null ? '' : props.products.category_id,
+    type_id: props.products.type_id == null ? '' : props.products.type_id,
 });
 
 const errors = reactive({
@@ -110,24 +110,11 @@ const submit = async () => {
         if (result) {
             console.log('mando formulario')
             const formData = new FormData();
-            formData.append('catalog_id', form.value.catalog_id);
-            formData.append('barcode', form.value.barcode);
-            formData.append('name', form.value.name);
-            formData.append('description', form.value.description);
-            formData.append('unit_price', form.value.unit_price);
-            formData.append('bulk_unit_price', form.value.bulk_unit_price);
-            formData.append('bulk_unit', form.value.bulk_unit);
-            formData.append('percent_off', form.value.percent_off);
-            formData.append('offer', form.value.offer);
-            formData.append('price_offer', form.value.price_offer);
-            formData.append('old_price', form.value.old_price);
-            formData.append('stock', form.value.stock);
-            formData.append('image_url', form.value.image_url);
-            formData.append('image_aux', form.value.image_aux);
-            formData.append('category_id', form.value.category_id);
-            formData.append('type_id', form.value.type_id);
-
-            const response = await api.post('/api/admin/products/edit/'+props.products.id, formData, {
+            for (const key in form.value) {
+                formData.append(key, form.value[key]);
+            }
+        
+            const response = await api.post('/api/admin/products/edit/' + props.products.id, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${localStorage.getItem('token')}`

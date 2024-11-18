@@ -99,22 +99,9 @@ const submit = async () => {
     try {
         if (result) {
             const formData = new FormData();
-            formData.append('catalog_id', form.value.catalog_id);
-            formData.append('barcode', form.value.barcode);
-            formData.append('name', form.value.name);
-            formData.append('description', form.value.description);
-            formData.append('unit_price', form.value.unit_price);
-            formData.append('bulk_unit_price', form.value.bulk_unit_price);
-            formData.append('bulk_unit', form.value.bulk_unit);
-            formData.append('percent_off', form.value.percent_off);
-            formData.append('offer', form.value.offer);
-            formData.append('price_offer', form.value.price_offer);
-            formData.append('old_price', form.value.old_price);
-            formData.append('stock', form.value.stock);
-            formData.append('image_url', form.value.image_url);
-            formData.append('category_id', form.value.category_id);
-            formData.append('type_id', form.value.type_id);
-
+            for (const key in form.value) {
+                formData.append(key, form.value[key]);
+            }
             const response = await api.post('/api/admin/products/create', formData,
                 {
                     headers: {
