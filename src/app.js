@@ -2,7 +2,7 @@ import axios from 'axios';
 import { BASE_URL } from "@/config";
 //axios.defaults.withCredentials = true;
 const api = axios.create({
-    baseURL: BASE_URL,
+    baseURL: 'distribuidora-back-production.up.railway.app"',
     headers: {
         'Content-Type': 'application/json',
     },
