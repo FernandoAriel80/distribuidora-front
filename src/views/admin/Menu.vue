@@ -15,7 +15,7 @@
         </router-link>
       </li>
       <li>
-        <router-link to=" "
+        <router-link to="/employee-index"
           class="block px-4 py-2 rounded-md bg-green-500 hover:bg-green-400 transition duration-200">
         Crea Empleado
         </router-link>

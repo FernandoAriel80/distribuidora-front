@@ -11,26 +11,83 @@ export const validateForm = (fields, errors, form, validateFunction) => {
     return message.length === 0;
 };
 
-export const validateRegister = (field, errors, form) => {
+export const validateLogin = (field, errors, form) => {
     switch (field) {
-        case 'name':
-            errors.name = form.name ? '' : 'El nombre es requerido.';
-            return errors.name;
         case 'email':
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            errors.email = form.email
-                ? emailPattern.test(form.email)
-                    ? ''
+            errors.email = form.value.email
+                ? emailPattern.test(form.value.email)
+                    ? form.value.email.length <= 255
+                        ? ''
+                        : 'El mail no debe exceder los 255 caracteres.'
                     : 'Correo no válido.'
                 : 'El correo es requerido.';
             return errors.email;
         case 'password':
-            errors.password = form.password.length >= 6
+            errors.password = form.value.password.length >= 8
                 ? ''
                 : 'La contraseña debe tener al menos 8 caracteres.';
             return errors.password;
+        default:
+            errors[field] = 'Campo no reconocido.';
+            return errors[field];
     }
 };
+
+export const validateRegister = (field, errors, form) => {
+    switch (field) {
+        case 'name':
+            const namePattern = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
+            errors.name = form.value.name
+                ? namePattern.test(form.value.name)
+                    ? form.value.name.length <= 50
+                        ? ''
+                        : 'El nombre no debe exceder los 50 caracteres.'
+                    : 'El nombre solo puede contener letras.'
+                : 'El nombre es requerido.';
+            return errors.name;
+        case 'last_name':
+            const lastNamePattern = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
+            errors.last_name = form.value.last_name
+                ? lastNamePattern.test(form.value.last_name)
+                    ? form.value.last_name.length <= 50
+                        ? ''
+                        : 'El apellido no debe exceder los 50 caracteres.'
+                    : 'El apellido solo puede contener letras.'
+                : 'El apellido es requerido.';
+            return errors.last_name;
+        case 'email':
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            errors.email = form.value.email
+                ? emailPattern.test(form.value.email)
+                    ? form.value.email.length <= 255
+                        ? ''
+                        : 'El mail no debe exceder los 255 caracteres.'
+                    : 'Correo no válido.'
+                : 'El correo es requerido.';
+            return errors.email;
+        case 'password':
+            errors.password = form.value.password
+                ? form.value.password.length >= 8
+                    ? ''
+                    : 'La contraseña debe tener al menos 8 caracteres.'
+                : 'La contraseña es requerido';
+            return errors.password;
+        case 'password_confirmation':
+            errors.password_confirmation = form.value.password_confirmation
+                ? form.value.password_confirmation.length >= 8
+                    ? form.value.password_confirmation === form.value.password
+                        ? ''
+                        : 'Las contraseñas no coinciden'
+                    : 'La contraseña debe tener al menos 8 caracteres.'
+                : 'La contraseña es requerido';
+            return errors.password_confirmation;
+        default:
+            errors[field] = 'Campo no reconocido.';
+            return errors[field];
+    }
+};
+
 
 export const validateProduct = (field, errors, form) => {
     switch (field) {

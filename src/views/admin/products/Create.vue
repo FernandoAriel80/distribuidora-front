@@ -57,7 +57,6 @@ const fields = [
     'price_offer',
     'stock',
     'image_url',
-
 ];
 
 const categories = ref([]);
@@ -167,7 +166,7 @@ const submit = async () => {
                         border border-gray-300 rounded-md shadow-sm
                       focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         placeholder="Escribe aquí una descripción detallada..."></textarea>
-                    <!--  <small class="error" v-if="form.errors.price_offer">{{ form.errors.description }}</small> -->
+                     <small class="text-red-500 text-sm" >{{ errors.description }}</small>
                 </div>
 
                 <div class="flex flex-col space-y-2 m-1">
