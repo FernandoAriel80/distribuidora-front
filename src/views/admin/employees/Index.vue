@@ -145,6 +145,9 @@ function formatDate(dateString) {
                                 Nombre
                             </th>
                             <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Apellido
+                            </th>
+                            <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Correo</th>
                             <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Fecha Creado
@@ -163,6 +166,7 @@ function formatDate(dateString) {
                     <tbody class="bg-white divide-y divide-gray-200">
                         <tr v-for="empolyee in employees" :key="empolyee.id">
                             <td class="px-2 py-3 text-sm text-gray-900">{{ empolyee.name }}</td>
+                            <td class="px-2 py-3 text-sm text-gray-900">{{ empolyee.last_name }}</td>
                             <td class="px-2 py-3 text-sm text-gray-500">{{ empolyee.email }}</td>
                             <td class="px-2 py-3 text-sm text-gray-500">{{ formatDate(empolyee.created_at) }}</td>
                             <td class="px-2 py-3 text-sm text-gray-500">{{ formatDate(empolyee.updated_at) }}</td>
