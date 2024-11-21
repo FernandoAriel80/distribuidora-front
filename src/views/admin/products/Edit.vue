@@ -113,7 +113,7 @@ const submit = async () => {
             for (const key in form.value) {
                 formData.append(key, form.value[key]);
             }
-        
+
             const response = await api.post('/api/admin/products/edit/' + props.products.id, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -157,6 +157,8 @@ const submit = async () => {
                     <TextInput name="Precio oferta" v-model="form.price_offer" />
                     <TextInput v-if="form.type_id == 1" name="Precio único por bulto en oferta"
                         v-model="form.bulk_unit_price" :message="errors.bulk_unit_price" />
+                    <TextInput name="Cantidad de unidad por bulto" v-model="form.bulk_unit"
+                        :message="errors.bulk_unit" />
                 </div>
                 <div v-else-if="(!form.offer && form.type_id == 1)">
                     <TextInput name="Precio por unidad" v-model="form.unit_price" :message="errors.unit_price" />

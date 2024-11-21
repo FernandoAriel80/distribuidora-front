@@ -57,7 +57,6 @@ const fields = [
     'price_offer',
     'stock',
     'image_url',
-
 ];
 
 const categories = ref([]);
@@ -145,6 +144,8 @@ const submit = async () => {
                     <TextInput name="Precio oferta" v-model="form.price_offer" />
                     <TextInput v-if="form.type_id == 1" name="Precio unico por bulto en oferta"
                         v-model="form.bulk_unit_price" :message="errors.bulk_unit_price" />
+                    <TextInput name="Cantidad de unidad por bulto" v-model="form.bulk_unit"
+                        :message="errors.bulk_unit" />
                 </div>
                 <div v-else-if="(!form.offer && form.type_id == 1)">
                     <TextInput name="Precio por unidad" v-model="form.unit_price" :message="errors.unit_price" />
@@ -165,7 +166,7 @@ const submit = async () => {
                         border border-gray-300 rounded-md shadow-sm
                       focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         placeholder="Escribe aquí una descripción detallada..."></textarea>
-                    <!--  <small class="error" v-if="form.errors.price_offer">{{ form.errors.description }}</small> -->
+                     <small class="text-red-500 text-sm" >{{ errors.description }}</small>
                 </div>
 
                 <div class="flex flex-col space-y-2 m-1">

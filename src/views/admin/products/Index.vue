@@ -109,7 +109,7 @@ const handleProductUpdated = () => {
 </script>
 
 <template>
-    <div>
+    <div class="mr-5 ml-5">
 
         <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Cargar Producto</button>
         <Modal :isOpen="showModalCreate" :closeModal="closeModalCreate">
@@ -118,7 +118,7 @@ const handleProductUpdated = () => {
 
         <div v-if="currentProduct">
             <Modal :isOpen="showModalEdit" :closeModal="closeModalEdit">
-                <EditProduct @actionExecuted="handleProductUpdated" :products="currentProduct"/>
+                <EditProduct @actionExecuted="handleProductUpdated" :products="currentProduct" />
             </Modal>
         </div>
 
@@ -128,9 +128,10 @@ const handleProductUpdated = () => {
         <div v-if="loading" class="m-10">
             <h1>CARGANDO CONTENIDO.....</h1>
         </div>
-        <div v-else>
+        <div v-else >
+             <h1 class="text-2xl font-bold mb-4">Lista de Empleados</h1>
             <SearchInput v-model:searchValue="search" />
-            <div v-if="products.length" class="mr-10 ml-10">
+            <div v-if="products.length">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
@@ -149,6 +150,10 @@ const handleProductUpdated = () => {
                                 <th
                                     class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Descripción</th>
+                                <th
+                                    class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Cantidad de unidades</th>
+
                                 <th
                                     class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Precio por Bulto</th>
@@ -193,6 +198,7 @@ const handleProductUpdated = () => {
                                 <td class="px-2 py-3 text-sm text-gray-900">{{ product.barcode }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.name }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.description }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500">{{ product.bulk_unit }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.bulk_unit_price }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.unit_price }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">
