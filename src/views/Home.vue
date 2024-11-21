@@ -99,29 +99,137 @@ const addToCart = async (id, type) => {
             </div>
             <div v-else>
                <div v-if="products.length > 0">
-                  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                     <div v-for="product in products" :key="product.id"
-                        class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col justify-between w-56">
+                  <!--  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                     <div v-for="product in products" :key="product.id" class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform 
+                     hover:scale-105 flex flex-col justify-between w-56 ">
+
                         <div>
-                           <img :src="`${BASE_URL}/storage/${product.image_url}`" alt="Imagen del producto"
-                              class="w-full h-60 object-cover rounded-t-lg">
+                           <div class="relative">
+                              <img :src="`${BASE_URL}/storage/${product.image_url}`" alt="Imagen del producto"
+                                 class="w-full h-60 object-cover rounded-t-lg">
+                              <div v-if="product.percent_off > 0"
+                                 class="absolute top-2 left-2 bg-red-500 text-white px-1 py-0.5 rounded text-xs">
+                                 {{ product.percent_off }}% OFF
+                              </div>
+                           </div>
                            <div class="p-2">
                               <h2 class="text-sm font-semibold text-gray-800 mb-1">{{ product.name }}</h2>
                               <p class="text-gray-500 text-xs mb-1">{{ product.description }}</p>
-                              <div class="flex items-center justify-between mb-2">
-                                 <span v-if="product.offer" class="text-green-600 font-bold text-xs">Oferta: ${{
-                                    product.price_offer }}</span>
-                                 <span v-else class="text-gray-800 font-bold text-xs">Precio: ${{ product.unit_price
-                                    }}</span>
+                              <div v-if="product.offer" class="flex items-center justify-between mb-2">
+                                 <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: $<p
+                                       class="line-through">{{ product.old_price }}</p></span>
+
+                                 <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: $<p
+                                       class="line-through">{{ product.old_price }}</p></span>
+
+                                 <div>
+
+                                    <span class="text-green-600 font-bold text-xs">
+                                       Oferta Unidad: ${{ product.price_offer }}
+                                    </span>
+                                    <span class="text-green-600 font-bold text-xs">
+                                       Oferta por Bulto: ${{ product.bulk_unit_price }}
+                                    </span>
+                                 </div>
+                              </div>
+                              <div v-else class="flex items-center justify-between mb-2">
+                                 <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: ${{
+                                    product.unit_price }}</span>
+                                 <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: ${{
+                                    product.unit_price }}</span>
+                                 <span v-if="product.bulk_unit_price" class="text-gray-800 font-bold text-xs">Bulto: ${{
+                                    product.bulk_unit_price }}</span>
+                              </div>
+                              <div v-if="product.unit_price" class="flex items-center justify-between mb-2">
+                                 <span class="text-gray-500 text-xs">Stock: {{ product.stock > 0 ? 'Sí' : 'No' }}</span>
                               </div>
                            </div>
                         </div>
-                        <button @click="addToCart(product.id, product.catalog_id)"
-                           class="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-lg text-xs font-semibold">
-                           Añadir al carrito
-                        </button>
+
+                        <div v-if="product.type.id == 1">
+                           <label class="flex items-center text-sm">
+                              <input type="radio" v-model="product.catalog_id" value="unit" class="mr-1.5 h-3 w-3" />
+                              x1 Unidad
+                           </label>
+                           <label class="flex items-center text-sm">
+                              <input type="radio" v-model="product.catalog_id" value="bulk" class="mr-1.5 h-3 w-3" />
+                              x{{ product.bulk_unit }} Bulto
+                           </label>
+                        </div>
+                        <div class="p-2 mt-auto">
+                           <button
+                              @click="addToCart(product.id, isNumber(product.catalog_id) ? 'unit' : product.catalog_id)"
+                              class="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors">
+                              Añadir
+                           </button>
+                        </div>
+                     </div>
+
+                  </div> -->
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-full">
+                     <div v-for="product in products" :key="product.id"
+                        class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col justify-between w-full">
+                        <div>
+                           <div class="relative">
+                              <img :src="`${BASE_URL}/storage/${product.image_url}`" alt="Imagen del producto"
+                                 class="w-full h-60 object-cover rounded-t-lg">
+                              <div v-if="product.percent_off > 0"
+                                 class="absolute top-2 left-2 bg-red-500 text-white px-1 py-0.5 rounded text-xs">
+                                 {{ product.percent_off }}% OFF
+                              </div>
+                           </div>
+                           <div class="p-2">
+                              <h2 class="text-sm font-semibold text-gray-800 mb-1">{{ product.name }}</h2>
+                              <p class="text-gray-500 text-xs mb-1">{{ product.description }}</p>
+                              <div v-if="product.offer" class="flex items-center justify-between mb-2">
+                                 <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: $<p
+                                       class="line-through">{{ product.old_price }}</p></span>
+                                 <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: $<p
+                                       class="line-through">{{ product.old_price }}</p></span>
+                                 <div>
+                                    <span class="text-green-600 font-bold text-xs"> Oferta Unidad: ${{
+                                       product.price_offer }}</span>
+                                    <br>
+                                    <span v-if="product.bulk_unit_price" class="text-green-600 font-bold text-xs"> Oferta por Bulto: ${{
+                                       product.bulk_unit_price }}</span>
+                                 </div>
+                              </div>
+                              <div v-else class="flex items-center justify-between mb-2">
+                                 <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: ${{
+                                    product.unit_price }}</span>
+                                 <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: ${{
+                                    product.unit_price }}</span>
+                                 <span v-if="product.bulk_unit_price" class="text-gray-800 font-bold text-xs">Bulto: ${{
+                                    product.bulk_unit_price }}</span>
+                              </div>
+                              <div v-if="product.unit_price" class="flex items-center justify-between mb-2">
+                                 <span class="text-gray-500 text-xs">Stock: {{ product.stock > 0 ? 'Sí' : 'No' }}</span>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div v-if="product.type.id == 1" class="p-2">
+                           <label class="flex items-center text-sm">
+                              <input type="radio" v-model="product.catalog_id" value="unit" class="mr-1.5 h-3 w-3" />
+                              x1 Unidad
+                           </label>
+                           <label class="flex items-center text-sm">
+                              <input type="radio" v-model="product.catalog_id" value="bulk" class="mr-1.5 h-3 w-3" />
+                              x{{ product.bulk_unit }} Bulto
+                           </label>
+                        </div>
+
+                        <div class="p-2 mt-auto">
+                           <button
+                              @click="addToCart(product.id, isNumber(product.catalog_id) ? 'unit' : product.catalog_id)"
+                              class="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors">
+                              Añadir
+                           </button>
+                        </div>
                      </div>
                   </div>
+
                   <Pagination :pagination="pagination" :fetchPage="fetchPage" />
                </div>
                <div v-else>
