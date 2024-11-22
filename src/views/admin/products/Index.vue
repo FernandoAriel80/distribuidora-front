@@ -1,13 +1,14 @@
 <script setup>
 import api from '@/app';
 import { BASE_URL } from '@/config';
-import { ref, defineProps, watch, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import ImagePreview from '@/components/ImagePreview.vue';
 import Pagination from '@/components/Pagination.vue';
 import SearchInput from '@/components/SearchInput.vue';
 import Modal from '@/components/Modal.vue';
 import ModalAsk from '@/components/ModalAsk.vue';
 import SuccessMessage from '@/components/SuccessMessage.vue';
+import { showMessage,messageAlert } from '@/functions/MessageAlert';
 import CreateProduct from './Create.vue'
 import EditProduct from './Edit.vue'
 import { debounce } from 'lodash';
@@ -114,23 +115,16 @@ const handleUpdated = () => {
 
 ///// message
 
-const successMessage = ref('');
-
-function showSuccessMessage(message) {
-    successMessage.value = message;
-    setTimeout(() => {
-        successMessage.value = '';
-    }, 3000);
-}
+const successMessage = ref(messageAlert);
 
 function createProduct() {
-    showSuccessMessage('El producto ha sido creado exitosamente.');
+    showMessage('El producto ha sido creado exitosamente.');
 }
 function updateProduct() {
-    showSuccessMessage('El producto ha sido actualizado exitosamente.');
+    showMessage('El producto ha sido actualizado exitosamente.');
 }
 function deleteProduct(value) {
-    showSuccessMessage(value);
+    showMessage(value);
 }
 </script>
 

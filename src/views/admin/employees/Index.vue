@@ -5,6 +5,7 @@ import SearchInput from '@/components/SearchInput.vue';
 import Modal from '@/components/Modal.vue';
 import ModalAsk from '@/components/ModalAsk.vue';
 import SuccessMessage from '@/components/SuccessMessage.vue';
+import { showMessage,messageAlert } from '@/functions/MessageAlert';
 import CreateEmployees from './Create.vue'
 import EditEmployees from './Edit.vue'
 import { debounce } from 'lodash';
@@ -119,23 +120,16 @@ function formatDate(dateString) {
 
 ///// message
 
-const successMessage = ref('');
-
-function showSuccessMessage(message) {
-    successMessage.value = message;
-    setTimeout(() => {
-        successMessage.value = '';
-    }, 3000);
-}
+const successMessage = ref(messageAlert);
 
 function createEmployee() {
-    showSuccessMessage('El empleado ha sido creado exitosamente.');
+    showMessage('El empleado ha sido creado exitosamente.');
 }
 function updateEmployee() {
-    showSuccessMessage('El empleado ha sido actualizado exitosamente.');
+    showMessage('El empleado ha sido actualizado exitosamente.');
 }
 function deleteEmployee(value) {
-    showSuccessMessage(value);
+    showMessage(value);
 }
 </script>
 <template>

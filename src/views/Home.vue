@@ -203,8 +203,8 @@ const addToCart = async (id, type) => {
                                  <span v-if="product.bulk_unit_price" class="text-gray-800 font-bold text-xs">Bulto: ${{
                                     product.bulk_unit_price }}</span>
                               </div>
-                              <div v-if="product.unit_price" class="flex items-center justify-between mb-2">
-                                 <span class="text-gray-500 text-xs">Stock: {{ product.stock > 0 ? 'Sí' : 'No' }}</span>
+                              <div v-if="product.stock == 0" class="flex items-center justify-between mb-2">
+                                 <span class="text-red-500 text-xs">Sin stock</span>
                               </div>
                            </div>
                         </div>
@@ -223,7 +223,7 @@ const addToCart = async (id, type) => {
                         <div class="p-2 mt-auto">
                            <button
                               @click="addToCart(product.id, isNumber(product.catalog_id) ? 'unit' : product.catalog_id)"
-                              class="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors">
+                              class="w-full bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors">
                               Añadir
                            </button>
                         </div>

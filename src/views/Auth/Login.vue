@@ -1,36 +1,51 @@
 <script setup>
-import { ref } from 'vue';
+import { ref,reactive } from 'vue';
 import api from '@/app';
 import TextInput from '@/components/TextInput.vue';
 import FormButton from '@/components/FormButton.vue';
-import { useRouter } from 'vue-router'; 
+import SuccessMessage from '@/components/SuccessMessage.vue';
+import { validateForm,validateLogin } from '@/functions/ValidateForm';
+import { showMessage,messageAlert } from '@/functions/MessageAlert';
+import { useRouter } from 'vue-router';
 import { useAuth } from '@/composables/UserAuth';
 
 const form = ref({
   email: '',
   password: '',
   remember: false,
-  errors: {},
-  progress: false, 
+  progress: false,
 });
+
+const errors = reactive({
+  email: '',
+  password: '',
+});
+
+const fields = [
+  'email',
+  'password',
+];
+
 const { fetchUser } = useAuth();
 const router = useRouter();
 
 const submit = async () => {
-    form.value.errors = {}; 
-    
-    try {
-        form.value.progress = true;     
+
+  try {
+    const validate = validateForm(fields, errors, form, validateLogin);
+    if (validate) {
+        form.value.progress = true;
         const response = await api.post('/api/login', {
         email: form.value.email,
         password: form.value.password,
         remember: form.value.remember,
-    });
-    if (localStorage.getItem('token') == null) {
-      localStorage.setItem('token', response.data.token);
+      });
+      if (localStorage.getItem('token') == null) {
+        localStorage.setItem('token', response.data.token);
+      }
+      await fetchUser();
+      router.push({ name: 'home' });
     }
-    await fetchUser();
-    router.push({ name: 'home' });
   } catch (error) {
     if (error.response && error.response.data.errors) {
       form.value.errors = error.response.data.errors;
@@ -42,51 +57,36 @@ const submit = async () => {
 
 ///// message
 
-const successMessage = ref('');
+const successMessage = ref(messageAlert);
 
-function showSuccessMessage(message) {
-    successMessage.value = message;
-    setTimeout(() => {
-        successMessage.value = '';
-    }, 3000);
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const message = route.query.message;
+
+if (message) {
+  showMessage(message)
 }
-
-function createUser() {
-    showSuccessMessage('La cuenta ha sido creado exitosamente.');
-}
-
 </script>
 
 <template>
+  <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
+  <SuccessMessage :message="successMessage" />
   <div class="min-h-screen flex items-center justify-center">
     <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md w-full">
       <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Iniciar Sesión</label>
       <div class="mb-6">
-        <TextInput 
-          name="Correo" 
-          type="email" 
-          v-model="form.email" 
-          :message="form.errors.email" 
-        />
-        <TextInput 
-          name="Contraseña" 
-          type="password" 
-          v-model="form.password" 
-          :message="form.errors.password" 
-        />
+        <TextInput name="Correo" type="email" v-model="form.email" :message="errors.email" />
+        <TextInput name="Contraseña" type="password" v-model="form.password" :message="errors.password" />
 
         <div>
-          <input 
-            type="checkbox" 
-            v-model="form.remember" 
-            id="remember" 
-          />
+          <input type="checkbox" v-model="form.remember" id="remember" />
           <label for="remember"> Recordar cuenta</label>
         </div>
 
         <div>
           <p class="text-slate-600 mb-2">
-            ¿Aún no tienes cuenta? 
+            ¿Aún no tienes cuenta?
             <router-link to="/register" class="text-link text-blue-400">Regístrate</router-link>
           </p>
           <FormButton :name="'Iniciar Sesión'" :progress="form.progress" />
@@ -95,4 +95,3 @@ function createUser() {
     </form>
   </div>
 </template>
-
