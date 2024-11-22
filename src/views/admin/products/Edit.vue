@@ -3,7 +3,7 @@ import TextInput from '@/components/TextInput.vue';
 import FormButton from '@/components/FormButton.vue';
 import FormSelect from '@/components/FormSelect.vue';
 import ImagePreview from '@/components/ImagePreview.vue';
-import { BASE_URL } from '@/config'
+import { BASE_URL,TOKEN } from '@/config'
 import { validateForm, validateProduct } from '@/functions/ValidateForm';
 import api from '@/app'
 import { onMounted, ref, reactive } from 'vue';
@@ -77,7 +77,7 @@ const fetchPage = async (url = '/api/admin/products/create') => {
         const response = await api.get(url,
             {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                 }
             });
         categories.value = response.data.categories;
@@ -117,7 +117,7 @@ const submit = async () => {
             const response = await api.post('/api/admin/products/edit/' + props.products.id, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                 }
             });
             emit('actionExecuted');

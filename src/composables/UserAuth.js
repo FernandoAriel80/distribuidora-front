@@ -1,15 +1,16 @@
 // src/composables/useAuth.js
 import { ref } from 'vue';
 import api from '../app';
+import { TOKEN } from '@/config';
 
 const user = ref(null);
 
 const fetchUser = async () => {
     try {
-     if (localStorage.getItem('token') != null ) {
+     if (localStorage.getItem(TOKEN) != null ) {
         const response = await api.get('/api/user', {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
             }
         });
         user.value = response.data;
@@ -23,10 +24,10 @@ const logout = async () => {
     try {
         await api.post('/api/logout', {}, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
             }
         });
-        localStorage.removeItem('token');
+        localStorage.removeItem(TOKEN);
         user.value = null;
     } catch (error) {
         console.error("Error al cerrar sesión:", error);

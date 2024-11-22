@@ -5,6 +5,7 @@ import FormSelect from '@/components/FormSelect.vue';
 import ImagePreview from '@/components/ImagePreview.vue';
 import { validateForm, validateProduct } from '@/functions/ValidateForm';
 import api from '@/app'
+import { TOKEN } from '@/config';
 import { onMounted, ref, reactive } from 'vue';
 
 const form = ref({
@@ -67,7 +68,7 @@ const fetchPage = async (url = '/api/admin/products/create') => {
         const response = await api.get(url,
             {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                 }
             });
         categories.value = response.data.categories;
@@ -105,7 +106,7 @@ const submit = async () => {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                        Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                     }
                 });
             emit('actionExecuted');

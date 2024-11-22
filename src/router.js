@@ -1,12 +1,13 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
+import { TOKEN } from './config';
 import Home from './views/Home.vue';
 import Register from './views/Auth/Register.vue';
 import Login from './views/Auth/Login.vue';
 import Menu from './views/admin/Menu.vue';
 import ProductIndex from './views/admin/products/Index.vue';
 import EmployeeIndex from './views/admin/employees/Index.vue';
-// import Cart from '../views/Cart.vue';
+import Cart from './views/cart/Cart.vue';
 // import Admin from '../views/Admin.vue';
 import { useAuth } from './composables/UserAuth';
 
@@ -17,6 +18,7 @@ const routes = [
     { path: '/menu', name: 'menu', component: Menu, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] } },
     { path: '/register', name: 'register', component: Register },
     { path: '/login', name: 'login', component: Login },
+    { path: '/cart', name: 'cart', component: Cart},
     { path: '/product-index', name: 'product-index', component: ProductIndex, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] }},
     { path: '/employee-index', name: 'employee-index', component: EmployeeIndex, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
     
@@ -33,7 +35,7 @@ router.beforeEach(async (to, from, next) => {
         await fetchUser();
     }
     
-    const isAuthenticated = localStorage.getItem('token') !== null;
+    const isAuthenticated = localStorage.getItem(TOKEN) !== null;
     const userRole = user.value?.role;
 
     if (to.meta.requiresAuth) {

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useAuth } from '../composables/UserAuth';
+import { useAuth } from '@/composables/UserAuth';
 const { logout } = useAuth();
 
 const props = defineProps({
@@ -27,9 +27,9 @@ const isAuthenticated = ref(false);
                     <router-link to="/">Inicio</router-link>
                     <h1 class="title">{{ props.user?.name }}</h1>
 
-                   <!--  <router-link to="/cart" class="bg-blue-500 text-white">
+                    <router-link to="/cart" class="bg-blue-500 text-white">
                         <div>{{ cart_quantity }} Carrito</div>
-                    </router-link> -->
+                    </router-link>
 
                     <button  @click="logout" class="nav-link">Cerrar Sesión</button>
 

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import api from '@/app';
-import { BASE_URL } from '@/config';
+import { BASE_URL,TOKEN } from '@/config';
 import SearchInput from '@/components/SearchInput.vue';
 import Pagination from '@/components/Pagination.vue';
 
@@ -45,19 +45,27 @@ watch([search, sort, category], () => {
    fetchPage();
 });
 
-const addToCart = async (id, type) => {
+// Función para agregar un producto al carrito
+const addToCart = async (productId) => {
    try {
-      const response = await axios.post(`/api/cart/add`, {
-         productId: id,
-         productType: type,
-      });
-      message.value = response.data.message;
-      console.log('Product added to cart');
+      const response = await api.post('/api/cart/create',
+         {
+            product_id: productId,
+            quantity: 1 // Por defecto agregamos 1 al carrito, puedes ajustar según tus necesidades
+         },
+         {
+            headers: {
+               Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
+            }
+         })
+         console.log(response.data);
+      console.log('Producto agregado al carrito')
    } catch (error) {
-      console.error('Error adding to cart:', error);
-      message.value = 'Error adding product to cart';
+      console.error('Error al agregar el producto al carrito:', error)
+      console.log('Hubo un problema al agregar el producto al carrito')
    }
-};
+}
+
 </script>
 
 <template>
@@ -123,8 +131,9 @@ const addToCart = async (id, type) => {
                                     <span class="text-green-600 font-bold text-xs"> Oferta Unidad: ${{
                                        product.price_offer }}</span>
                                     <br>
-                                    <span v-if="product.bulk_unit_price" class="text-green-600 font-bold text-xs"> Oferta por Bulto: ${{
-                                       product.bulk_unit_price }}</span>
+                                    <span v-if="product.bulk_unit_price" class="text-green-600 font-bold text-xs">
+                                       Oferta por Bulto: ${{
+                                          product.bulk_unit_price }}</span>
                                  </div>
                               </div>
                               <div v-else class="flex items-center justify-between mb-2">
@@ -153,8 +162,7 @@ const addToCart = async (id, type) => {
                         </div>
 
                         <div class="p-2 mt-auto">
-                           <button
-                              @click="addToCart(product.id, isNumber(product.catalog_id) ? 'unit' : product.catalog_id)"
+                           <button @click="addToCart(product.id)"
                               class="w-full bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors">
                               Añadir
                            </button>
