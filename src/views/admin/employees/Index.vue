@@ -4,6 +4,8 @@ import { ref, watch, onMounted } from 'vue';
 import SearchInput from '@/components/SearchInput.vue';
 import Modal from '@/components/Modal.vue';
 import ModalAsk from '@/components/ModalAsk.vue';
+import SuccessMessage from '@/components/SuccessMessage.vue';
+import { showMessage,messageAlert } from '@/functions/MessageAlert';
 import CreateEmployees from './Create.vue'
 import EditEmployees from './Edit.vue'
 import { debounce } from 'lodash';
@@ -82,6 +84,7 @@ const closeModalAlertYes = async () => {
         );
         console.log(response.data)
         showAlert.value = false;
+        deleteEmployee(response.data.message);
         fetchPage();
     } catch (error) {
         console.error('Error eliminando el producto:', error);
@@ -89,18 +92,21 @@ const closeModalAlertYes = async () => {
 };
 
 
-
-const handleProductCreated = () => {
-    closeModalCreate();
-    fetchPage();
-};
-
 const closeModalAlert = () => {
     showAlert.value = false;
 };
-const handleProductUpdated = () => {
+
+const handleCreated = () => {
+    closeModalCreate();
+    fetchPage();
+    createEmployee();
+};
+
+const handleUpdated = () => {
     closeModalEdit();
     fetchPage();
+    updateEmployee();
+
 };
 
 
@@ -111,17 +117,34 @@ function formatDate(dateString) {
 
     return `${dateFormatted} ${timeFormatted}`;
 }
+
+///// message
+
+const successMessage = ref(messageAlert);
+
+function createEmployee() {
+    showMessage('El empleado ha sido creado exitosamente.');
+}
+function updateEmployee() {
+    showMessage('El empleado ha sido actualizado exitosamente.');
+}
+function deleteEmployee(value) {
+    showMessage(value);
+}
 </script>
 <template>
+    <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
+    <SuccessMessage :message="successMessage" />
+
     <div>
         <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Crear empleado</button>
         <Modal :isOpen="showModalCreate" :closeModal="closeModalCreate">
-            <CreateEmployees @actionExecuted="handleProductCreated" />
+            <CreateEmployees @actionExecuted="handleCreated" />
         </Modal>
     </div>
     <div v-if="currentEmployee">
         <Modal :isOpen="showModalEdit" :closeModal="closeModalEdit">
-            <EditEmployees :employees="currentEmployee" @actionExecuted="handleProductUpdated" />
+            <EditEmployees :employees="currentEmployee" @actionExecuted="handleUpdated" />
         </Modal>
     </div>
     <div>
@@ -132,6 +155,7 @@ function formatDate(dateString) {
         <h1>CARGANDO CONTENIDO.....</h1>
     </div>
     <div v-else class="container mx-auto p-4">
+
         <h1 class="text-2xl font-bold mb-4">Lista de Empleados</h1>
 
         <SearchInput v-model:searchValue="search" />
@@ -184,7 +208,7 @@ function formatDate(dateString) {
                         </tr>
                     </tbody>
                 </table>
-            </div>     
+            </div>
         </div>
         <div v-else>
             <p> empleado no encontrado</p>

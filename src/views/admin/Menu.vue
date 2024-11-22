@@ -10,13 +10,13 @@
     <ul class="space-y-4">
       <li>
         <router-link to = "/product-index" 
-        class="block px-4 py-2 rounded-md bg-green-500  hover:bg-green-400 transition duration-200">        
+        class="block px-4 py-2 rounded-md bg-blue-500  hover:bg-blue-400 transition duration-200">        
             Ver Productos
         </router-link>
       </li>
       <li>
         <router-link to="/employee-index"
-          class="block px-4 py-2 rounded-md bg-green-500 hover:bg-green-400 transition duration-200">
+          class="block px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transition duration-200">
         Crea Empleado
         </router-link>
       </li>

@@ -1,12 +1,14 @@
 <script setup>
 import api from '@/app';
 import { BASE_URL } from '@/config';
-import { ref, defineProps, watch, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import ImagePreview from '@/components/ImagePreview.vue';
 import Pagination from '@/components/Pagination.vue';
 import SearchInput from '@/components/SearchInput.vue';
 import Modal from '@/components/Modal.vue';
 import ModalAsk from '@/components/ModalAsk.vue';
+import SuccessMessage from '@/components/SuccessMessage.vue';
+import { showMessage,messageAlert } from '@/functions/MessageAlert';
 import CreateProduct from './Create.vue'
 import EditProduct from './Edit.vue'
 import { debounce } from 'lodash';
@@ -87,6 +89,7 @@ const closeModalAlertYes = async () => {
         console.log(response.data)
         showAlert.value = false;
         fetchPage();
+        deleteProduct(response.data.message)
     } catch (error) {
         console.error('Error eliminando el producto:', error);
     }
@@ -94,31 +97,50 @@ const closeModalAlertYes = async () => {
 
 
 
-const handleProductCreated = () => {
-    closeModalCreate();
-    fetchPage();
-};
-
 const closeModalAlert = () => {
     showAlert.value = false;
 };
-const handleProductUpdated = () => {
+const handleCreated = () => {
+    closeModalCreate();
+    fetchPage();
+    createProduct();
+};
+
+const handleUpdated = () => {
     closeModalEdit();
     fetchPage();
+    updateProduct();
 };
+
+
+///// message
+
+const successMessage = ref(messageAlert);
+
+function createProduct() {
+    showMessage('El producto ha sido creado exitosamente.');
+}
+function updateProduct() {
+    showMessage('El producto ha sido actualizado exitosamente.');
+}
+function deleteProduct(value) {
+    showMessage(value);
+}
 </script>
 
 <template>
+    <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
+    <SuccessMessage :message="successMessage" />
     <div class="mr-5 ml-5">
 
         <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Cargar Producto</button>
         <Modal :isOpen="showModalCreate" :closeModal="closeModalCreate">
-            <CreateProduct @actionExecuted="handleProductCreated" />
+            <CreateProduct @actionExecuted="handleCreated" />
         </Modal>
 
         <div v-if="currentProduct">
             <Modal :isOpen="showModalEdit" :closeModal="closeModalEdit">
-                <EditProduct @actionExecuted="handleProductUpdated" :products="currentProduct" />
+                <EditProduct @actionExecuted="handleUpdated" :products="currentProduct" />
             </Modal>
         </div>
 
@@ -128,8 +150,9 @@ const handleProductUpdated = () => {
         <div v-if="loading" class="m-10">
             <h1>CARGANDO CONTENIDO.....</h1>
         </div>
-        <div v-else >
-             <h1 class="text-2xl font-bold mb-4">Lista de Empleados</h1>
+        <div v-else>
+
+            <h1 class="text-2xl font-bold mb-4">Lista de Empleados</h1>
             <SearchInput v-model:searchValue="search" />
             <div v-if="products.length">
                 <div class="overflow-x-auto">
