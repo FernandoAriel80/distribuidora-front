@@ -1,17 +1,16 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { ref,onMounted } from 'vue';
 import { useAuth } from '@/composables/UserAuth';
-const { logout } = useAuth();
+const {logout,cartQuantity,fetchCart } = useAuth();
 
 const props = defineProps({
-    user: Object
+    user: Object,
 })
-const router = useRouter();
-const route = useRoute();
 
-const cart_quantity = ref(0);
-const isAuthenticated = ref(false); 
+const cart_quantity = ref(cartQuantity);
+onMounted(() => {
+  fetchCart()
+})
 
 </script>
 

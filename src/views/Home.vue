@@ -51,7 +51,7 @@ const addToCart = async (productId) => {
       const response = await api.post('/api/cart/create',
          {
             product_id: productId,
-            quantity: 1 // Por defecto agregamos 1 al carrito, puedes ajustar según tus necesidades
+            quantity: 1
          },
          {
             headers: {

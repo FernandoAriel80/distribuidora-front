@@ -28,7 +28,7 @@ const fetchCartItems = async () => {
 const updateQuantity = async (item, newQuantity) => {
     if (newQuantity < 1) return
     try {
-        await api.post(`/api/cart/add`,
+        const response = await api.post('/api/cart/create',
             {
                 product_id: item.product.id,
                 quantity: newQuantity - item.quantity
@@ -39,8 +39,8 @@ const updateQuantity = async (item, newQuantity) => {
                 }
             },
         )
-        item.quantity = newQuantity
-        item.total = item.quantity * item.product.price
+        console.log(response.data)
+        fetchCartItems();
     } catch (error) {
         console.error('Error al actualizar la cantidad:', error)
     }
@@ -49,29 +49,23 @@ const updateQuantity = async (item, newQuantity) => {
 // Función para eliminar un producto del carrito
 const removeItem = async (item) => {
     try {
-        await api.delete(`/api/cart/remove/${item.id}`,
+        await api.delete('/api/cart/'+item.id,
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                 }
             },
         )
-        cartItems.value = cartItems.value.filter(i => i.id !== item.id)
+        fetchCartItems();
     } catch (error) {
         console.error('Error al eliminar el producto:', error)
     }
 }
 
 // Calcular el total del carrito
-/* const cartTotal = computed(() => {
-    return cartItems.value.reduce((total, item) => total + item.total, 0).toFixed(2)
-}) */
 const cartTotal = computed(() => {
-    return Object.values(cartItems).reduce((total, product) => {
-        return product.type == 'bulk' ? total + product.price * product.bulk_unit * product.quantity : total + product.price * product.quantity
-    }, 0);
+    return cartItems.value.reduce((total, item) => total + Number(item.total), 0);
 });
-
 // Montar los datos del carrito al cargar el componente
 onMounted(() => {
     fetchCartItems()
@@ -100,7 +94,7 @@ onMounted(() => {
                     class="w-16 h-16 object-cover rounded mr-4" /> -->
                 <div class="flex-1">
                     <h3 class="text-lg font-semibold">{{ item.product.name }}</h3>
-                    <p class="text-gray-500">Precio: ${{ item.product.price }}</p>
+                    <p class="text-gray-500">Precio: ${{ item.product.unit_price }}</p>
                     <p class="text-gray-500">Subtotal: ${{ item.total }}</p>
                 </div>
 
