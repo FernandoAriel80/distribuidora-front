@@ -37,7 +37,11 @@ const submit = async () => {
       password_confirmation: form.value.password_confirmation,
     });
 
-    router.push({ name: 'login' }); 
+    router.push({ 
+      name: 'login',
+      query: { message: 'El registro se completó con éxito. Por favor, inicia sesión.' } 
+    }); 
+
   } catch (error) {
     if (error.response && error.response.data.errors) {
       form.value.errors = error.response.data.errors;
@@ -46,6 +50,7 @@ const submit = async () => {
     form.value.progress = false; 
   }
 };
+
 </script>
 
 <template>

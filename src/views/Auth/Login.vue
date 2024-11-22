@@ -40,6 +40,21 @@ const submit = async () => {
   }
 };
 
+///// message
+
+const successMessage = ref('');
+
+function showSuccessMessage(message) {
+    successMessage.value = message;
+    setTimeout(() => {
+        successMessage.value = '';
+    }, 3000);
+}
+
+function createUser() {
+    showSuccessMessage('La cuenta ha sido creado exitosamente.');
+}
+
 </script>
 
 <template>
