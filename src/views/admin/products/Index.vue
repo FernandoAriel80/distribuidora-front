@@ -130,7 +130,7 @@ function deleteProduct(value) {
 
 <template>
     <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
-    <SuccessMessage :message="successMessage" />
+    <SuccessMessage v-if="messageAlert" :message="successMessage" />
     <div class="mr-5 ml-5">
 
         <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Cargar Producto</button>
