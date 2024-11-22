@@ -1,11 +1,12 @@
 <script setup>
-import { ref,reactive } from 'vue';
+import { ref, reactive } from 'vue';
 import api from '@/app';
 import TextInput from '@/components/TextInput.vue';
 import FormButton from '@/components/FormButton.vue';
 import SuccessMessage from '@/components/SuccessMessage.vue';
-import { validateForm,validateLogin } from '@/functions/ValidateForm';
-import { showMessage,messageAlert } from '@/functions/MessageAlert';
+import ErrorMessage from '@/components/ErrorMessage.vue';
+import { validateForm, validateLogin } from '@/functions/ValidateForm';
+import { showMessage, messageAlert } from '@/functions/MessageAlert';
 import { useRouter } from 'vue-router';
 import { useAuth } from '@/composables/UserAuth';
 
@@ -34,17 +35,23 @@ const submit = async () => {
   try {
     const validate = validateForm(fields, errors, form, validateLogin);
     if (validate) {
-        form.value.progress = true;
-        const response = await api.post('/api/login', {
+      form.value.progress = true;
+      const response = await api.post('/api/login', {
         email: form.value.email,
         password: form.value.password,
         remember: form.value.remember,
       });
-      if (localStorage.getItem('token') == null) {
-        localStorage.setItem('token', response.data.token);
+      if (response.data.token != null) {
+        if (localStorage.getItem('token') == null) {
+          localStorage.setItem('token', response.data.token);
+        }
+        await fetchUser();
+        router.push({ name: 'home' });
+      }else{
+        errorMessage.value = messageAlert;
+        showMessage(response.data.message)
       }
-      await fetchUser();
-      router.push({ name: 'home' });
+
     }
   } catch (error) {
     if (error.response && error.response.data.errors) {
@@ -58,6 +65,7 @@ const submit = async () => {
 ///// message
 
 const successMessage = ref(messageAlert);
+const errorMessage = ref('');
 
 import { useRoute } from 'vue-router';
 
@@ -71,7 +79,8 @@ if (message) {
 
 <template>
   <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
-  <SuccessMessage :message="successMessage" />
+  <SuccessMessage v-if="messageAlert" :message="successMessage" />
+  <ErrorMessage v-if="messageAlert" :message="errorMessage" />
   <div class="min-h-screen flex items-center justify-center">
     <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md w-full">
       <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Iniciar Sesión</label>

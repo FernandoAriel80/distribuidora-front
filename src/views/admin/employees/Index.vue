@@ -134,7 +134,7 @@ function deleteEmployee(value) {
 </script>
 <template>
     <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
-    <SuccessMessage :message="successMessage" />
+    <SuccessMessage v-if="messageAlert" :message="successMessage" />
 
     <div>
         <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Crear empleado</button>

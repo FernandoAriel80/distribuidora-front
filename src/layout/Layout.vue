@@ -1,12 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import api from '../app';
 import { useAuth } from '../composables/UserAuth';
 const { logout } = useAuth();
 
 const props = defineProps({
-    user: String
+    user: Object
 })
 const router = useRouter();
 const route = useRoute();
