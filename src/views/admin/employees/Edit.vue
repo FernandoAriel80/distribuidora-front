@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import api from '@/app';
+import { TOKEN } from '@/config';
 import TextInput from '@/components/TextInput.vue';
 import FormButton from '@/components/FormButton.vue';
 import { validateForm, validateRegisterEmpleado } from '@/functions/ValidateForm';
@@ -52,7 +53,7 @@ const submit = async () => {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                        Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                     }
                 });
             emit('actionExecuted');

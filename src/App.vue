@@ -10,7 +10,7 @@ if (user.value == null) {
 
 <template>
   <div id="app">
-      <Layout :user="user"/>
+      <Layout :user="user" />
       <router-view></router-view>
   </div>
 </template>

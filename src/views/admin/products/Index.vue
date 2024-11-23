@@ -1,6 +1,6 @@
 <script setup>
 import api from '@/app';
-import { BASE_URL } from '@/config';
+import { BASE_URL,TOKEN } from '@/config';
 import { ref, watch, onMounted } from 'vue';
 import ImagePreview from '@/components/ImagePreview.vue';
 import Pagination from '@/components/Pagination.vue';
@@ -27,7 +27,7 @@ const fetchPage = async (url = '/api/admin/products') => {
         },
             {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                 }
             });
         loading.value = false;
@@ -82,7 +82,7 @@ const closeModalAlertYes = async () => {
         const response = await api.delete(url,
             {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                 }
             },
         );

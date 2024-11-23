@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
+import { TOKEN } from '@/config';
 import api from '@/app';
 import TextInput from '@/components/TextInput.vue';
 import FormButton from '@/components/FormButton.vue';
@@ -42,8 +43,8 @@ const submit = async () => {
         remember: form.value.remember,
       });
       if (response.data.token != null) {
-        if (localStorage.getItem('token') == null) {
-          localStorage.setItem('token', response.data.token);
+        if (localStorage.getItem(TOKEN) == null) {
+          localStorage.setItem(TOKEN, response.data.token);
         }
         await fetchUser();
         router.push({ name: 'home' });

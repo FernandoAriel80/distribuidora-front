@@ -1,5 +1,6 @@
 <script setup>
 import api from '@/app';
+import { TOKEN } from '@/config';
 import { ref, watch, onMounted } from 'vue';
 import SearchInput from '@/components/SearchInput.vue';
 import Modal from '@/components/Modal.vue';
@@ -24,7 +25,7 @@ const fetchPage = async (url = '/api/admin/employees') => {
         },
             {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                 }
             });
         loading.value = false;
@@ -78,7 +79,7 @@ const closeModalAlertYes = async () => {
         const response = await api.delete(url,
             {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                 }
             },
         );

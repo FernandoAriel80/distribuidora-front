@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from "@/config";
+import { BASE_URL,TOKEN } from "@/config";
 
 const api = axios.create({
     baseURL: BASE_URL,
@@ -9,7 +9,7 @@ const api = axios.create({
 });
 
  api.interceptors.request.use(config => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(TOKEN);
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }

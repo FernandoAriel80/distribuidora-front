@@ -4,7 +4,12 @@ import api from '@/app';
 import { BASE_URL } from '@/config';
 import SearchInput from '@/components/SearchInput.vue';
 import Pagination from '@/components/Pagination.vue';
+import SuccessMessage from '@/components/SuccessMessage.vue';
+import { showMessage,messageAlert } from '@/functions/MessageAlert';
+import { useCartStore } from '@/stores/UseCartStore'
+import { debounce } from 'lodash'
 
+const cartStore = useCartStore();
 const products = ref([]);
 const categories = ref([]);
 const message = ref('');
@@ -45,19 +50,30 @@ watch([search, sort, category], () => {
    fetchPage();
 });
 
-const addToCart = async (id, type) => {
-   try {
-      const response = await axios.post(`/api/cart/add`, {
-         productId: id,
-         productType: type,
-      });
-      message.value = response.data.message;
-      console.log('Product added to cart');
-   } catch (error) {
-      console.error('Error adding to cart:', error);
-      message.value = 'Error adding product to cart';
-   }
-};
+onMounted(() => {
+   cartStore.fetchCartItems()
+})
+
+const currentIdMessage = ref();
+
+const addProductToCart = debounce(async (productId,typePrice) => {
+   await cartStore.addToCart(productId,typePrice);
+   cartStore.fetchCartItems();
+   currentIdMessage.value = productId;
+   addCartMessage();
+}, 300) 
+
+///// message
+const successMessage = ref(messageAlert);
+
+function addCartMessage() {
+    showMessage('Agregado al carrito.');
+}
+
+///validad numero
+const isNumber = (value) => {
+      return !isNaN(value) && typeof value === 'number';
+    }
 </script>
 
 <template>
@@ -123,8 +139,9 @@ const addToCart = async (id, type) => {
                                     <span class="text-green-600 font-bold text-xs"> Oferta Unidad: ${{
                                        product.price_offer }}</span>
                                     <br>
-                                    <span v-if="product.bulk_unit_price" class="text-green-600 font-bold text-xs"> Oferta por Bulto: ${{
-                                       product.bulk_unit_price }}</span>
+                                    <span v-if="product.bulk_unit_price" class="text-green-600 font-bold text-xs">
+                                       Oferta por Bulto: ${{
+                                          product.bulk_unit_price }}</span>
                                  </div>
                               </div>
                               <div v-else class="flex items-center justify-between mb-2">
@@ -153,12 +170,13 @@ const addToCart = async (id, type) => {
                         </div>
 
                         <div class="p-2 mt-auto">
-                           <button
-                              @click="addToCart(product.id, isNumber(product.catalog_id) ? 'unit' : product.catalog_id)"
-                              class="w-full bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors">
+                           <button @click="addProductToCart(product.id,isNumber(product.catalog_id) ? 'unit' : product.catalog_id)" :disabled="product.stock == 0"
+                              class="w-full bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors  disabled:bg-gray-100 disabled:text-gray-400">
                               Añadir
                            </button>
                         </div>
+                        <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
+                        <SuccessMessage v-if="currentIdMessage == product.id" :message="successMessage" />
                      </div>
                   </div>
 
