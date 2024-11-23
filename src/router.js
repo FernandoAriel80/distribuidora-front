@@ -18,7 +18,7 @@ const routes = [
     { path: '/menu', name: 'menu', component: Menu, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] } },
     { path: '/register', name: 'register', component: Register },
     { path: '/login', name: 'login', component: Login },
-    { path: '/cart', name: 'cart', component: Cart},
+    { path: '/cart', name: 'cart', component: Cart,meta: { requiresAuth: true}},
     { path: '/product-index', name: 'product-index', component: ProductIndex, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] }},
     { path: '/employee-index', name: 'employee-index', component: EmployeeIndex, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
     

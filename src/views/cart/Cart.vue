@@ -14,15 +14,15 @@ onMounted(() => {
 
 const isUpdating = ref(false)
 
-const increaseQuantity = debounce(async (item, quantity) => {
+const increaseQuantity = debounce(async (item, quantity, typePrice) => {
     quantity++;
-    await cartStore.updateQuantity(item, quantity);
+    await cartStore.updateQuantity(item, quantity,typePrice);
 }, 300)
 
-const decreaseQuantity = debounce(async (item, quantity) => {
+const decreaseQuantity = debounce(async (item, quantity, typePrice) => {
     if (quantity > 1) {
         quantity--;
-        await cartStore.updateQuantity(item, quantity);
+        await cartStore.updateQuantity(item, quantity,typePrice);
     }
 }, 300) 
 
@@ -56,21 +56,25 @@ function deleteItemMessage() {
                     class="w-16 h-16 object-cover rounded mr-4" />
                 <div v-if="item.product.stock == 1" class="flex-1">
                     <h3 class="text-lg font-semibold">{{ item.product.name }}</h3>
-                    <p class="text-gray-500">Precio: ${{ item.product.unit_price }}</p>
+                    <p v-if="item.product.type_id == 1" class="text-gray-500">Precio: ${{ item.type_price == 'unit'? item.product.unit_price:item.product.bulk_unit_price }}</p>
+                    <p v-if="item.product.type_id == 2" class="text-gray-500">Precio: ${{ item.product.unit_price }}</p>
                     <p class="text-gray-500">Subtotal: ${{ item.total }}</p>
+                    <p v-if="item.product.type_id == 1" class="text-gray-500">Tipo de precio: {{  item.type_price == 'unit'? 'unico x1': 'bulto x'+item.product.bulk_unit  }}</p>
                 </div>
                 <div v-else class="flex-1">
                     <h3 class="text-lg font-semibold line-through">{{ item.product.name }}</h3>
-                    <p class="text-gray-500 line-through">Precio: ${{ item.product.unit_price }}</p>
+                    <p v-if="item.product.type_id == 1" class="text-gray-500 line-through">Precio: ${{item.type_price == 'unit'? item.product.unit_price:item.product.bulk_unit_price }}</p>
+                    <p v-if="item.product.type_id == 2" class="text-gray-500 line-through">Precio: ${{ item.product.unit_price }}</p>
                     <p class="text-gray-500 line-through">Subtotal: ${{ item.total }}</p>
+                    <p v-if="item.product.type_id == 1" class="text-gray-500 line-through">Tipo de precio: {{  item.type_price == 'unit'? 'unico x1': 'bulto x'+item.product.bulk_unit }}</p>
                 </div>
                 <div v-if="item.product.stock == 1" class="flex items-center space-x-2">
-                    <button @click="decreaseQuantity(item, item.quantity)" :disabled="item.quantity <= 1 || isUpdating"
+                    <button @click="decreaseQuantity(item, item.quantity,item.type_price)" :disabled="item.quantity <= 1 || isUpdating"
                         class="px-2 py-1 bg-gray-200 rounded disabled:bg-gray-100 disabled:text-gray-400">
                         -
                     </button>
                     <span>{{ item.quantity }}</span>
-                    <button @click="increaseQuantity(item, item.quantity)" :disabled="isUpdating"
+                    <button @click="increaseQuantity(item, item.quantity,item.type_price)" :disabled="isUpdating"
                         class="px-2 py-1 bg-gray-200 rounded disabled:bg-gray-100 disabled:text-gray-400">
                         +
                     </button>

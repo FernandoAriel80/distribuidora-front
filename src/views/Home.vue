@@ -56,8 +56,8 @@ onMounted(() => {
 
 const currentIdMessage = ref();
 
-const addProductToCart = debounce(async (productId) => {
-   await cartStore.addToCart(productId);
+const addProductToCart = debounce(async (productId,typePrice) => {
+   await cartStore.addToCart(productId,typePrice);
    cartStore.fetchCartItems();
    currentIdMessage.value = productId;
    addCartMessage();
@@ -69,6 +69,11 @@ const successMessage = ref(messageAlert);
 function addCartMessage() {
     showMessage('Agregado al carrito.');
 }
+
+///validad numero
+const isNumber = (value) => {
+      return !isNaN(value) && typeof value === 'number';
+    }
 </script>
 
 <template>
@@ -165,7 +170,7 @@ function addCartMessage() {
                         </div>
 
                         <div class="p-2 mt-auto">
-                           <button @click="addProductToCart(product.id)" :disabled="product.stock == 0"
+                           <button @click="addProductToCart(product.id,isNumber(product.catalog_id) ? 'unit' : product.catalog_id)" :disabled="product.stock == 0"
                               class="w-full bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors  disabled:bg-gray-100 disabled:text-gray-400">
                               Añadir
                            </button>

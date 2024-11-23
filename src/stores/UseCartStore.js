@@ -34,8 +34,8 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     // Agregar un producto al carrito
-    const addToCart = async (productId, quantity = 1) => {
-        const addedItem = cartItems.value.find(item => item.product.id === productId);
+    const addToCart = async (productId,typePrice, quantity = 1) => {
+        const addedItem = cartItems.value.find(item => item.product.id === productId && item.type_price === typePrice);
         let validate = 0;
         if (addedItem) {
             validate = addedItem.quantity + quantity;
@@ -45,6 +45,7 @@ export const useCartStore = defineStore('cart', () => {
         try {
             const response = await api.post('/api/cart/create', {
                 product_id: productId,
+                type_price: typePrice,
                 quantity: validate
             }, {
                 headers: {
@@ -59,11 +60,12 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     // Actualizar la cantidad de un producto
-    const updateQuantity = async (item, newQuantity) => {
+    const updateQuantity = async (item, newQuantity,typePrice) => {
         const verifica = newQuantity < 1 ? 1 : newQuantity;
         try {
            const response = await api.post('/api/cart/create', {
                 product_id: item.product.id,
+                type_price: typePrice,
                 quantity: verifica
             }, {
                 headers: {
