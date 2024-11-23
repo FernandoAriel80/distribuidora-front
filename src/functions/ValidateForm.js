@@ -109,7 +109,7 @@ export const validateProduct = (field, errors, form) => {
 
         case 'name':
             // Validación de que solo contenga letras y números
-            const namePattern = /^[a-zA-Z0-9]+$/;
+            const namePattern = /^[a-zA-Z0-9\s]+$/;
             errors.name = form.value.name
                 ? form.value.name.length <= 255
                     ? namePattern.test(form.value.name)

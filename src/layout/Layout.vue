@@ -1,15 +1,12 @@
 <script setup>
-import { ref,onMounted } from 'vue';
 import { useAuth } from '@/composables/UserAuth';
-const {logout,cartQuantity,fetchCart } = useAuth();
+import { useCartStore } from '@/stores/UseCartStore'
+
+const cartStore = useCartStore()
+const { logout } = useAuth();
 
 const props = defineProps({
     user: Object,
-})
-
-const cart_quantity = ref(cartQuantity);
-onMounted(() => {
-  fetchCart()
 })
 
 </script>
@@ -27,7 +24,7 @@ onMounted(() => {
                     <h1 class="title">{{ props.user?.name }}</h1>
 
                     <router-link to="/cart" class="bg-blue-500 text-white">
-                        <div>{{ cart_quantity }} Carrito</div>
+                        <div>{{ cartStore.cartQuantity }} Carrito</div>
                     </router-link>
 
                     <button  @click="logout" class="nav-link">Cerrar Sesión</button>

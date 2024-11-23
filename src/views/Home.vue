@@ -1,10 +1,15 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import api from '@/app';
-import { BASE_URL,TOKEN } from '@/config';
+import { BASE_URL } from '@/config';
 import SearchInput from '@/components/SearchInput.vue';
 import Pagination from '@/components/Pagination.vue';
+import SuccessMessage from '@/components/SuccessMessage.vue';
+import { showMessage,messageAlert } from '@/functions/MessageAlert';
+import { useCartStore } from '@/stores/UseCartStore'
+import { debounce } from 'lodash'
 
+const cartStore = useCartStore();
 const products = ref([]);
 const categories = ref([]);
 const message = ref('');
@@ -45,27 +50,25 @@ watch([search, sort, category], () => {
    fetchPage();
 });
 
-// Función para agregar un producto al carrito
-const addToCart = async (productId) => {
-   try {
-      const response = await api.post('/api/cart/create',
-         {
-            product_id: productId,
-            quantity: 1
-         },
-         {
-            headers: {
-               Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
-            }
-         })
-         console.log(response.data);
-      console.log('Producto agregado al carrito')
-   } catch (error) {
-      console.error('Error al agregar el producto al carrito:', error)
-      console.log('Hubo un problema al agregar el producto al carrito')
-   }
-}
+onMounted(() => {
+   cartStore.fetchCartItems()
+})
 
+const currentIdMessage = ref();
+
+const addProductToCart = debounce(async (productId) => {
+   await cartStore.addToCart(productId);
+   cartStore.fetchCartItems();
+   currentIdMessage.value = productId;
+   addCartMessage();
+}, 300) 
+
+///// message
+const successMessage = ref(messageAlert);
+
+function addCartMessage() {
+    showMessage('Agregado al carrito.');
+}
 </script>
 
 <template>
@@ -162,11 +165,13 @@ const addToCart = async (productId) => {
                         </div>
 
                         <div class="p-2 mt-auto">
-                           <button @click="addToCart(product.id)"
-                              class="w-full bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors">
+                           <button @click="addProductToCart(product.id)" :disabled="product.stock == 0"
+                              class="w-full bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors  disabled:bg-gray-100 disabled:text-gray-400">
                               Añadir
                            </button>
                         </div>
+                        <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
+                        <SuccessMessage v-if="currentIdMessage == product.id" :message="successMessage" />
                      </div>
                   </div>
 
