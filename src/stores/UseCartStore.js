@@ -6,8 +6,7 @@ import { TOKEN } from '@/config'
 
 export const useCartStore = defineStore('cart', () => {
     const cartItems = ref([])
-    const items = ref([]);
-    
+      
     const cartTotal = computed(() => {
         return cartItems.value.length > 0
             ? cartItems.value.reduce((total, item) => total + Number(item.total), 0)
@@ -29,39 +28,10 @@ export const useCartStore = defineStore('cart', () => {
                 }
             })
             cartItems.value = response.data.items || []
-            formatItems();
         } catch (error) {
             console.error('Error al cargar el carrito:', error)
         }
     }
-
-    // Formatear los items del carrito
-    const formatItems = () => {
-        const formattedItems = cartItems.value.map((item) => {
-            let unitPrice = 0;
-
-            if (item.product.type_id === 1) {
-                unitPrice = item.type_price === 'unit'
-                    ? item.product.unit_price
-                    : item.product.bulk_unit_price;
-            } else if (item.product.type_id === 2) {
-                unitPrice = item.product.unit_price;
-            }
-
-            return {
-                id: item.id,
-                title: item.product.name,
-                quantity: item.quantity,
-                unit_price: unitPrice
-            };
-        });
-
-        // Asignar los items formateados a la variable reactiva
-        items.value = formattedItems;
-        //console.log(items.value); // Mostrar los items formateados en consola
-    };
-
-
 
     // Agregar un producto al carrito
     const addToCart = async (productId, typePrice, quantity = 1) => {
