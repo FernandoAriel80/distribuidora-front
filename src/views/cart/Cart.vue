@@ -32,6 +32,7 @@ const successMessage = ref(messageAlert);
 function deleteItemMessage() {
     showMessage('Eliminado del carrito.');
 }
+
 </script>
 
 <style scoped>
