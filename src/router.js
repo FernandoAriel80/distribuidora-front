@@ -10,6 +10,7 @@ import EmployeeIndex from './views/admin/employees/Index.vue';
 import Cart from './views/cart/Cart.vue';
 import PaymentViewOnline from './views/cart/PaymentViewOnline.vue';
 import PaymentViewInStore from './views/cart/PaymentViewInStore.vue';
+import Order from './views/admin/customers/Order.vue';
 import { useAuth } from './composables/UserAuth';
 
 const { user, fetchUser } = useAuth();
@@ -24,6 +25,7 @@ const routes = [
     { path: '/pago-presencial', name: 'pay-store', component: PaymentViewInStore,meta: { requiresAuth: true}},
     { path: '/vista-productos', name: 'product-index', component: ProductIndex, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] }},
     { path: '/vista-empleados', name: 'employee-index', component: EmployeeIndex, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
+    { path: '/vista-pedidos', name: 'costumers-order', component: Order, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] }},
     
 ];
 

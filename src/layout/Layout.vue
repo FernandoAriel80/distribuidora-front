@@ -26,6 +26,7 @@ const props = defineProps({
                     <router-link to="/carrito" class="bg-blue-500 text-white">
                         <div>{{ cartStore.cartQuantity }} Carrito</div>
                     </router-link>
+                    <router-link to="/vista-pedidos">Pedidos</router-link>
                     <button  @click="logout" class="nav-link">Cerrar Sesión</button>
 
                     <div v-if="props.user?.role === 'admin' || props.user?.role === 'super_admin'">
