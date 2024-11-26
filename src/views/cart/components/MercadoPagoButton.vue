@@ -3,62 +3,22 @@ import { mp } from "@/stores/MercadoPago";
 import { ref, onMounted } from "vue";
 import api from "@/app";
 import { TOKEN } from "@/config";
+import { useCartStore } from '@/stores/UseCartStore'
+
+const cartStore = useCartStore()
+
+onMounted(() => {
+  cartStore.fetchCartItems()
+})
 
 const isLoading = ref(true);
 const preferenceId = ref(null);
-const products = ref([]);
-
-const fetchCartItems = async () => {
-  try {
-    const response = await api.get("/api/cart", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem(TOKEN)}`,
-      },
-    });
-
-    if (response.data.items) {
-      const formattedItems = response.data.items.map((item) => {
-        let unitPrice = 0;
-
-        if (item.product.type_id === 1) {
-          unitPrice =
-            item.type_price === "unit"
-              ? item.product.unit_price
-              : item.product.bulk_unit_price;
-        } else if (item.product.type_id === 2) {
-          unitPrice = item.product.unit_price;
-        }
-
-        return {
-          id: item.id,
-          title: item.product.name,
-          quantity: item.quantity,
-          unit_price: unitPrice,
-          stock: item.product.stock,
-        };
-      });
-      return formattedItems;
-    }
-  } catch (error) {
-    console.error("Error al cargar el carrito:", error);
-  }
-};
-
-const loadAndFilterCartItems = async () => {
-  const cartItems = await fetchCartItems();
-  if (cartItems) {
-    const filteredItems = cartItems.filter((item) => item.quantity > 0);
-    products.value = filteredItems;
-  }
-};
 
 const fetchPreferenceId = async () => {
   try {
-    await loadAndFilterCartItems();
-
     const response = await api.post(
       "/api/process_payment",
-      { products: products.value },
+      { products: cartStore.formattedItems },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem(TOKEN)}`,

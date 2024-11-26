@@ -8,7 +8,8 @@ import Menu from './views/admin/Menu.vue';
 import ProductIndex from './views/admin/products/Index.vue';
 import EmployeeIndex from './views/admin/employees/Index.vue';
 import Cart from './views/cart/Cart.vue';
-import PaymentView from './views/cart/PaymentView.vue';
+import PaymentViewOnline from './views/cart/PaymentViewOnline.vue';
+import PaymentViewInStore from './views/cart/PaymentViewInStore.vue';
 import { useAuth } from './composables/UserAuth';
 
 const { user, fetchUser } = useAuth();
@@ -19,7 +20,8 @@ const routes = [
     { path: '/registar', name: 'register', component: Register },
     { path: '/inicia-sesion', name: 'login', component: Login },
     { path: '/carrito', name: 'cart', component: Cart,meta: { requiresAuth: true}},
-    { path: '/pago-online', name: 'pay', component: PaymentView,meta: { requiresAuth: true}},
+    { path: '/pago-online', name: 'pay-online', component: PaymentViewOnline,meta: { requiresAuth: true}},
+    { path: '/pago-presencial', name: 'pay-store', component: PaymentViewInStore,meta: { requiresAuth: true}},
     { path: '/vista-productos', name: 'product-index', component: ProductIndex, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] }},
     { path: '/vista-empleados', name: 'employee-index', component: EmployeeIndex, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
     

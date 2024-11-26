@@ -1,23 +1,14 @@
 // src/stores/useCartStore.js
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import api from '@/app'
 import { TOKEN } from '@/config'
 
 export const useCartStore = defineStore('cart', () => {
-    const cartItems = ref([])
-      
-    const cartTotal = computed(() => {
-        return cartItems.value.length > 0
-            ? cartItems.value.reduce((total, item) => total + Number(item.total), 0)
-            : 0
-    })
-
-    const cartQuantity = computed(() => {
-        return cartItems.value.length > 0
-            ? cartItems.value.reduce((total, item) => total + item.quantity, 0)
-            : 0
-    })
+    const formattedItems = ref([]);
+    const cartItems = ref([]);
+    const cartTotal = ref(0);
+    const cartQuantity = ref(0);
 
     // Cargar los productos del carrito desde la API
     const fetchCartItems = async () => {
@@ -26,13 +17,16 @@ export const useCartStore = defineStore('cart', () => {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                 }
-            })
-            cartItems.value = response.data.items || []
+            });
+            cartItems.value = response.data.items || [];
+            formattedItems.value = response.data.formattedItems || []; 
+            cartTotal.value = response.data.total;
+            cartQuantity.value = response.data.quantity;
         } catch (error) {
-            console.error('Error al cargar el carrito:', error)
+            console.error('Error al cargar el carrito:', error);
         }
-    }
-
+    };
+  
     // Agregar un producto al carrito
     const addToCart = async (productId, typePrice, quantity = 1) => {
         const addedItem = cartItems.value.find(item => item.product.id === productId && item.type_price === typePrice);
@@ -97,6 +91,7 @@ export const useCartStore = defineStore('cart', () => {
         cartItems,
         cartTotal,
         cartQuantity,
+        formattedItems,
         fetchCartItems,
         addToCart,
         updateQuantity,

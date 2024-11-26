@@ -4,7 +4,6 @@ import OtherButton from './components/OtherButton.vue';
 import { onMounted } from 'vue'
 import { useCartStore } from '@/stores/UseCartStore'
 
-console.log(MercadoPagoButton)
 const cartStore = useCartStore()
 
 onMounted(() => {
