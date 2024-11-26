@@ -1,94 +1,34 @@
-<template>
-  <div id="wallet_container"></div>
-</template>
-
 <script setup>
-import { mp } from '@/stores/MercadoPago';
-import { ref, onMounted } from 'vue';
-import api from '@/app';
-import { TOKEN } from '@/config';
+import MercadoPagoButton from './components/MercadoPagoButton.vue';
+import OtherButton from './components/OtherButton.vue';
+import { onMounted } from 'vue'
+import { useCartStore } from '@/stores/UseCartStore'
 
-const fetchCartItems = async () => {
-  try {
-    const response = await api.get('/api/cart', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
-      }
-    });
+console.log(MercadoPagoButton)
+const cartStore = useCartStore()
 
-    if (response.data.items) {
-      const formattedItems = response.data.items.map((item) => {
-        let unitPrice = 0;
-
-        if (item.product.type_id === 1) {
-          unitPrice = item.type_price === 'unit'
-            ? item.product.unit_price
-            : item.product.bulk_unit_price;
-        } else if (item.product.type_id === 2) {
-          unitPrice = item.product.unit_price;
-        }
-
-        return {
-          id: item.id,
-          title: item.product.name,
-          quantity: item.quantity,
-          unit_price: unitPrice
-        };
-      });
-      return formattedItems;
-    }
-  } catch (error) {
-    console.error('Error al cargar el carrito:', error);
-  }
-};
-
-const preferenceId = ref(null);
-const products = ref([]); 
-
-const loadAndFilterCartItems = async () => {
-  const cartItems = await fetchCartItems();
-  if (cartItems) {
-    const filteredItems = cartItems.filter(item => item.quantity > 0); 
-    products.value = filteredItems;
-  }
-};
-
-const fetchPreferenceId = async () => {
-  try {
-
-    await loadAndFilterCartItems();
-
-    const response = await api.post(
-      '/api/process_payment',
-      { products: products.value }, 
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
-        }
-      }
-    );
-
-    console.log(response.data)
-    preferenceId.value = response.data.preference;
-    if (preferenceId.value) {
-      mp.bricks().create("wallet", "wallet_container", {
-        initialization: {
-          preferenceId: preferenceId.value.id,
-          redirectMode: 'modal'
-        },
-        customization: {
-          texts: {
-            valueProp: 'smart_option',
-          },
-        },
-      });
-    } else {
-      console.error("No se obtuvo un preferenceId válido.");
-    }
-  } catch (error) {
-    console.error("Error al obtener la preferencia de pago:", error);
-  }
-};
-
-onMounted(fetchPreferenceId);
+onMounted(() => {
+  cartStore.fetchCartItems()
+})
 </script>
+
+<template>
+  <div class="flex justify-center items-center min-h-screen bg-gray-100">
+    <div class="bg-white rounded-lg shadow-lg p-8 flex w-2/3 max-w-4xl">
+      <div class="flex-1 pr-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Métodos de Pago Online</h2>
+        <p class="text-gray-600">
+          Por favor, selecciona uno de los métodos de pago disponibles para continuar con tu compra. Asegúrate de
+          verificar los detalles antes de proceder.<br>
+          Los botones pueden tardar...
+        </p>
+      </div>
+      <div class="flex-1 grid grid-cols-1 gap-4">
+        <MercadoPagoButton />
+        <OtherButton />
+        <OtherButton />
+        <OtherButton />
+      </div>
+    </div>
+  </div>
+</template>

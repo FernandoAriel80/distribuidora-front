@@ -25,8 +25,3 @@
   
   onMounted(fetchOrders);
   </script>
-  
-  <style scoped>
-  /* Estilos adicionales */
-  </style>
-  

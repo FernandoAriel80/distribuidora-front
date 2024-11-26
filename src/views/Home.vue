@@ -175,7 +175,6 @@ const isNumber = (value) => {
                               Añadir
                            </button>
                         </div>
-                        <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
                         <SuccessMessage v-if="currentIdMessage == product.id" :message="successMessage" />
                      </div>
                   </div>

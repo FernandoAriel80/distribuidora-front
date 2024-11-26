@@ -23,10 +23,9 @@ const props = defineProps({
                     <router-link to="/">Inicio</router-link>
                     <h1 class="title">{{ props.user?.name }}</h1>
 
-                    <router-link to="/cart" class="bg-blue-500 text-white">
+                    <router-link to="/carrito" class="bg-blue-500 text-white">
                         <div>{{ cartStore.cartQuantity }} Carrito</div>
                     </router-link>
-                    <router-link to="/pay">mercado pago</router-link>
                     <button  @click="logout" class="nav-link">Cerrar Sesión</button>
 
                     <div v-if="props.user?.role === 'admin' || props.user?.role === 'super_admin'">
@@ -36,7 +35,7 @@ const props = defineProps({
 
                 <div v-else class="space-x-6 ml-auto">
                     <router-link to="/">Inicio</router-link>
-                    <router-link to="/login">Iniciar Sesión</router-link>
+                    <router-link to="/inicia-sesion">Iniciar Sesión</router-link>
                 </div>
             </nav>
         </header>

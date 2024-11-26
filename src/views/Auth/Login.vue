@@ -97,7 +97,7 @@ if (message) {
         <div>
           <p class="text-slate-600 mb-2">
             ¿Aún no tienes cuenta?
-            <router-link to="/register" class="text-link text-blue-400">Regístrate</router-link>
+            <router-link to="/registar" class="text-link text-blue-400">Regístrate</router-link>
           </p>
           <FormButton :name="'Iniciar Sesión'" :progress="form.progress" />
         </div>
