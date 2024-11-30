@@ -1,11 +1,22 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import api from '@/app';
+import { TOKEN } from '@/config';
 
 const orders = ref([]);
 
 async function fetchOrders() {
-  const response = await fetch('/api/payment_orders');
-  orders.value = await response.json();
+  try {
+    const response = await api.get('/api/payment_orders', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
+      }
+    });
+    console.log(response.data)
+    orders.value = response.data.orders;
+  } catch (error) {
+    console.error('Error al cargar el carrito:', error);
+  }
 }
 
 onMounted(fetchOrders);
