@@ -12,6 +12,9 @@ import PaymentViewOnline from './views/cart/PaymentViewOnline.vue';
 import PaymentViewInStore from './views/cart/PaymentViewInStore.vue';
 import Order from './views/admin/customers/Order.vue';
 import PaymentProcessing from './views/cart/PaymentProcessing.vue';
+import ProfileView from './views/porfile.vue/ProfileView.vue';
+import ClientsListView from './views/admin/customers/ClientsListView.vue';
+import DashboardView from './views/admin/dashboard/DashboardView.vue';
 import { useAuth } from './composables/UserAuth';
 
 const { user, fetchUser } = useAuth();
@@ -22,12 +25,16 @@ const routes = [
     { path: '/registar', name: 'register', component: Register },
     { path: '/inicia-sesion', name: 'login', component: Login },
     { path: '/carrito', name: 'cart', component: Cart,meta: { requiresAuth: true}},
+    { path: '/perfil', name: 'profile', component: ProfileView,meta: { requiresAuth: true}},
     { path: '/pago-online', name: 'pay-online', component: PaymentViewOnline,meta: { requiresAuth: true}},
     { path: '/pago-presencial', name: 'pay-store', component: PaymentViewInStore,meta: { requiresAuth: true}},
     { path: '/pago-en-proceso', name: 'pay-process', component: PaymentProcessing,meta: { requiresAuth: true}},
     { path: '/vista-productos', name: 'product-index', component: ProductIndex, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] }},
     { path: '/vista-empleados', name: 'employee-index', component: EmployeeIndex, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
     { path: '/vista-pedidos', name: 'costumers-order', component: Order, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] }},
+    { path: '/vista-clientes', name: 'costumers-index', component: ClientsListView, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] }},
+    { path: '/vista-estadísticas', name: 'dashboard-index', component: DashboardView, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
+
     
 ];
 

@@ -19,6 +19,24 @@
         Crea Empleado
         </router-link>
       </li>
+      <li>
+        <router-link to="/vista-clientes"
+        class="block px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transition duration-200">
+        Clientes
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/vista-pedidos"
+        class="block px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transition duration-200">
+        Pedidos
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/vista-estadísticas"
+        class="block px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transition duration-200">
+        Estadisticas
+        </router-link>
+      </li>
     </ul>
   </div>
 </template>
