@@ -26,7 +26,10 @@ onMounted(() => {
         <MercadoPagoButton />
         <OtherButton />
         <OtherButton />
-        <OtherButton />
+        <router-link class="flex justify-center items-center bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+          to="/pago-presencial">
+          Pago Presencial
+        </router-link>
       </div>
     </div>
   </div>

@@ -18,13 +18,8 @@ function closeModal() {
             <div class="flex flex-col gap-4">
                 <router-link 
                     class="flex justify-center items-center bg-green-500 text-white py-2 rounded-lg hover:bg-green-600"
-                    to="/pago-online">
-                    Pago Online
-                </router-link>
-                <router-link
-                    class="flex justify-center items-center bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
-                    to="/pago-presencial">
-                    Pago Presencial
+                    to="/metodo-pago">
+                    Metodo de pago
                 </router-link>
                 <button @click="closeModal"
                     class="flex justify-center items-center bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">

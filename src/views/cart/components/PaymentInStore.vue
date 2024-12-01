@@ -2,6 +2,8 @@
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/UseCartStore'
+import api from '@/app';
+import { TOKEN } from '@/config';
 
 const cartStore = useCartStore()
 const router = useRouter();
@@ -10,8 +12,25 @@ onMounted(() => {
     cartStore.fetchCartItems()
 })
 
-const confirmPurchase = () => {
-    alert("¡Gracias por tu compra! Tu pedido será procesado.");
+const confirmPurchase = async () => {
+    try {
+        const response = await api.post('/api/payment_in_store_orders',
+            {
+                preferenceItems: cartStore.formattedItems,
+                preferenceTotal: cartStore.cartTotal,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
+                }
+            });
+        console.log(response.data)
+       /*  if (response.data.status == 'success') {
+            router.push("/vista-pedidos");
+        } */
+    } catch (error) {
+        console.error('Error al cargar el carrito:', error);
+    }
 };
 const goBackToCart = () => {
     router.push({ name: 'cart' });
@@ -38,7 +57,8 @@ const goBackToCart = () => {
 
                 <div class="p-4 border border-gray-300 rounded-lg">
                     <h4 class="text-lg font-bold">Productos en tu carrito:</h4>
-                    <div v-for="item in cartStore.formattedItems" :key="item.id" class="flex justify-between py-2 border-b">
+                    <div v-for="item in cartStore.formattedItems" :key="item.id"
+                        class="flex justify-between py-2 border-b">
                         <div class="flex-1">
                             <p class="font-semibold">{{ item.title }}</p>
                             <p class="text-gray-500">Cantidad: {{ item.quantity }}</p>
@@ -53,7 +73,7 @@ const goBackToCart = () => {
                 <div class="p-4 border-t-2 border-gray-300 mt-4">
                     <div class="flex justify-between text-lg font-semibold">
                         <p>Total</p>
-                        <p>${{ cartStore.cartTotal  }}</p>
+                        <p>${{ cartStore.cartTotal }}</p>
                     </div>
                     <button @click="confirmPurchase"
                         class="w-full mt-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">

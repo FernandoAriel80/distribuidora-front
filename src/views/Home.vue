@@ -172,7 +172,7 @@ const isNumber = (value) => {
                         <div class="p-2 mt-auto">
                            <button @click="addProductToCart(product.id,isNumber(product.catalog_id) ? 'unit' : product.catalog_id)" :disabled="product.stock == 0"
                               class="w-full bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors  disabled:bg-gray-100 disabled:text-gray-400">
-                              Añadir
+                              Agregar
                            </button>
                         </div>
                         <SuccessMessage v-if="currentIdMessage == product.id" :message="successMessage" />

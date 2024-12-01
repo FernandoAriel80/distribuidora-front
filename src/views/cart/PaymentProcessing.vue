@@ -13,7 +13,7 @@ const router = useRouter();
 async function fetchOrders() {
   console.log(paymentId)
   try {
-    const response = await api.post('/api/payment_orders',
+    const response = await api.post('/api/payment_online_orders',
     {
       paymentId:paymentId,
       preferenceId:preferenceId,
