@@ -86,6 +86,32 @@ export const useCartStore = defineStore('cart', () => {
             console.error('Error al eliminar el producto:', error)
         }
     }
+       // Eliminar del carrito
+    const removeAllCart = async (id) => {
+        try {
+            await api.delete('/api/cart/all/'+id, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
+                }
+            })
+            fetchCartItems()
+        } catch (error) {
+            console.error('Error al eliminar el carrito:', error)
+        }    
+    }
+
+    const removeAllCartOnline = async () => {
+        try {
+            await api.post('/api/cart/all/online', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
+                }
+            })
+            fetchCartItems()
+        } catch (error) {
+            console.error('Error al eliminar el carrito:', error)
+        }    
+    }
 
     return {
         cartItems,
@@ -95,6 +121,8 @@ export const useCartStore = defineStore('cart', () => {
         fetchCartItems,
         addToCart,
         updateQuantity,
-        removeItem
+        removeItem,
+        removeAllCart,
+        removeAllCartOnline
     }
 })

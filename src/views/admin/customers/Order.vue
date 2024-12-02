@@ -96,14 +96,14 @@ const formatNumber = (value) => {
             </td>
             <td v-if="order.status == 'Pagado'" class="border border-gray-200 p-2 text-green-500">{{ order.status }}
             </td>
-            <td v-if="order.delivery_status == 'Listo'" class="border border-gray-200 p-2  text-green-500">{{
-              order.delivery_status }}</td>
             <td v-if="order.status == 'Pendiente'" class="border border-gray-200 p-2 text-orange-500">{{ order.status }}
             </td>
-            <td v-if="order.delivery_status == 'Revision'" class="border border-gray-200 p-2  text-orange-500">{{
-              order.delivery_status }}</td>
             <td v-if="order.status == 'Cancelado'" class="border border-gray-200 p-2 text-red-500">{{ order.status }}
             </td>
+            <td v-if="order.delivery_status == 'Listo'" class="border border-gray-200 p-2  text-green-500">{{
+              order.delivery_status }}</td>
+            <td v-if="order.delivery_status == 'Revision'" class="border border-gray-200 p-2  text-orange-500">{{
+              order.delivery_status }}</td>
             <td v-if="order.delivery_status == 'Entregado'" class="border border-gray-200 p-2  text-blue-500">{{
               order.delivery_status }}</td>
             <td class="border border-gray-200 p-2 text-blue-500 cursor-pointer"

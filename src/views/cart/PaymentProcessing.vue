@@ -3,12 +3,19 @@ import { onMounted } from 'vue';
 import api from '@/app';
 import { TOKEN } from '@/config';
 import { useRouter } from "vue-router";
+import { useCartStore } from '@/stores/UseCartStore'
+
 
 const urlParams = new URLSearchParams(window.location.search);
 const status = urlParams.get('collection_status');
 const paymentId = urlParams.get('collection_id');
 const preferenceId = urlParams.get('preference_id');
+const cartStore = useCartStore()
 const router = useRouter();
+
+onMounted(() => {
+    cartStore.fetchCartItems()
+})
 
 async function fetchOrders() {
   try {
@@ -22,9 +29,9 @@ async function fetchOrders() {
         Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
       }
     });
-    console.log(response.data.status)
     if (response.data.status == 'success') {
-      router.push("/vista-pedidos");
+      cartStore.removeAllCartOnline();
+      router.push("/perfil");
     }
   } catch (error) {
     console.error('Error al cargar el carrito:', error);

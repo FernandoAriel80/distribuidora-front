@@ -111,7 +111,7 @@ const formatNumber = (value) => {
           Método de Pago
         </button> -->
       <router-link  class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400"
-        to="/metodo-pago">
+        to="/metodo-pago" :disabled="isOutOfStock">
         Finalizar Compra
       </router-link>
 

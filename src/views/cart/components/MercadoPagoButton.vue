@@ -27,7 +27,6 @@ const fetchPreferenceId = async () => {
     );
     console.log(response.data.preference)
     preferenceId.value = response.data.preference;
-
     if (preferenceId.value) {
       mp.bricks().create("wallet", "wallet_container", {
         initialization: {

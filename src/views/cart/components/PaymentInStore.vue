@@ -26,6 +26,7 @@ const confirmPurchase = async () => {
             });
         console.log(response.data)
         if (response.data.status == 'aprovated') {
+            cartStore.removeAllCart(response.data.cart_id);
             router.push("/vista-pedidos");
         } 
     } catch (error) {
