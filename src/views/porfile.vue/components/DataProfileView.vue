@@ -91,7 +91,7 @@ const formatNumber = (value) => {
                             <td class="border border-gray-200 p-2">#{{ order.payment_id }}</td>
                             <td class="border border-gray-200 p-2">${{ formatNumber(order.total) }}</td>
                             <td class="border border-gray-200 p-2">{{ order.name }} {{ order.last_name }}</td>
-                            <td class="border border-gray-200 p-2">{{ order.card_last_numb ? '***-'.order.card_last_numb
+                            <td class="border border-gray-200 p-2">{{ order.card_last_numb ? '***-'+order.card_last_numb
                                 : 'Sin Tarjeta'
                                 }}
                             </td>

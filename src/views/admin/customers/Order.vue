@@ -26,7 +26,7 @@ const updateOrderStatus = async (orderId, status, deliveryStatus) => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
-    fetchOrders(); 
+    fetchOrders();
   } catch (error) {
     console.error("Error updating order:", error);
   }
@@ -43,11 +43,11 @@ onMounted(() => {
 });
 
 function formatDate(dateString) {
-    const date = new Date(dateString);
-    const dateFormatted = date.toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' });
-    const timeFormatted = date.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+  const date = new Date(dateString);
+  const dateFormatted = date.toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  const timeFormatted = date.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
 
-    return `${dateFormatted} ${timeFormatted}`;
+  return `${dateFormatted} ${timeFormatted}`;
 }
 
 // Función para formatear números
@@ -71,7 +71,9 @@ const formatNumber = (value) => {
             <th class="border border-gray-200 p-2">ID Pedido</th>
             <th class="border border-gray-200 p-2">Precio Total</th>
             <th class="border border-gray-200 p-2">Nombre Apellido</th>
+            <th class="border border-gray-200 p-2">Metodo de Pago</th>
             <th class="border border-gray-200 p-2">N. Tarjeta</th>
+            <th class="border border-gray-200 p-2">Nombre Tarjeta</th>
             <th class="border border-gray-200 p-2">Estado</th>
             <th class="border border-gray-200 p-2">Estado de Entrega</th>
             <th class="border border-gray-200 p-2">Productos</th>
@@ -81,11 +83,15 @@ const formatNumber = (value) => {
         </thead>
         <tbody>
           <tr v-for="order in orders" :key="order.id">
-            <td class="border border-gray-200 p-2">{{ formatDate( order.hour_and_date) }}</td>
+            <td class="border border-gray-200 p-2">{{ formatDate(order.hour_and_date) }}</td>
             <td class="border border-gray-200 p-2">#{{ order.payment_id }}</td>
             <td class="border border-gray-200 p-2">${{ formatNumber(order.total) }}</td>
             <td class="border border-gray-200 p-2">{{ order.name }} {{ order.last_name }}</td>
-            <td class="border border-gray-200 p-2">{{ order.card_last_numb ? '***-'.order.card_last_numb : 'Sin Tarjeta'
+            <td class="border border-gray-200 p-2">{{ order.type_card }}</td>
+            <td class="border border-gray-200 p-2">{{ order.card_last_numb ? '***-' + order.card_last_numb : 'Sin Tarjeta'
+              }}
+            </td>
+            <td class="border border-gray-200 p-2">{{ order.card_name_user ? order.card_name_user : 'Sin Tarjeta'
               }}
             </td>
             <td v-if="order.status == 'Pagado'" class="border border-gray-200 p-2 text-green-500">{{ order.status }}
