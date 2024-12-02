@@ -69,7 +69,7 @@ const formatNumber = (value) => {
             <p><span class="font-medium">Codigo Postal:</span> {{ address?.postal_code }}</p>
         </div>
 
-        <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="bg-white shadow-md rounded-lg p-4">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Orders</h2>
             <div v-if="orders.length" class="overflow-x-auto">
                 <table class="table-auto w-full border-collapse border border-gray-200">

@@ -1,16 +1,23 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,watch } from "vue";
 import api from "@/app";
+import SearchInput from '@/components/SearchInput.vue';
 
 const orders = ref([]);
 const currenlyProducts = ref([]);
 const showModal = ref(false);
+const search = ref('');
 
 const fetchOrders = async () => {
   try {
     const response = await api.get("/api/admin/orders", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+            params: {
+                search: search.value,
+            },
+        },
+        {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
     console.log(response.data)
     orders.value = response.data.orders;
   } catch (error) {
@@ -32,6 +39,9 @@ const updateOrderStatus = async (orderId, status, deliveryStatus) => {
   }
 };
 
+watch([search], () => {
+  fetchOrders();
+});
 
 const fetchOrderProducts = async (products) => {
   currenlyProducts.value = products;
@@ -61,8 +71,10 @@ const formatNumber = (value) => {
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-6">Orders List</h1>
+  <div class="max-w-8xl mx-auto p-3">
+    <h1 class="text-2xl font-bold mb-3">Lista de Pedidos</h1>
+    <h4>Se puede buscar por (id pedido, nombre, apellido, dni)</h4>
+    <SearchInput v-model:searchValue="search" />
     <div v-if="orders.length" class="overflow-x-auto">
       <table class="table-auto w-full border-collapse border border-gray-200">
         <thead>
@@ -71,6 +83,7 @@ const formatNumber = (value) => {
             <th class="border border-gray-200 p-2">ID Pedido</th>
             <th class="border border-gray-200 p-2">Precio Total</th>
             <th class="border border-gray-200 p-2">Nombre Apellido</th>
+            <th class="border border-gray-200 p-2">DNI</th>
             <th class="border border-gray-200 p-2">Metodo de Pago</th>
             <th class="border border-gray-200 p-2">N. Tarjeta</th>
             <th class="border border-gray-200 p-2">Nombre Tarjeta</th>
@@ -87,6 +100,7 @@ const formatNumber = (value) => {
             <td class="border border-gray-200 p-2">#{{ order.payment_id }}</td>
             <td class="border border-gray-200 p-2">${{ formatNumber(order.total) }}</td>
             <td class="border border-gray-200 p-2">{{ order.name }} {{ order.last_name }}</td>
+            <td class="border border-gray-200 p-2">{{ order.dni }}</td>
             <td class="border border-gray-200 p-2">{{ order.type_card }}</td>
             <td class="border border-gray-200 p-2">{{ order.card_last_numb ? '***-' + order.card_last_numb : 'Sin Tarjeta'
               }}

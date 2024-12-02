@@ -13,7 +13,7 @@ const setView = (view) => {
 </script>
 
 <template>
-    <div class="flex max-w-6xl mx-auto p-6 space-x-4">
+    <div class="flex max-w-8xl mx-auto p-6 space-x-4">
         <div class="flex flex-col space-y-4 w-1/4">
             <button @click="setView('dataProfile')" :class="[
                 'w-full py-2 px-4 rounded text-white',
