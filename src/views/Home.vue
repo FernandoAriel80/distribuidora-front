@@ -74,6 +74,13 @@ function addCartMessage() {
 const isNumber = (value) => {
       return !isNaN(value) && typeof value === 'number';
     }
+// Función para formatear números
+const formatNumber = (value) => {
+  return new Intl.NumberFormat("es-AR", {
+    style: "decimal",
+    minimumFractionDigits: 0,
+  }).format(value);
+};
 </script>
 
 <template>
@@ -132,25 +139,25 @@ const isNumber = (value) => {
                               <p class="text-gray-500 text-xs mb-1">{{ product.description }}</p>
                               <div v-if="product.offer" class="flex items-center justify-between mb-2">
                                  <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: $<p
-                                       class="line-through">{{ product.old_price }}</p></span>
+                                       class="line-through">{{ formatNumber(product.old_price) }}</p></span>
                                  <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: $<p
-                                       class="line-through">{{ product.old_price }}</p></span>
+                                       class="line-through">{{ formatNumber(product.old_price) }}</p></span>
                                  <div>
                                     <span class="text-green-600 font-bold text-xs"> Oferta Unidad: ${{
-                                       product.price_offer }}</span>
+                                       formatNumber(product.price_offer) }}</span>
                                     <br>
                                     <span v-if="product.bulk_unit_price" class="text-green-600 font-bold text-xs">
                                        Oferta por Bulto: ${{
-                                          product.bulk_unit_price }}</span>
+                                          formatNumber(product.bulk_unit_price) }}</span>
                                  </div>
                               </div>
                               <div v-else class="flex items-center justify-between mb-2">
                                  <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: ${{
-                                    product.unit_price }}</span>
+                                    formatNumber(product.unit_price) }}</span>
                                  <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: ${{
-                                    product.unit_price }}</span>
+                                    formatNumber(product.unit_price) }}</span>
                                  <span v-if="product.bulk_unit_price" class="text-gray-800 font-bold text-xs">Bulto: ${{
-                                    product.bulk_unit_price }}</span>
+                                    formatNumber(product.bulk_unit_price) }}</span>
                               </div>
                               <div v-if="product.stock == 0" class="flex items-center justify-between mb-2">
                                  <span class="text-red-500 text-xs">Sin stock</span>
@@ -175,7 +182,7 @@ const isNumber = (value) => {
                               Agregar
                            </button>
                         </div>
-                        <SuccessMessage v-if="currentIdMessage == product.id" :message="successMessage" />
+                        <SuccessMessage class="fixed bottom-40 left-1/2 transform -translate-x-1/2" v-if="currentIdMessage == product.id" :message="successMessage" />
                      </div>
                   </div>
 

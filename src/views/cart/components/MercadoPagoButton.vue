@@ -17,7 +17,7 @@ const preferenceId = ref(null);
 const fetchPreferenceId = async () => {
   try {
     const response = await api.post(
-      "/api/process_payment",
+      "/api/process_mercado_pago_payment",
       { products: cartStore.formattedItems },
       {
         headers: {

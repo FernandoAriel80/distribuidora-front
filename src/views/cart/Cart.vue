@@ -37,12 +37,20 @@ const isOutOfStock = computed(() => {
   return cartStore.cartItems.some(item => item.product.stock === 0)
 });
 
-// Modal
+/* // Modal
 const isModalOpen = ref(false);
 
 function openModal() {
   isModalOpen.value = true;
-}
+} */
+
+// Función para formatear números
+const formatNumber = (value) => {
+  return new Intl.NumberFormat("es-AR", {
+    style: "decimal",
+    minimumFractionDigits: 0,
+  }).format(value);
+};
 </script>
 
 <template>
@@ -61,19 +69,19 @@ function openModal() {
         <div v-if="item.product.stock == 1" class="flex-1">
           <h3 class="text-lg font-semibold">{{ item.product.name }}</h3>
           <p v-if="item.product.type_id == 1" class="text-gray-500">Precio: ${{ item.type_price == 'unit' ?
-            item.product.unit_price : item.product.bulk_unit_price }}</p>
-          <p v-if="item.product.type_id == 2" class="text-gray-500">Precio: ${{ item.product.unit_price }}</p>
-          <p class="text-gray-500">Subtotal: ${{ item.total }}</p>
+            formatNumber(item.product.unit_price) : formatNumber(item.product.bulk_unit_price) }}</p>
+          <p v-if="item.product.type_id == 2" class="text-gray-500">Precio: ${{ formatNumber(item.product.unit_price) }}</p>
+          <p class="text-gray-500">Subtotal: ${{ formatNumber(item.total) }}</p>
           <p v-if="item.product.type_id == 1" class="text-gray-500">Tipo de precio: {{ item.type_price == 'unit' ?
             'unico x1' : 'bulto x' + item.product.bulk_unit }}</p>
         </div>
         <div v-else class="flex-1">
           <h3 class="text-lg font-semibold line-through">{{ item.product.name }}</h3>
           <p v-if="item.product.type_id == 1" class="text-gray-500 line-through">Precio: ${{ item.type_price == 'unit' ?
-            item.product.unit_price : item.product.bulk_unit_price }}</p>
-          <p v-if="item.product.type_id == 2" class="text-gray-500 line-through">Precio: ${{ item.product.unit_price }}
+            formatNumber(item.product.unit_price) : formatNumber(item.product.bulk_unit_price) }}</p>
+          <p v-if="item.product.type_id == 2" class="text-gray-500 line-through">Precio: ${{ formatNumber(item.product.unit_price) }}
           </p>
-          <p class="text-gray-500 line-through">Subtotal: ${{ item.total }}</p>
+          <p class="text-gray-500 line-through">Subtotal: ${{ formatNumber(item.total) }}</p>
           <p v-if="item.product.type_id == 1" class="text-gray-500 line-through">Tipo de precio: {{ item.type_price ==
             'unit' ? 'unico x1' : 'bulto x' + item.product.bulk_unit }}</p>
         </div>
@@ -97,7 +105,7 @@ function openModal() {
       </div>
 
       <div class="mt-6 text-right">
-        <h3 class="text-xl font-bold">Total: ${{ cartStore.cartTotal }}</h3>
+        <h3 class="text-xl font-bold">Total: ${{ formatNumber(cartStore.cartTotal) }}</h3>
       </div>
       <!--   <button @click="openModal" :disabled="isOutOfStock" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400">
           Método de Pago

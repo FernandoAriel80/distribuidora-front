@@ -11,9 +11,8 @@ const preferenceId = urlParams.get('preference_id');
 const router = useRouter();
 
 async function fetchOrders() {
-  console.log(paymentId)
   try {
-    const response = await api.post('/api/payment_online_orders',
+    const response = await api.post('/api/payment_mercado_pago_orders',
     {
       paymentId:paymentId,
       preferenceId:preferenceId,

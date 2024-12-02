@@ -25,15 +25,23 @@ const confirmPurchase = async () => {
                 }
             });
         console.log(response.data)
-       /*  if (response.data.status == 'success') {
+        if (response.data.status == 'aprovated') {
             router.push("/vista-pedidos");
-        } */
+        } 
     } catch (error) {
         console.error('Error al cargar el carrito:', error);
     }
 };
 const goBackToCart = () => {
     router.push({ name: 'cart' });
+};
+
+// Función para formatear números
+const formatNumber = (value) => {
+  return new Intl.NumberFormat("es-AR", {
+    style: "decimal",
+    minimumFractionDigits: 0,
+  }).format(value);
 };
 </script>
 <template>
@@ -62,10 +70,10 @@ const goBackToCart = () => {
                         <div class="flex-1">
                             <p class="font-semibold">{{ item.title }}</p>
                             <p class="text-gray-500">Cantidad: {{ item.quantity }}</p>
-                            <p class="text-gray-500">Precio: ${{ item.unit_price }}</p>
+                            <p class="text-gray-500">Precio: ${{ formatNumber(item.unit_price) }}</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-gray-600">Subtotal: ${{ item.total }}</p>
+                            <p class="text-gray-600">Subtotal: ${{ formatNumber(item.total) }}</p>
                         </div>
                     </div>
                 </div>
@@ -73,7 +81,7 @@ const goBackToCart = () => {
                 <div class="p-4 border-t-2 border-gray-300 mt-4">
                     <div class="flex justify-between text-lg font-semibold">
                         <p>Total</p>
-                        <p>${{ cartStore.cartTotal }}</p>
+                        <p>${{ formatNumber(cartStore.cartTotal) }}</p>
                     </div>
                     <button @click="confirmPurchase"
                         class="w-full mt-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
