@@ -1,25 +1,37 @@
 <script setup>
 import { ref, onMounted,watch } from "vue";
 import api from "@/app";
+import { TOKEN } from "@/config";
 import SearchInput from '@/components/SearchInput.vue';
+import Pagination from '@/components/Pagination.vue';
+import { debounce } from 'lodash';
 
 const orders = ref([]);
+const search = ref('');
+const pagination = ref(null);
 const currenlyProducts = ref([]);
 const showModal = ref(false);
-const search = ref('');
 
-const fetchOrders = async () => {
+const fetchPage = async (url ='/api/admin/orders') => {
   try {
-    const response = await api.get("/api/admin/orders", {
+    const response = await api.get(url, {
             params: {
                 search: search.value,
             },
         },
         {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            headers: { 
+              Authorization: `Bearer ${localStorage.getItem(TOKEN)}` 
+            },
         });
-    console.log(response.data)
-    orders.value = response.data.orders;
+    console.log(response.data.orders)
+    orders.value = response.data.orders.data;
+    pagination.value = {
+            current_page: response.data.orders.current_page,
+            last_page: response.data.orders.last_page,
+            next_page_url: response.data.orders.next_page_url,
+            prev_page_url: response.data.orders.prev_page_url,
+        };
   } catch (error) {
     console.error("Error fetching orders:", error);
   }
@@ -30,27 +42,31 @@ const updateOrderStatus = async (orderId, status, deliveryStatus) => {
     await api.put('/api/admin/orders/' + orderId,
       { status: status, delivery_status: deliveryStatus },
       {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem(TOKEN)}` },
       }
     );
-    fetchOrders();
+    fetchPage();
   } catch (error) {
     console.error("Error updating order:", error);
   }
 };
 
-watch([search], () => {
-  fetchOrders();
+onMounted(() => {
+  fetchPage();
 });
+
+watch([search], () => {
+  searchDebounced();
+});
+
+const searchDebounced = debounce(() => {
+  fetchPage();
+}, 300);
 
 const fetchOrderProducts = async (products) => {
   currenlyProducts.value = products;
   showModal.value = true;
 };
-
-onMounted(() => {
-  fetchOrders();
-});
 
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -75,74 +91,77 @@ const formatNumber = (value) => {
     <h1 class="text-2xl font-bold mb-3">Lista de Pedidos</h1>
     <h4>Se puede buscar por (id pedido, nombre, apellido, dni)</h4>
     <SearchInput v-model:searchValue="search" />
-    <div v-if="orders.length" class="overflow-x-auto">
-      <table class="table-auto w-full border-collapse border border-gray-200">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="border border-gray-200 p-2">Fecha y Hora</th>
-            <th class="border border-gray-200 p-2">ID Pedido</th>
-            <th class="border border-gray-200 p-2">Precio Total</th>
-            <th class="border border-gray-200 p-2">Nombre Apellido</th>
-            <th class="border border-gray-200 p-2">DNI</th>
-            <th class="border border-gray-200 p-2">Metodo de Pago</th>
-            <th class="border border-gray-200 p-2">N. Tarjeta</th>
-            <th class="border border-gray-200 p-2">Nombre Tarjeta</th>
-            <th class="border border-gray-200 p-2">Estado</th>
-            <th class="border border-gray-200 p-2">Estado de Entrega</th>
-            <th class="border border-gray-200 p-2">Productos</th>
-            <th class="border border-gray-200 p-2">Cambia Estado</th>
-            <th class="border border-gray-200 p-2">Cambia Estado de Entrega</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="order in orders" :key="order.id">
-            <td class="border border-gray-200 p-2">{{ formatDate(order.hour_and_date) }}</td>
-            <td class="border border-gray-200 p-2">#{{ order.payment_id }}</td>
-            <td class="border border-gray-200 p-2">${{ formatNumber(order.total) }}</td>
-            <td class="border border-gray-200 p-2">{{ order.name }} {{ order.last_name }}</td>
-            <td class="border border-gray-200 p-2">{{ order.dni }}</td>
-            <td class="border border-gray-200 p-2">{{ order.type_card }}</td>
-            <td class="border border-gray-200 p-2">{{ order.card_last_numb ? '***-' + order.card_last_numb : 'Sin Tarjeta'
-              }}
-            </td>
-            <td class="border border-gray-200 p-2">{{ order.card_name_user ? order.card_name_user : 'Sin Tarjeta'
-              }}
-            </td>
-            <td v-if="order.status == 'Pagado'" class="border border-gray-200 p-2 text-green-500">{{ order.status }}
-            </td>
-            <td v-if="order.status == 'Pendiente'" class="border border-gray-200 p-2 text-orange-500">{{ order.status }}
-            </td>
-            <td v-if="order.status == 'Cancelado'" class="border border-gray-200 p-2 text-red-500">{{ order.status }}
-            </td>
-            <td v-if="order.delivery_status == 'Listo'" class="border border-gray-200 p-2  text-green-500">{{
-              order.delivery_status }}</td>
-            <td v-if="order.delivery_status == 'Revision'" class="border border-gray-200 p-2  text-orange-500">{{
-              order.delivery_status }}</td>
-            <td v-if="order.delivery_status == 'Entregado'" class="border border-gray-200 p-2  text-blue-500">{{
-              order.delivery_status }}</td>
-            <td class="border border-gray-200 p-2 text-blue-500 cursor-pointer"
-              @click="fetchOrderProducts(order.order_items)">
-              Ver
-            </td>
-            <td class="border border-gray-200 p-2">
-              <select v-model="order.status" class="border p-1"
-                @change="updateOrderStatus(order.id, order.status, order.delivery_status)">
-                <option value="Pagado">Pagado</option>
-                <option value="Pendiente">Pendiente</option>
-                <option value="Cancelado">Cancelado</option>
-              </select>
-            </td>
-            <td class="border border-gray-200 p-2">
-              <select v-model="order.delivery_status" class="border p-1"
-                @change="updateOrderStatus(order.id, order.status, order.delivery_status)">
-                <option value="Listo">Listo</option>
-                <option value="Revision">Revisión</option>
-                <option value="Entregado">Entregado</option>
-              </select>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div v-if="orders.length">
+      <div class="overflow-x-auto">
+        <table class="table-auto w-full border-collapse border border-gray-200">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-200 p-2">Fecha y Hora</th>
+              <th class="border border-gray-200 p-2">ID Pedido</th>
+              <th class="border border-gray-200 p-2">Precio Total</th>
+              <th class="border border-gray-200 p-2">Nombre Apellido</th>
+              <th class="border border-gray-200 p-2">DNI</th>
+              <th class="border border-gray-200 p-2">Metodo de Pago</th>
+              <th class="border border-gray-200 p-2">N. Tarjeta</th>
+              <th class="border border-gray-200 p-2">Nombre Tarjeta</th>
+              <th class="border border-gray-200 p-2">Estado</th>
+              <th class="border border-gray-200 p-2">Estado de Entrega</th>
+              <th class="border border-gray-200 p-2">Productos</th>
+              <th class="border border-gray-200 p-2">Cambia Estado</th>
+              <th class="border border-gray-200 p-2">Cambia Estado de Entrega</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="order in orders" :key="order.id">
+              <td class="border border-gray-200 p-2">{{ formatDate(order.hour_and_date) }}</td>
+              <td class="border border-gray-200 p-2">#{{ order.payment_id }}</td>
+              <td class="border border-gray-200 p-2">${{ formatNumber(order.total) }}</td>
+              <td class="border border-gray-200 p-2">{{ order.name }} {{ order.last_name }}</td>
+              <td class="border border-gray-200 p-2">{{ order.dni }}</td>
+              <td class="border border-gray-200 p-2">{{ order.type_card }}</td>
+              <td class="border border-gray-200 p-2">{{ order.card_last_numb ? '***-' + order.card_last_numb : 'Sin Tarjeta'
+                }}
+              </td>
+              <td class="border border-gray-200 p-2">{{ order.card_name_user ? order.card_name_user : 'Sin Tarjeta'
+                }}
+              </td>
+              <td v-if="order.status == 'Pagado'" class="border border-gray-200 p-2 text-green-500">{{ order.status }}
+              </td>
+              <td v-if="order.status == 'Pendiente'" class="border border-gray-200 p-2 text-orange-500">{{ order.status }}
+              </td>
+              <td v-if="order.status == 'Cancelado'" class="border border-gray-200 p-2 text-red-500">{{ order.status }}
+              </td>
+              <td v-if="order.delivery_status == 'Listo'" class="border border-gray-200 p-2  text-green-500">{{
+                order.delivery_status }}</td>
+              <td v-if="order.delivery_status == 'Revision'" class="border border-gray-200 p-2  text-orange-500">{{
+                order.delivery_status }}</td>
+              <td v-if="order.delivery_status == 'Entregado'" class="border border-gray-200 p-2  text-blue-500">{{
+                order.delivery_status }}</td>
+              <td class="border border-gray-200 p-2 text-blue-500 cursor-pointer"
+                @click="fetchOrderProducts(order.order_items)">
+                Ver
+              </td>
+              <td class="border border-gray-200 p-2">
+                <select v-model="order.status" class="border p-1"
+                  @change="updateOrderStatus(order.id, order.status, order.delivery_status)">
+                  <option value="Pagado">Pagado</option>
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="Cancelado">Cancelado</option>
+                </select>
+              </td>
+              <td class="border border-gray-200 p-2">
+                <select v-model="order.delivery_status" class="border p-1"
+                  @change="updateOrderStatus(order.id, order.status, order.delivery_status)">
+                  <option value="Listo">Listo</option>
+                  <option value="Revision">Revisión</option>
+                  <option value="Entregado">Entregado</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <Pagination :pagination="pagination" :fetchPage="fetchPage" />
     </div>
     <div v-else>
       <h1>No hay Pedidos</h1>
