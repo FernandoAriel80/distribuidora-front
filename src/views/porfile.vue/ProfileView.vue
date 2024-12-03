@@ -1,7 +1,14 @@
 <script setup>
-import { ref } from "vue";
+import { ref,onMounted } from "vue";
 import DataProfileView from "./components/DataProfileView.vue";
 import UpdateProfileView from "./components/UpdateProfileView.vue";
+import { useCartStore } from '@/stores/UseCartStore'
+
+const cartStore = useCartStore()
+
+onMounted(() => {
+  cartStore.fetchCartItems()
+})
 
 // Controla qué vista se muestra
 const currentView = ref("dataProfile");

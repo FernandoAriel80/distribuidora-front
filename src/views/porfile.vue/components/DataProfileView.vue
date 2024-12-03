@@ -61,16 +61,17 @@ const formatNumber = (value) => {
         </div>
 
         <div class="bg-white shadow-md rounded-lg p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Address</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Dirección</h2>
             <p><span class="font-medium">DNI:</span> {{ address?.dni }}</p>
+            <p><span class="font-medium">Numero Telefono:</span> {{ address?.phone_number }}</p>
             <p><span class="font-medium">Genero:</span> {{ address?.gender }}</p>
-            <p><span class="font-medium">Direccion:</span> {{ address?.address }}</p>
+            <p><span class="font-medium">Dirección:</span> {{ address?.address }}</p>
             <p><span class="font-medium">Localidad:</span> {{ address?.city }}</p>
             <p><span class="font-medium">Codigo Postal:</span> {{ address?.postal_code }}</p>
         </div>
 
         <div class="bg-white shadow-md rounded-lg p-4">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Orders</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Mis Pedidos</h2>
             <div v-if="orders.length" class="overflow-x-auto">
                 <table class="table-auto w-full border-collapse border border-gray-200">
                     <thead>

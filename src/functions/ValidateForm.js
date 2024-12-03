@@ -258,7 +258,7 @@ export const validateRegisterEmpleado = (field, errors, form) => {
                     ? ''
                     : 'La contraseña debe tener al menos 8 caracteres.';
                 return errors.password;
-            }else{
+            } else {
                 return errors.password;
             }
 
@@ -270,9 +270,82 @@ export const validateRegisterEmpleado = (field, errors, form) => {
                         : 'Las contraseñas no coinciden'
                     : 'La contraseña debe tener al menos 8 caracteres.';
                 return errors.password_confirmation;
-            }else{
+            } else {
                 return errors.password_confirmation;
             }
 
     }
 };
+
+export const validateAddress = (field, errors, address) => {
+    switch (field) {
+        case 'dni':
+            const dniPattern = /^[0-9]{7,8}$/;  // Asumiendo que el DNI es solo números de 7 a 8 dígitos
+            errors.dni = address.value.dni
+                ? dniPattern.test(address.value.dni)
+                    ? ''
+                    : 'El DNI debe contener solo números y tener entre 7 y 8 dígitos.'
+                : 'El DNI es requerido.';
+            return errors.dni;
+        case 'phone_number':
+            // Validación para el número de teléfono en Argentina
+            const phonePattern = /^[0-9]{10}$/;
+            errors.phone_number = address.value.phone_number
+                ? phonePattern.test(address.value.phone_number)
+                    ? ''
+                    : 'El número de teléfono no es válido. Debe ser un número de Argentina.'
+                : 'El número de teléfono es requerido.';
+            return errors.phone_number;
+        case 'gender':
+            // Validar que el género sea uno de los valores esperados: 'hombre', 'mujer', 'otros'
+            errors.gender = address.value.gender
+                ? ['hombre', 'mujer', 'otros'].includes(address.value.gender)
+                    ? ''
+                    : 'El género debe ser "hombre", "mujer" o "otros".'
+                : 'El género es requerido.';
+            return errors.gender;
+
+
+        /*  case 'birth_date':
+             const birthDatePattern = /^\d{4}-\d{2}-\d{2}$/;  // Formato YYYY-MM-DD
+             errors.birth_date = address.value.birth_date
+                 ? birthDatePattern.test(address.value.birth_date)
+                     ? ''
+                     : 'La fecha de nacimiento debe tener el formato YYYY-MM-DD.'
+                 : 'La fecha de nacimiento es requerida.';
+             return errors.birth_date; */
+
+        case 'address':
+            // Validar que la dirección no sea vacía y que no exceda los 255 caracteres
+            errors.address = address.value.address
+                ? address.value.address.length <= 255
+                    ? ''
+                    : 'La dirección no debe exceder los 255 caracteres.'
+                : 'La dirección es requerida.';
+            return errors.address;
+
+        case 'postal_code':
+            // Validar que el código postal sea un número de 4 a 5 dígitos
+            const postalCodePattern = /^[0-9]{4,5}$/;
+            errors.postal_code = address.value.postal_code
+                ? postalCodePattern.test(address.value.postal_code)
+                    ? ''
+                    : 'El código postal debe contener entre 4 y 5 dígitos numéricos.'
+                : 'El código postal es requerido.';
+            return errors.postal_code;
+
+        case 'city':
+            // Validar que la ciudad no esté vacía y no exceda los 100 caracteres
+            errors.city = address.value.city
+                ? address.value.city.length <= 100
+                    ? ''
+                    : 'La ciudad no debe exceder los 100 caracteres.'
+                : 'La ciudad es requerida.';
+            return errors.city;
+
+        default:
+            errors[field] = 'Campo no reconocido.';
+            return errors[field];
+    }
+};
+

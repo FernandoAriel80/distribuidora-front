@@ -27,7 +27,7 @@ const confirmPurchase = async () => {
         console.log(response.data)
         if (response.data.status == 'aprovated') {
             cartStore.removeAllCart(response.data.cart_id);
-            router.push("/vista-pedidos");
+            router.push("/perfil");
         } 
     } catch (error) {
         console.error('Error al cargar el carrito:', error);

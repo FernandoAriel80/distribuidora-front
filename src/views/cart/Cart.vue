@@ -1,11 +1,15 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { BASE_URL } from '@/config';
+import api from '@/app';
 import { useCartStore } from '@/stores/UseCartStore'
 import SuccessMessage from '@/components/SuccessMessage.vue';
 import PaymentModal from './components/PaymentModal.vue';
+import Modal from '@/components/Modal.vue';
+import Createaddress from '@/views/Auth/Address.vue'
 import { showMessage, messageAlert } from '@/functions/MessageAlert';
 import { debounce } from 'lodash'
+import router from '@/router';
 
 const cartStore = useCartStore()
 
@@ -32,17 +36,13 @@ const successMessage = ref(messageAlert);
 function deleteItemMessage() {
   showMessage('Eliminado del carrito.');
 }
+function createAddressMessage() {
+  showMessage('La dirección se ha guardado con éxito.');
+}
 
 const isOutOfStock = computed(() => {
   return cartStore.cartItems.some(item => item.product.stock === 0)
 });
-
-/* // Modal
-const isModalOpen = ref(false);
-
-function openModal() {
-  isModalOpen.value = true;
-} */
 
 // Función para formatear números
 const formatNumber = (value) => {
@@ -51,6 +51,32 @@ const formatNumber = (value) => {
     minimumFractionDigits: 0,
   }).format(value);
 };
+
+// Modal
+
+const showModalCreate = ref(false);
+const openModalCreate = () => showModalCreate.value = true;
+const closeModalCreate = () => showModalCreate.value = false;
+
+const hasAddress = async () => {
+  try {
+    const response = await api.get('/api/address');
+    console.log(response.data)
+    if (!response.data.exist) {
+      openModalCreate();
+    } else {
+      router.push("/metodo-pago")
+    }
+  } catch (error) {
+    console.error('Error al cargar los datos de direccion:', error);
+  }
+}
+
+const handleCreated = () => {
+  closeModalCreate(); 
+  createAddressMessage();
+};
+
 </script>
 
 <template>
@@ -70,7 +96,8 @@ const formatNumber = (value) => {
           <h3 class="text-lg font-semibold">{{ item.product.name }}</h3>
           <p v-if="item.product.type_id == 1" class="text-gray-500">Precio: ${{ item.type_price == 'unit' ?
             formatNumber(item.product.unit_price) : formatNumber(item.product.bulk_unit_price) }}</p>
-          <p v-if="item.product.type_id == 2" class="text-gray-500">Precio: ${{ formatNumber(item.product.unit_price) }}</p>
+          <p v-if="item.product.type_id == 2" class="text-gray-500">Precio: ${{ formatNumber(item.product.unit_price) }}
+          </p>
           <p class="text-gray-500">Subtotal: ${{ formatNumber(item.total) }}</p>
           <p v-if="item.product.type_id == 1" class="text-gray-500">Tipo de precio: {{ item.type_price == 'unit' ?
             'unico x1' : 'bulto x' + item.product.bulk_unit }}</p>
@@ -79,7 +106,8 @@ const formatNumber = (value) => {
           <h3 class="text-lg font-semibold line-through">{{ item.product.name }}</h3>
           <p v-if="item.product.type_id == 1" class="text-gray-500 line-through">Precio: ${{ item.type_price == 'unit' ?
             formatNumber(item.product.unit_price) : formatNumber(item.product.bulk_unit_price) }}</p>
-          <p v-if="item.product.type_id == 2" class="text-gray-500 line-through">Precio: ${{ formatNumber(item.product.unit_price) }}
+          <p v-if="item.product.type_id == 2" class="text-gray-500 line-through">Precio: ${{
+            formatNumber(item.product.unit_price) }}
           </p>
           <p class="text-gray-500 line-through">Subtotal: ${{ formatNumber(item.total) }}</p>
           <p v-if="item.product.type_id == 1" class="text-gray-500 line-through">Tipo de precio: {{ item.type_price ==
@@ -107,15 +135,22 @@ const formatNumber = (value) => {
       <div class="mt-6 text-right">
         <h3 class="text-xl font-bold">Total: ${{ formatNumber(cartStore.cartTotal) }}</h3>
       </div>
+      <button @click="hasAddress" :disabled="isOutOfStock"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400">
+        Finalizar Compra
+      </button>
+      <Modal :isOpen="showModalCreate" :closeModal="closeModalCreate">
+        <Createaddress @actionExecuted="handleCreated" />
+      </Modal>
       <!--   <button @click="openModal" :disabled="isOutOfStock" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400">
-          Método de Pago
+          Finalizar Compra
         </button> -->
-      <router-link  class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400"
+      <!-- <router-link  class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400"
         to="/metodo-pago" :disabled="isOutOfStock">
         Finalizar Compra
-      </router-link>
+      </router-link> -->
 
-      <PaymentModal v-if="isModalOpen" @close="isModalOpen = false" />
+      <!-- <PaymentModal v-if="isModalOpen" @close="isModalOpen = false" /> -->
     </div>
   </div>
 </template>
