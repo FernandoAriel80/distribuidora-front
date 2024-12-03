@@ -66,6 +66,7 @@ const formatNumber = (value) => {
             <p><span class="font-medium">Numero Telefono:</span> {{ address?.phone_number }}</p>
             <p><span class="font-medium">Genero:</span> {{ address?.gender }}</p>
             <p><span class="font-medium">Dirección:</span> {{ address?.address }}</p>
+            <p><span class="font-medium">Departamento:</span> {{ address?.department }}</p>
             <p><span class="font-medium">Localidad:</span> {{ address?.city }}</p>
             <p><span class="font-medium">Codigo Postal:</span> {{ address?.postal_code }}</p>
         </div>

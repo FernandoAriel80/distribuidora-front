@@ -10,8 +10,8 @@ const address = ref({
     dni: '',
     phone_number: '',
     gender: '',
-    //birth_date: '',
     address: '',
+    department: '',
     postal_code: '',
     city: '',
     progress: false,
@@ -21,8 +21,8 @@ const errors = reactive({
     dni: '',
     phone_number: '',
     gender: '',
-    //birth_date: '',
     address: '',
+    //department: '',
     postal_code: '',
     city: ''
 });
@@ -46,6 +46,7 @@ const submit = async () => {
                 phone_number: address.value.phone_number,
                 gender: address.value.gender,
                 address: address.value.address,
+                department:address.value.department,
                 postal_code: address.value.postal_code,
                 city: address.value.city,
             });
@@ -70,10 +71,10 @@ const submit = async () => {
             </p>
 
             <div class="mb-6">
-                <TextInput name="DNI" v-model="address.dni" :message="errors.dni" />
-                <TextInput name="Número de Teléfono" v-model="address.phone_number" :message="errors.phone_number" />
+                <TextInput name="DNI*" v-model="address.dni" :message="errors.dni" />
+                <TextInput name="Número de Teléfono*" v-model="address.phone_number" :message="errors.phone_number" />
                 <div class="mb-4">
-                    <label for="gender" class="block text-sm font-medium text-slate-700">Género</label>
+                    <label for="gender" class="block text-sm font-medium text-slate-700">Género*</label>
                     <select id="gender" v-model="address.gender" class="w-full p-2 border rounded"
                         :class="{ 'border-red-500': errors.gender }">
                         <option value="" disabled selected>Selecciona un género</option>
@@ -83,11 +84,10 @@ const submit = async () => {
                     </select>
                     <span v-if="errors.gender" class="text-red-500 text-sm">{{ errors.gender }}</span>
                 </div>
-               <!--  <TextInput name="Fecha de nacimiento" type="date" v-model="address.birth_date"
-                    :message="errors.birth_date" /> -->
-                <TextInput name="Dirección" v-model="address.address" :message="errors.address" />
-                <TextInput name="Código Postal" v-model="address.postal_code" :message="errors.postal_code" />
-                <TextInput name="Localidad" v-model="address.city" :message="errors.city" />
+                <TextInput name="Dirección*" v-model="address.address" :message="errors.address" />
+                <TextInput name="Departamento (opcional)" v-model="address.department" />
+                <TextInput name="Código Postal*" v-model="address.postal_code" :message="errors.postal_code" />
+                <TextInput name="Localidad*" v-model="address.city" :message="errors.city" />
             </div>
 
             <div>
