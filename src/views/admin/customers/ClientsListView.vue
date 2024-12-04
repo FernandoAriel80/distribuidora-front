@@ -54,7 +54,7 @@ const searchDebounced = debounce(() => {
   <Layout />
   <div class="max-w-6xl mx-auto p-6">
     <h1 class="text-2xl font-bold mb-6">Clientes</h1>
-    <h4>Se puede buscar por (nombre, apellido)</h4>
+    <h4>Se puede buscar por (nombre, apellido, dni)</h4>
     <SearchInput v-model:searchValue="search" />
     <div v-if="clients.length">
       <div class="overflow-x-auto">
