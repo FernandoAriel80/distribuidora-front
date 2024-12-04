@@ -3,10 +3,9 @@ import { onMounted, ref, computed } from 'vue'
 import { BASE_URL } from '@/config';
 import api from '@/app';
 import { useCartStore } from '@/stores/UseCartStore'
-import SuccessMessage from '@/components/SuccessMessage.vue';
-import PaymentModal from './components/PaymentModal.vue';
 import Modal from '@/components/Modal.vue';
 import Createaddress from '@/views/Auth/Address.vue'
+import SuccessMessage from '@/components/SuccessMessage.vue';
 import { showMessage, messageAlert } from '@/functions/MessageAlert';
 import { debounce } from 'lodash'
 import router from '@/router';
@@ -135,22 +134,13 @@ const handleCreated = () => {
       <div class="mt-6 text-right">
         <h3 class="text-xl font-bold">Total: ${{ formatNumber(cartStore.cartTotal) }}</h3>
       </div>
-      <button @click="hasAddress" :disabled="isOutOfStock"
+      <button v-if="user?.role != 'admin'" @click="hasAddress" :disabled="isOutOfStock"
         class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400">
         Finalizar Compra
       </button>
       <Modal :isOpen="showModalCreate" :closeModal="closeModalCreate">
         <Createaddress @actionExecuted="handleCreated" />
       </Modal>
-      <!--   <button @click="openModal" :disabled="isOutOfStock" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400">
-          Finalizar Compra
-        </button> -->
-      <!-- <router-link  class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400"
-        to="/metodo-pago" :disabled="isOutOfStock">
-        Finalizar Compra
-      </router-link> -->
-
-      <!-- <PaymentModal v-if="isModalOpen" @close="isModalOpen = false" /> -->
     </div>
   </div>
 </template>

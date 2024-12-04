@@ -29,11 +29,11 @@ const logout = async () => {
         });
         localStorage.removeItem(TOKEN);
         user.value = null;
+        window.location.href = "/";
     } catch (error) {
         console.error("Error al cerrar sesión:", error);
     }
 };
-
 
 export function useAuth() {
     return { user,fetchUser, logout };

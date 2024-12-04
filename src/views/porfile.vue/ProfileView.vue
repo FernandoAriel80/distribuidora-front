@@ -1,13 +1,19 @@
 <script setup>
-import { ref,onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import DataProfileView from "./components/DataProfileView.vue";
 import UpdateProfileView from "./components/UpdateProfileView.vue";
 import { useCartStore } from '@/stores/UseCartStore'
+import { useAuth } from '@/composables/UserAuth';
+
+const { user, fetchUser } = useAuth();
+
+if (user.value == null) {
+    fetchUser();
+}
 
 const cartStore = useCartStore()
-
 onMounted(() => {
-  cartStore.fetchCartItems()
+    cartStore.fetchCartItems()
 })
 
 // Controla qué vista se muestra
@@ -28,7 +34,7 @@ const setView = (view) => {
             ]">
                 Datos Generales
             </button>
-            <button @click="setView('updateProfile')" :class="[
+            <button v-if="user?.role != 'admin'" @click="setView('updateProfile')" :class="[
                 'w-full py-2 px-4 rounded text-white',
                 currentView === 'updateProfile' ? 'bg-blue-500' : 'bg-gray-500',
             ]">
