@@ -15,6 +15,7 @@ import PaymentProcessing from './views/cart/PaymentProcessing.vue';
 import ProfileView from './views/porfile.vue/ProfileView.vue';
 import ClientsListView from './views/admin/customers/ClientsListView.vue';
 import DashboardView from './views/admin/dashboard/DashboardView.vue';
+import ActionLogs from './views/admin/dashboard/ActionLogs.vue';
 import { useAuth } from './composables/UserAuth';
 
 const { user, fetchUser } = useAuth();
@@ -33,7 +34,8 @@ const routes = [
     { path: '/vista-pedidos', name: 'costumers-order', component: Order, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] }},
     { path: '/vista-clientes', name: 'costumers-index', component: ClientsListView, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] }},
     { path: '/vista-empleados', name: 'employee-index', component: EmployeeIndex, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
-    { path: '/vista-estadísticas', name: 'dashboard-index', component: DashboardView, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
+    { path: '/vista-estadisticas', name: 'dashboard-index', component: DashboardView, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
+    { path: '/vista-accion-empleados', name: 'dashboard-index', component: ActionLogs, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
 
     
 ];

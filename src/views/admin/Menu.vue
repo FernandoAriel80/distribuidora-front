@@ -34,7 +34,13 @@ import Layout from '@/layout/Layout.vue';
         </router-link>
       </li>
       <li>
-        <router-link to="/vista-estadísticas"
+        <router-link to="/vista-accion-empleados"
+          class="block px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transition duration-200">
+          Acciones Empleados
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/vista-estadisticas"
           class="block px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transition duration-200">
           Estadisticas
         </router-link>
