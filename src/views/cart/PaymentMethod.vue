@@ -3,6 +3,7 @@ import MercadoPagoButton from './components/MercadoPagoButton.vue';
 import OtherButton from './components/OtherButton.vue';
 import { onMounted } from 'vue'
 import { useCartStore } from '@/stores/UseCartStore'
+import Layout from '@/layout/Layout.vue';
 
 const cartStore = useCartStore()
 
@@ -13,6 +14,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <Layout/>
   <div class="flex justify-center items-center min-h-screen bg-gray-100">
     <div class="bg-white rounded-lg shadow-lg p-8 flex w-2/3 max-w-4xl">
       <div class="flex-1 pr-6">

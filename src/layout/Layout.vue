@@ -5,12 +5,11 @@ import logo from "@/assets/logo.png";
 import { ref } from "vue";
 
 const cartStore = useCartStore()
-const { logout } = useAuth();
+const { logout, user,fetchUser  } = useAuth();
 
-const props = defineProps({
-    user: Object,
-})
-
+if (user.value == null) {
+  fetchUser();
+}
 // Controlar la visibilidad del menú desplegable
 const isOpen = ref(false);
 
@@ -30,9 +29,9 @@ const toggleMenu = () => {
                     <img :src="logo" alt="Logo" class="w-40 h-15" />
                 </div>
 
-                <div v-if="props.user?.name" class="flex space-x-6 ml-auto">
+                <div v-if="user?.name" class="flex space-x-6 ml-auto">
                     <router-link to="/">Inicio</router-link>
-                    <h1 class="title">{{ props.user?.name }}</h1>
+                    <h1 class="title">{{ user?.name }}</h1>
 
                     <router-link to="/carrito" class="bg-blue-500 text-white">
                         <div>{{ cartStore.cartQuantity }} Carrito</div>
@@ -58,7 +57,7 @@ const toggleMenu = () => {
                                     </a>
                                 </li> -->
                                 <li>
-                                    <div v-if="props.user?.role === 'admin' || props.user?.role === 'super_admin'">
+                                    <div v-if="user?.role === 'admin' || user?.role === 'super_admin'">
                                         <router-link class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                                             to="/menu">Administración</router-link>
                                     </div>

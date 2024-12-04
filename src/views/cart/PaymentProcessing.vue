@@ -4,6 +4,7 @@ import api from '@/app';
 import { TOKEN } from '@/config';
 import { useRouter } from "vue-router";
 import { useCartStore } from '@/stores/UseCartStore'
+import Layout from '@/layout/Layout.vue';
 
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -42,6 +43,7 @@ onMounted(fetchOrders);
 
 </script>
 <template>
+  <Layout/>
   <div class="flex justify-center items-center h-screen">
     <div v-if="status == 'approved'" class="p-6 rounded-lg shadow-lg text-center border bg-green-100 text-green-700 border-green-500">
       <h1 class="text-2xl font-bold mb-2"> ¡Pago exitoso! </h1>

@@ -69,6 +69,7 @@ const successMessage = ref(messageAlert);
 const errorMessage = ref('');
 
 import { useRoute } from 'vue-router';
+import Layout from '@/layout/Layout.vue';
 
 const route = useRoute();
 const message = route.query.message;
@@ -79,6 +80,7 @@ if (message) {
 </script>
 
 <template>
+  <Layout/>
   <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
   <SuccessMessage v-if="messageAlert" :message="successMessage" />
   <ErrorMessage v-if="messageAlert" :message="errorMessage" />

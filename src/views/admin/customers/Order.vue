@@ -5,6 +5,7 @@ import { TOKEN } from "@/config";
 import SearchInput from '@/components/SearchInput.vue';
 import Pagination from '@/components/Pagination.vue';
 import { debounce } from 'lodash';
+import Layout from "@/layout/Layout.vue";
 
 const orders = ref([]);
 const search = ref('');
@@ -87,6 +88,7 @@ const formatNumber = (value) => {
 </script>
 
 <template>
+  <Layout/>
   <div class="max-w-8xl mx-auto p-3">
     <h1 class="text-2xl font-bold mb-3">Lista de Pedidos</h1>
     <h4>Se puede buscar por (id pedido, nombre, apellido, dni)</h4>

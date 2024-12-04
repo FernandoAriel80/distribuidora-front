@@ -1,10 +1,11 @@
 <script setup>
-import { ref,reactive } from 'vue';
+import { ref, reactive } from 'vue';
 import api from '@/app';
 import TextInput from '@/components/TextInput.vue';
 import FormButton from '@/components/FormButton.vue';
 import { useRouter } from 'vue-router';
-import { validateForm,validateRegister } from '@/functions/ValidateForm';
+import { validateForm, validateRegister } from '@/functions/ValidateForm';
+import Layout from '@/layout/Layout.vue';
 
 const form = ref({
   name: '',
@@ -16,19 +17,19 @@ const form = ref({
 });
 
 const errors = reactive({
-    name: '',
-    last_name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+  name: '',
+  last_name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
 });
 
 const fields = [
-    'name',
-    'last_name',
-    'email',
-    'password',
-    'password_confirmation',
+  'name',
+  'last_name',
+  'email',
+  'password',
+  'password_confirmation',
 ];
 
 const router = useRouter();
@@ -39,7 +40,7 @@ const submit = async () => {
     const validate = validateForm(fields, errors, form, validateRegister);
     if (validate) {
       form.value.progress = true;
-      
+
       const response = await api.post('/api/register', {
         name: form.value.name,
         last_name: form.value.last_name,
@@ -66,7 +67,7 @@ const submit = async () => {
 </script>
 
 <template>
-
+  <Layout />
   <div class="min-h-screen flex items-center justify-center">
     <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md w-full">
       <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Registrarse</label>

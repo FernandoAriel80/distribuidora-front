@@ -8,11 +8,11 @@ import SuccessMessage from '@/components/SuccessMessage.vue';
 import { showMessage,messageAlert } from '@/functions/MessageAlert';
 import { useCartStore } from '@/stores/UseCartStore'
 import { debounce } from 'lodash'
+import Layout from '@/layout/Layout.vue';
 
 const cartStore = useCartStore();
 const products = ref([]);
 const categories = ref([]);
-const message = ref('');
 const search = ref('');
 const category = ref('');
 const sort = ref('rel');
@@ -84,6 +84,7 @@ const formatNumber = (value) => {
 </script>
 
 <template>
+   <Layout/>
    <div class="container mx-auto p-4">
       <h1 class="text-2xl font-bold mb-4 text-gray-800">Productos Disponibles</h1>
 

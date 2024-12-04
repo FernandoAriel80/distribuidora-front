@@ -12,6 +12,7 @@ import { showMessage,messageAlert } from '@/functions/MessageAlert';
 import CreateProduct from './Create.vue'
 import EditProduct from './Edit.vue'
 import { debounce } from 'lodash';
+import Layout from '@/layout/Layout.vue';
 
 const products = ref([]);
 const search = ref('');
@@ -129,6 +130,7 @@ function deleteProduct(value) {
 </script>
 
 <template>
+    <Layout/>
     <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
     <SuccessMessage v-if="messageAlert" :message="successMessage" />
     <div class="mr-5 ml-5">

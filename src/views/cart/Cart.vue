@@ -9,6 +9,7 @@ import SuccessMessage from '@/components/SuccessMessage.vue';
 import { showMessage, messageAlert } from '@/functions/MessageAlert';
 import { debounce } from 'lodash'
 import router from '@/router';
+import Layout from '@/layout/Layout.vue';
 
 const cartStore = useCartStore()
 
@@ -79,6 +80,7 @@ const handleCreated = () => {
 </script>
 
 <template>
+  <Layout/>
   <SuccessMessage v-if="messageAlert" :message="successMessage" />
   <div class="container mx-auto p-6 max-w-4xl">
     <h1 class="text-2xl font-bold mb-4 text-center">Mi Carrito de Compras</h1>

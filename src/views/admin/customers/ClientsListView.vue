@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import api from "@/app";
+import Layout from "@/layout/Layout.vue";
 
 // Lista de clientes
 const clients = ref([]);
@@ -25,6 +26,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <Layout/>
   <div class="max-w-6xl mx-auto p-6">
     <h1 class="text-2xl font-bold mb-6">Clients List</h1>
     <div class="overflow-x-auto">

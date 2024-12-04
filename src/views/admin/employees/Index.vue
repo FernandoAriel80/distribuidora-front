@@ -10,6 +10,7 @@ import { showMessage,messageAlert } from '@/functions/MessageAlert';
 import CreateEmployees from './Create.vue'
 import EditEmployees from './Edit.vue'
 import { debounce } from 'lodash';
+import Layout from '@/layout/Layout.vue';
 
 const employees = ref([]);
 const search = ref('');
@@ -134,6 +135,7 @@ function deleteEmployee(value) {
 }
 </script>
 <template>
+    <Layout/>
     <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
     <SuccessMessage v-if="messageAlert" :message="successMessage" />
 

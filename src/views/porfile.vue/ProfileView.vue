@@ -4,6 +4,7 @@ import DataProfileView from "./components/DataProfileView.vue";
 import UpdateProfileView from "./components/UpdateProfileView.vue";
 import { useCartStore } from '@/stores/UseCartStore'
 import { useAuth } from '@/composables/UserAuth';
+import Layout from "@/layout/Layout.vue";
 
 const { user, fetchUser } = useAuth();
 
@@ -26,6 +27,7 @@ const setView = (view) => {
 </script>
 
 <template>
+    <Layout/>
     <div class="flex max-w-8xl mx-auto p-6 space-x-4">
         <div class="flex flex-col space-y-4 w-1/4">
             <button @click="setView('dataProfile')" :class="[

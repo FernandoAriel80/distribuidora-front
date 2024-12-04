@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/UseCartStore'
 import api from '@/app';
 import { TOKEN } from '@/config';
+import Layout from '@/layout/Layout.vue';
 
 const cartStore = useCartStore()
 const router = useRouter();
@@ -46,6 +47,7 @@ const formatNumber = (value) => {
 };
 </script>
 <template>
+    <Layout/>
     <div class="container mx-auto p-6 max-w-4xl">
         <div class="bg-white rounded-lg shadow-lg p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 
