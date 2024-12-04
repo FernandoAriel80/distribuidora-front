@@ -280,7 +280,7 @@ export const validateRegisterEmpleado = (field, errors, form) => {
 export const validateAddress = (field, errors, address) => {
     switch (field) {
         case 'dni':
-            const dniPattern = /^[0-9]{7,8}$/;  // Asumiendo que el DNI es solo números de 7 a 8 dígitos
+            const dniPattern = /^[0-9]{7,8}$/; 
             errors.dni = address.value.dni
                 ? dniPattern.test(address.value.dni)
                     ? ''
@@ -288,7 +288,6 @@ export const validateAddress = (field, errors, address) => {
                 : 'El DNI es requerido.';
             return errors.dni;
         case 'phone_number':
-            // Validación para el número de teléfono en Argentina
             const phonePattern = /^[0-9]{10}$/;
             errors.phone_number = address.value.phone_number
                 ? phonePattern.test(address.value.phone_number)
@@ -297,7 +296,6 @@ export const validateAddress = (field, errors, address) => {
                 : 'El número de teléfono es requerido.';
             return errors.phone_number;
         case 'gender':
-            // Validar que el género sea uno de los valores esperados: 'hombre', 'mujer', 'otros'
             errors.gender = address.value.gender
                 ? ['hombre', 'mujer', 'otros'].includes(address.value.gender)
                     ? ''
@@ -316,7 +314,6 @@ export const validateAddress = (field, errors, address) => {
              return errors.birth_date; */
 
         case 'address':
-            // Validar que la dirección no sea vacía y que no exceda los 255 caracteres
             errors.address = address.value.address
                 ? address.value.address.length <= 255
                     ? ''
@@ -325,7 +322,6 @@ export const validateAddress = (field, errors, address) => {
             return errors.address;
 
         case 'postal_code':
-            // Validar que el código postal sea un número de 4 a 5 dígitos
             const postalCodePattern = /^[0-9]{4,5}$/;
             errors.postal_code = address.value.postal_code
                 ? postalCodePattern.test(address.value.postal_code)
@@ -335,7 +331,6 @@ export const validateAddress = (field, errors, address) => {
             return errors.postal_code;
 
         case 'city':
-            // Validar que la ciudad no esté vacía y no exceda los 100 caracteres
             errors.city = address.value.city
                 ? address.value.city.length <= 100
                     ? ''
@@ -349,3 +344,66 @@ export const validateAddress = (field, errors, address) => {
     }
 };
 
+export const validateInfoPorfile = (field, errors, form) => {
+    switch (field) {
+        case 'name':
+            const namePattern = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
+            errors.name = form.value.name
+                ? namePattern.test(form.value.name)
+                    ? form.value.name.length <= 50
+                        ? ''
+                        : 'El nombre no debe exceder los 50 caracteres.'
+                    : 'El nombre solo puede contener letras.'
+                : 'El nombre es requerido.';
+            return errors.name;
+        case 'last_name':
+            const lastNamePattern = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
+            errors.last_name = form.value.last_name
+                ? lastNamePattern.test(form.value.last_name)
+                    ? form.value.last_name.length <= 50
+                        ? ''
+                        : 'El apellido no debe exceder los 50 caracteres.'
+                    : 'El apellido solo puede contener letras.'
+                : 'El apellido es requerido.';
+            return errors.last_name;
+        case 'email':
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            errors.email = form.value.email
+                ? emailPattern.test(form.value.email)
+                    ? form.value.email.length <= 255
+                        ? ''
+                        : 'El mail no debe exceder los 255 caracteres.'
+                    : 'Correo no válido.'
+                : 'El correo es requerido.';
+            return errors.email;
+    }
+};
+
+
+export const validatePasswordPorfile = (field, errors, form) => {
+    switch (field) {
+        case 'current_password':
+            errors.current_password = form.value.current_password
+                ? form.value.current_password.length >= 8
+                    ? ''
+                    : 'La contraseña debe tener al menos 8 caracteres.'
+                : 'La contraseña es requerido';
+            return errors.current_password;
+            case 'password':
+                errors.password = form.value.password
+                    ? form.value.password.length >= 8
+                        ? ''
+                        : 'La contraseña debe tener al menos 8 caracteres.'
+                    : 'La contraseña es requerido';
+                return errors.password;
+            case 'password_confirmation':
+                errors.password_confirmation = form.value.password_confirmation
+                    ? form.value.password_confirmation.length >= 8
+                        ? form.value.password_confirmation === form.value.password
+                            ? ''
+                            : 'Las contraseñas no coinciden'
+                        : 'La contraseña debe tener al menos 8 caracteres.'
+                    : 'La contraseña es requerido';
+                return errors.password_confirmation;
+    }
+};
