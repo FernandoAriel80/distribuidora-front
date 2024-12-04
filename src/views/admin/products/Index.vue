@@ -155,6 +155,7 @@ function deleteProduct(value) {
         <div v-else>
 
             <h1 class="text-2xl font-bold mb-4">Lista de Empleados</h1>
+            <h4>Se puede buscar por (ID producto, cod. barra, nombre)</h4>
             <SearchInput v-model:searchValue="search" />
             <div v-if="products.length">
                 <div class="overflow-x-auto">
