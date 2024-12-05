@@ -35,7 +35,7 @@ const routes = [
     { path: '/vista-clientes', name: 'costumers-index', component: ClientsListView, meta: { requiresAuth: true, requiredRoles: ['admin', 'super_admin'] }},
     { path: '/vista-empleados', name: 'employee-index', component: EmployeeIndex, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
     { path: '/vista-estadisticas', name: 'dashboard-index', component: DashboardView, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
-    { path: '/vista-accion-empleados', name: 'dashboard-index', component: ActionLogs, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
+    { path: '/vista-accion-empleados', name: 'Action-index', component: ActionLogs, meta: { requiresAuth: true, requiredRoles: ['super_admin'] }},
 
     
 ];

@@ -1,19 +1,21 @@
 <script setup>
-/* import { ref, onMounted } from "vue";
-import axios from "axios";
-import { DoughnutChart, BarChart } from "vue-chart-3";
-import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, BarElement, CategoryScale, LinearScale } from "chart.js";
+import { ref, onMounted } from "vue";
+import api from "@/app";
+import Layout from "@/layout/Layout.vue";
+import { TOKEN } from "@/config";
+//import { DoughnutChart, BarChart } from "vue-chart-3";
+//import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, BarElement, CategoryScale, LinearScale } from "chart.js";
 
 // Registrar componentes de Chart.js
-ChartJS.register(Title, Tooltip, Legend, ArcElement, BarElement, CategoryScale, LinearScale);
+//ChartJS.register(Title, Tooltip, Legend, ArcElement, BarElement, CategoryScale, LinearScale);
 
 const dashboardData = ref({
   topProductsLastMonth: [],
-  earningsComparison: {
+  /* earningsComparison: {
     currentMonth: 0,
     lastMonth: 0,
   },
-  topProductsYear: [],
+  topProductsYear: [], */
 });
 
 // Gráficos
@@ -22,12 +24,13 @@ const barData = ref({});
 
 const fetchDashboardData = async () => {
   try {
-    const response = await axios.get("/api/admin/dashboard", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    const response = await api.get("/api/admin/dashboard", {
+      headers: { Authorization: `Bearer ${localStorage.getItem(TOKEN)}` },
     });
+    console.log(response.data);
     dashboardData.value = response.data;
 
-    // Preparar datos para el gráfico de los productos más vendidos en el mes
+   /*  // Preparar datos para el gráfico de los productos más vendidos en el mes
     doughnutData.value = {
       labels: dashboardData.value.topProductsLastMonth.map((item) => item.name),
       datasets: [
@@ -51,7 +54,7 @@ const fetchDashboardData = async () => {
           backgroundColor: ["#4BC0C0", "#FF6384"],
         },
       ],
-    };
+    }; */
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
   }
@@ -59,10 +62,11 @@ const fetchDashboardData = async () => {
 
 onMounted(() => {
   fetchDashboardData();
-}); */
+}); 
 </script>
 <template>
-    <!-- 
+  <Layout/>
+<!-- 
   <div class="max-w-6xl mx-auto p-6">
     <h1 class="text-2xl font-bold mb-6">Admin Dashboard</h1>
 
