@@ -3,58 +3,31 @@ import { ref, onMounted } from "vue";
 import api from "@/app";
 import Layout from "@/layout/Layout.vue";
 import { TOKEN } from "@/config";
-//import { DoughnutChart, BarChart } from "vue-chart-3";
-//import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, BarElement, CategoryScale, LinearScale } from "chart.js";
 
-// Registrar componentes de Chart.js
-//ChartJS.register(Title, Tooltip, Legend, ArcElement, BarElement, CategoryScale, LinearScale);
-
-const dashboardData = ref({
-  topProductsLastMonth: [],
-  /* earningsComparison: {
-    currentMonth: 0,
-    lastMonth: 0,
-  },
-  topProductsYear: [], */
-});
-
-// Gráficos
-const doughnutData = ref({});
-const barData = ref({});
+const currentMonth = ref(0);
+const lastMonth = ref(0);
+const topBestProductsCurrentMonth = ref([]);
+const topBestProductsLastMonth = ref([]);
+const topWorstProductsCurrentMonth = ref([]);
+const topWorstProductsLastMonth = ref([]);
+const topProductsAllYear = ref([]);
+const topProductsYear = ref([]);
 
 const fetchDashboardData = async () => {
   try {
     const response = await api.get("/api/admin/dashboard", {
       headers: { Authorization: `Bearer ${localStorage.getItem(TOKEN)}` },
     });
-    console.log(response.data);
-    dashboardData.value = response.data;
+ 
+    currentMonth.value = response.data.currentMonth;
+    lastMonth.value = response.data.lastMonth;
+    topBestProductsCurrentMonth.value = response.data.topBestProductsCurrentMonth;
+    topBestProductsLastMonth.value = response.data.topBestProductsLastMonth;
+    topWorstProductsCurrentMonth.value = response.data.topWorstProductsCurrentMonth;
+    topWorstProductsLastMonth.value = response.data.topWorstProductsLastMonth;
+    topProductsAllYear.value = response.data.topProductsAllYear;
+    topProductsYear.value = response.data.topProductsYear;
 
-   /*  // Preparar datos para el gráfico de los productos más vendidos en el mes
-    doughnutData.value = {
-      labels: dashboardData.value.topProductsLastMonth.map((item) => item.name),
-      datasets: [
-        {
-          data: dashboardData.value.topProductsLastMonth.map((item) => item.total_sold),
-          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
-        },
-      ],
-    };
-
-
-    barData.value = {
-      labels: ["Last Month", "Current Month"],
-      datasets: [
-        {
-          label: "Earnings",
-          data: [
-            dashboardData.value.earningsComparison.lastMonth,
-            dashboardData.value.earningsComparison.currentMonth,
-          ],
-          backgroundColor: ["#4BC0C0", "#FF6384"],
-        },
-      ],
-    }; */
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
   }
@@ -62,41 +35,119 @@ const fetchDashboardData = async () => {
 
 onMounted(() => {
   fetchDashboardData();
-}); 
+});
+
+// Función para formatear números
+const formatNumber = (value) => {
+  return new Intl.NumberFormat("es-AR", {
+    style: "decimal",
+    minimumFractionDigits: 0,
+  }).format(value);
+};
+
 </script>
 <template>
-  <Layout/>
-<!-- 
-  <div class="max-w-6xl mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-6">Admin Dashboard</h1>
-
-    <div class="mb-8">
-      <h2 class="text-lg font-bold mb-4">Top 5 Products Last Month</h2>
-      <DoughnutChart :data="doughnutData" :options="{ responsive: true }" />
+  <Layout />
+  <div class="p-6 border-2 border-gray-300 mb-6">
+    <h3 class="text-2xl font-bold text-blue-600 mb-4 text-center">Ganancias Total Por Mes</h3>
+    <div class="flex justify-between gap-6 p-6 rounded-lg">
+      <div class="w-1/2 bg-white shadow-lg border border-gray-200 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-blue-600 mb-4 text-center">Mes Anterior</h3>
+        <ul class="space-y-3">
+          <li class="flex justify-between items-center bg-blue-50 p-3 rounded-md shadow-sm">
+            <span class="text-lg font-semibold text-gray-700"> Total: </span>
+            <span class="text-lg font-bold text-blue-600">${{ formatNumber(lastMonth) }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="w-1/2 bg-white shadow-lg border border-gray-200 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-green-600 mb-4 text-center">Este Mes</h3>
+        <ul class="space-y-3">
+          <li class="flex justify-between items-center bg-green-50 p-3 rounded-md shadow-sm">
+            <span class="text-lg font-semibold text-gray-700"> Total: </span>
+            <span class="text-lg font-bold text-green-600">${{ formatNumber(currentMonth) }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
-
-    <div class="mb-8">
-      <h2 class="text-lg font-bold mb-4">Earnings Comparison (Last vs Current Month)</h2>
-      <BarChart :data="barData" :options="{ responsive: true }" />
+  </div>
+  <!-- /////////////////////////////////////////////////////////////////////////////////// -->
+  <div class="p-6 border-2 border-gray-300 mb-6">
+    <h3 class="text-2xl font-bold text-blue-600 mb-4 text-center">Productos Más Vendidos Por Mes</h3>
+    <div class="flex justify-between gap-6 p-6 rounded-lg">
+      <div class="w-1/2 bg-white shadow-lg border border-gray-200 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-blue-600 mb-4 text-center">Mes Anterior</h3>
+        <ul class="space-y-3">
+          <li v-for="item in topBestProductsLastMonth" :key="item.name"
+            class="flex justify-between items-center bg-blue-50 p-3 rounded-md shadow-sm">
+            <span class="text-lg font-semibold text-gray-700">{{ item.name }}</span>
+            <span class="text-lg font-bold text-blue-600">{{ item.total_quantity }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="w-1/2 bg-white shadow-lg border border-gray-200 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-green-600 mb-4 text-center">Este Mes</h3>
+        <ul class="space-y-3">
+          <li v-for="item in topBestProductsCurrentMonth" :key="item.name"
+            class="flex justify-between items-center bg-green-50 p-3 rounded-md shadow-sm">
+            <span class="text-lg font-semibold text-gray-700">{{ item.name }}</span>
+            <span class="text-lg font-bold text-green-600">{{ item.total_quantity }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
-
-    <div>
-      <h2 class="text-lg font-bold mb-4">Top Products This Year</h2>
-      <table class="table-auto w-full border-collapse border border-gray-200">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="border border-gray-200 p-2">Product Name</th>
-            <th class="border border-gray-200 p-2">Total Sold</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="product in dashboardData.topProductsYear" :key="product.name">
-            <td class="border border-gray-200 p-2">{{ product.name }}</td>
-            <td class="border border-gray-200 p-2">{{ product.total_sold }}</td>
-          </tr>
-        </tbody>
-      </table>
+  </div>
+  <!-- ////////////////////// -->
+  <div class="p-6 border-2 border-gray-300 mb-6">
+    <h3 class="text-2xl font-bold text-blue-600 mb-4 text-center">Productos Menos Vendidos Por Mes</h3>
+    <div class="flex justify-between gap-6 p-6 rounded-lg">
+      <div class="w-1/2 bg-white shadow-lg border border-gray-200 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-blue-600 mb-4 text-center">Mes Anterior</h3>
+        <ul class="space-y-3">
+          <li v-for="item in topWorstProductsCurrentMonth" :key="item.name"
+            class="flex justify-between items-center bg-blue-50 p-3 rounded-md shadow-sm">
+            <span class="text-lg font-semibold text-gray-700">{{ item.name }}</span>
+            <span class="text-lg font-bold text-blue-600">{{ item.total_quantity }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="w-1/2 bg-white shadow-lg border border-gray-200 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-green-600 mb-4 text-center">Este mes</h3>
+        <ul class="space-y-3">
+          <li v-for="item in topWorstProductsLastMonth" :key="item.name"
+            class="flex justify-between items-center bg-green-50 p-3 rounded-md shadow-sm">
+            <span class="text-lg font-semibold text-gray-700">{{ item.name }}</span>
+            <span class="text-lg font-bold text-green-600">{{ item.total_quantity }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div> -->
-  <h1>AUN EN FACE DE PRUEBAS</h1>
+  </div>
+  <!-- /////////////////////////////////////////////////////////////// -->
+  <div class="p-6 border-2 border-gray-300 mb-6">
+    <h3 class="text-2xl font-bold text-blue-600 mb-4 text-center">Productos Más Vendidos Por Año</h3>
+    <div class="flex justify-between gap-6 p-6 rounded-lg">
+      <div class="w-1/2 bg-white shadow-lg border border-gray-200 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-blue-600 mb-4 text-center">Todos los Años</h3>
+        <ul class="space-y-3">
+          <li v-for="item in topProductsAllYear" :key="item.name"
+            class="flex justify-between items-center bg-blue-50 p-3 rounded-md shadow-sm">
+            <span class="text-lg font-semibold text-gray-700">{{ item.name }}</span>
+            <span class="text-lg font-bold text-blue-600">{{ item.total_quantity }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="w-1/2 bg-white shadow-lg border border-gray-200 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-green-600 mb-4 text-center">Este año</h3>
+        <ul class="space-y-3">
+          <li v-for="item in topProductsYear" :key="item.name"
+            class="flex justify-between items-center bg-green-50 p-3 rounded-md shadow-sm">
+            <span class="text-lg font-semibold text-gray-700">{{ item.name }}</span>
+            <span class="text-lg font-bold text-green-600">{{ item.total_quantity }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
 </template>
