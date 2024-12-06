@@ -51,7 +51,7 @@ const searchDebounced = debounce(() => {
 </script>
 
 <template>
-  <Layout />
+  <Layout/>
   <div class="max-w-6xl mx-auto p-6">
     <h1 class="text-2xl font-bold mb-6">Clientes</h1>
     <h4>Se puede buscar por (nombre, apellido, dni)</h4>

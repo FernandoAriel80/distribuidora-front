@@ -67,7 +67,7 @@ const submit = async () => {
 </script>
 
 <template>
-  <Layout />
+  <Layout/>
   <div class="min-h-screen flex items-center justify-center">
     <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md w-full">
       <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Registrarse</label>

@@ -5,7 +5,7 @@ import Layout from '@/layout/Layout.vue';
 </script>
 
 <template>
-  <Layout />
+  <Layout/>
   <div class="p-6 bg-gray-800 text-white rounded-lg shadow-lg max-w-sm mx-auto">
     <h1 class="text-3xl font-bold mb-6 text-center">Menú Administrativo</h1>
     <ul class="space-y-4">

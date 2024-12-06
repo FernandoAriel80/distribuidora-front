@@ -89,7 +89,7 @@ const formatNumber = (value) => {
 
 <template>
   <Layout/>
-  <div class="max-w-8xl mx-auto p-3">
+  <div class="max-w-8xl mx-6 p-3">
     <h1 class="text-2xl font-bold mb-3">Lista de Pedidos</h1>
     <h4>Se puede buscar por (id pedido, nombre, apellido, dni)</h4>
     <SearchInput v-model:searchValue="search" />
