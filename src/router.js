@@ -16,6 +16,7 @@ import ProfileView from './views/porfile.vue/ProfileView.vue';
 import ClientsListView from './views/admin/customers/ClientsListView.vue';
 import DashboardView from './views/admin/dashboard/DashboardView.vue';
 import ActionLogs from './views/admin/dashboard/ActionLogs.vue';
+import CategoryView from './views/CategoryView.vue';
 import { useAuth } from './composables/UserAuth';
 
 const { user, fetchUser } = useAuth();
@@ -24,6 +25,7 @@ const routes = [
     { path: '/', name: 'home', component: Home },
     { path: '/registar', name: 'register', component: Register },
     { path: '/inicia-sesion', name: 'login', component: Login },
+    { path: '/vista-productos-categoria', name: 'login', component: CategoryView },
     { path: '/carrito', name: 'cart', component: Cart,meta: { requiresAuth: true}},
     { path: '/perfil', name: 'profile', component: ProfileView,meta: { requiresAuth: true}},
     { path: '/metodo-pago', name: 'pay-method', component: PaymentMethod,meta: { requiresAuth: true}},
