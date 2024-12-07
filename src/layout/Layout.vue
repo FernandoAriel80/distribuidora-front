@@ -2,7 +2,7 @@
 import CategoryMenu from '@/components/CategoryMenu.vue';
 import { useAuth } from '@/composables/UserAuth';
 import { useCartStore } from '@/stores/UseCartStore'
-import logo from "@/assets/icon/logo.png";
+import logo from "@/assets/icon/La_viejita_navidad.png";
 import { ref } from "vue";
 
 const cartStore = useCartStore()
