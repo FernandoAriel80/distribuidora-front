@@ -57,8 +57,8 @@ const formatNumber = (value) => {
                 <div class="p-4 border border-gray-300 rounded-lg">
                     <h3 class="text-xl font-bold">Dirección y Horarios</h3>
                     <p class="mt-2">Visítanos en nuestra tienda para completar tu compra:</p>
-                    <p class="font-semibold mt-2">Dirección: Calle Ficticia 123, Ciudad Ficticia, País Ficticio</p>
-                    <p>Horario de atención: Lunes a Viernes, de 10:00 AM a 6:00 PM</p>
+                    <p class="font-semibold mt-2">Dirección: Av. Juan Manuel de Rosas 11000 Gregorio de Laferrere, Argentina</p>
+                    <p>Horario de atención: Lunes a Viernes: 9:00 hs - 17:00 hs, Sábados: 9:00 hs - 13:00 hs</p>
                     <p class="mt-2">¡Te esperamos en nuestro local para ayudarte con tu compra!</p>
                 </div>
             </div>

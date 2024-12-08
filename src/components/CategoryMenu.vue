@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import api from '@/app';
+import { useRouter } from 'vue-router';
 
 const topCategories = ref([]);
 
@@ -28,19 +29,43 @@ const openCategories = () => {
     activeCategory.value = false;
 }
 
+const scrollToFooter = () => {
+  window.scrollTo({
+    top: document.documentElement.scrollHeight, 
+    behavior: "smooth",
+  });
+};
+
 onMounted(fetchCategories);
+
+const router = useRouter();
+
+const openAllProducts = () => {
+    router.push({
+        name: 'product-all-index',
+      });
+};
 </script>
 
 <template>
-    <div class="bg-blue-700 text-white mb-4 mx-6 p-1 px-10 rounded-lg ">
-        <button @click="openCategories" class="mx-auto rounded-lg p-1 hover:bg-blue-600 ">
-            <p class="font-semibold">Categorías</p>
+    <div class="bg-blue-800 text-slate-200 mb-4 mx-6 p-1 px-10 rounded-lg ">
+        <button @click="openCategories" class="mx-10 rounded-lg p-1 hover:bg-blue-600 ">
+            <p class="font-semibold ">Categorías</p>
+        </button>
+        <button @click="openAllProducts" class="mx-10 rounded-lg p-1 hover:bg-blue-600 ">
+            <p class="font-semibold ">Todos los productos</p>
+        </button>
+        <button @click="scrollToFooter" class="mx-10 rounded-lg p-1 hover:bg-blue-600 ">
+            <p class="font-semibold ">Contacto</p>
+        </button>
+        <button @click="scrollToFooter" class="mx-10 rounded-lg p-1 hover:bg-blue-600 ">
+            <p class="font-semibold ">Medios de pago</p>
         </button>
         <div class="mt-2" v-if="isOpen">
             <ul>
                 <li v-for="category in topCategories" :key="category.id" class="relative group">
                     <button @click="toggleSubcategories(category.categories, category.id)"
-                        class="w-auto text-left text-white py-1 px-4 rounded-lg hover:bg-blue-600">
+                        class="w-auto text-left text-slate-200 py-1 px-4 rounded-lg hover:bg-blue-600">
                         {{ category.name }}
                     </button>
                     <ul v-if="activeCategory && categotyIDCurrent == category.id"
@@ -48,7 +73,7 @@ onMounted(fetchCategories);
                         <li v-for="subCategory in subCategoriesCurrent" :key="subCategory.id"
                             class="w-100">
                             <router-link  :to="{ path: '/vista-productos-categoria', query: { id: subCategory.id } }"
-                                class="block py-2 px-4 text-white rounded-lg hover:bg-blue-600">
+                                class="block py-2 px-4 text-slate-200 rounded-lg hover:bg-blue-600">
                                 - {{ subCategory.name }}
                             </router-link>
                         </li>

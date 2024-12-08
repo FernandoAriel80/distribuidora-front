@@ -8,7 +8,7 @@ import { useCartStore } from '@/stores/UseCartStore'
 import { debounce } from 'lodash'
 
 const props = defineProps({
-    category: {
+    filter: {
         type: Number,
         required: true,
     }
@@ -26,10 +26,10 @@ const loading = ref(true)
 const fetchProducts = async () => {
 
     try {
-        const response = await api.get('/api/',
+        const response = await api.get('/api/getAllOffer',
             {
                 params: {
-                    category: props.category,
+                    filter: props.filter??null,
                     page: pagination.value.current_page,
                     per_page: perPage,
                 },
@@ -105,7 +105,7 @@ const formatNumber = (value) => {
                 <h1>CARGANDO CONTENIDO......</h1>
             </div>
             <div v-else v-for="product in products" :key="product.id" class="p-2 m-1 bg-white rounded-2xl">
-                <div class="max-w-52 h-100 mx-6">
+                <div class="max-w-52 h-100 ">
                     <div class="relative">
                         <img :src="`${BASE_URL}/storage/${product.image_url}`" alt="Imagen del producto"
                             class="w-60 h-60 object-cover rounded-t-lg">
@@ -175,20 +175,20 @@ const formatNumber = (value) => {
                     </button>
                 </div>
                 <SuccessMessage class="fixed bottom-40 left-1/2 transform -translate-x-1/2"
-                    v-if="currentIdMessage" :message="successMessage" />
+                    v-if="currentIdMessage == product.id" :message="successMessage" />
             </div>
         </div>
         <!-- Botón Prev -->
         <div class="absolute top-1/2 -translate-y-1/2 left-2 z-10">
             <button @click="prevPage" :disabled="pagination.current_page === 1"
-                class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full disabled:opacity-50 disabled:cursor-not-allowed">
+                class="bg-blue-600 text-white p-4 rounded-full disabled:opacity-50 disabled:cursor-not-allowed">
                 < </button>
         </div>
 
         <!-- Botón Next -->
         <div class="absolute top-1/2 -translate-y-1/2 right-2 z-10">
             <button @click="nextPage" :disabled="pagination.current_page === pagination.last_page"
-                class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full disabled:opacity-50 disabled:cursor-not-allowed">
+                class="bg-blue-600 text-white p-4 rounded-full disabled:opacity-50 disabled:cursor-not-allowed">
                 >
             </button>
         </div>

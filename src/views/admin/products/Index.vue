@@ -223,7 +223,7 @@ function deleteProduct(value) {
                                 <td class="px-2 py-3 text-sm text-gray-900">{{ product.catalog_id }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-900">{{ product.barcode }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.name }}</td>
-                                <td class="px-2 py-3 text-sm text-gray-500">{{ product.description }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500 break-words max-w-28">{{ product.description }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.bulk_unit }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.bulk_unit_price }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.unit_price }}</td>

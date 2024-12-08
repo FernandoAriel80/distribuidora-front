@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import api from "@/app";
 import { useRoute } from 'vue-router';
 import Layout from "@/layout/Layout.vue";
@@ -24,9 +24,6 @@ const fetchProduct = async () => {
     }
 };
 
-const addToCart = () => {
-    console.log("Producto agregado al carrito:", product.value);
-};
 onMounted(() => {
     fetchProduct();
 });
@@ -34,6 +31,7 @@ onMounted(() => {
 onMounted(() => {
     cartStore.fetchCartItems()
 })
+watch(() => route.query.id, fetchProduct);
 
 const currentIdMessage = ref();
 
@@ -137,6 +135,8 @@ const formatNumber = (value) => {
                     Agregar
                 </button>
             </div>
+            <SuccessMessage class="fixed bottom-40 left-1/2 transform -translate-x-1/2"
+                v-if="currentIdMessage == product.id" :message="successMessage" />
         </div>
     </div>
 </template>

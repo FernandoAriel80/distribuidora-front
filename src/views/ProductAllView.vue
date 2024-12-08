@@ -9,19 +9,19 @@ import { showMessage, messageAlert } from '@/functions/MessageAlert';
 import { useCartStore } from '@/stores/UseCartStore'
 import { debounce } from 'lodash'
 import Layout from '@/layout/Layout.vue';
+import Pagination from '@/components/Pagination.vue';
 
 const cartStore = useCartStore();
 const products = ref([]);
 const loading = ref(true);
 const search = ref('');
+const pagination = ref(null);
 const sort = ref('rel');
 
-const route = useRoute();
-
-const fetchPage = async () => {
+const fetchPage = async (url = '/api/getAll') => {
     try {
-        const categoryId = route.query.id;
-        const response = await api.get('/api/categories/show/' + categoryId,
+
+        const response = await api.get(url,
             {
                 params: {
                     search: search.value,
@@ -29,8 +29,14 @@ const fetchPage = async () => {
                 },
             }
         );
-        products.value = response.data.products;
         loading.value = false;
+        products.value = response.data.products.data;
+        pagination.value = {
+            current_page: response.data.products.current_page,
+            last_page: response.data.products.last_page,
+            next_page_url: response.data.products.next_page_url,
+            prev_page_url: response.data.products.prev_page_url,
+        };
     } catch (error) {
         console.error('Error fetching productos:', error);
     }
@@ -43,8 +49,6 @@ onMounted(() => {
 watch([search, sort], () => {
     searchDebounced();
 });
-
-watch(() => route.query.id, fetchPage);
 
 const searchDebounced = debounce(() => {
     fetchPage();
@@ -186,6 +190,7 @@ const formatNumber = (value) => {
                                 v-if="currentIdMessage == product.id" :message="successMessage" />
                         </div>
                     </div>
+                    <Pagination :pagination="pagination" :fetchPage="fetchPage" />
                 </div>
                 <div v-else>
                     <h1>No hay productos</h1>

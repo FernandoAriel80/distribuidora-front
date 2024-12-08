@@ -31,7 +31,6 @@ const searchProducts = async () => {
         products.value = [];
         return;
     }
-
     try {
         const response = await api.get("/api/search", {
             params: { query: searchQuery.value },
@@ -57,13 +56,24 @@ const selectProduct = (product) => {
         <header class=" text-slate-600">
             <nav class="flex items-center justify-between p-2 px-10 mx-auto">
                 <div>
-                    <img :src="logo" alt="Logo" class="w-44 h-full" />
+                    <img :src="logo" alt="Logo" class="w-56 h-20" />
                 </div>
 
                 <!-- search -->
                 <div class="md:mx-20 relative p-4 w-3/5">
-                    <input v-model="searchQuery" @input="searchProducts" type="search" placeholder="Buscar productos..."
-                        class="md:w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" />
+                    <div class="relative md:w-full">
+                        <input v-model="searchQuery" @input="searchProducts" type="search"
+                            placeholder="Buscar productos..."
+                            class="w-full pr-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" />
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8zM2 8a6 6 0 1 1 11.313 3.03l3.858 3.858a1 1 0 0 1-1.414 1.414l-3.858-3.858A6 6 0 0 1 2 8z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
                     <ul v-if="products.length && searchQuery.trim() !== ''"
                         class="md:w-96 absolute top-full left-0 w-full bg-white border rounded shadow-lg z-50">
                         <li v-for="product in products" :key="product.id" @click="selectProduct(product)"
@@ -89,7 +99,7 @@ const selectProduct = (product) => {
                         <div class="flex items-center">
                             <span>Carrito</span>
                             <span v-if="cartStore.cartQuantity >= 0"
-                                class="absolute top-0 right-0 w-5 h-5 bg-blue-600 text-xs text-white font-bold rounded-full flex items-center justify-center -mt-2 -mr-2">
+                                class="absolute top-0 right-0 w-5 h-5 bg-blue-800 text-xs text-white font-bold rounded-full flex items-center justify-center -mt-2 -mr-2">
                                 {{ cartStore.cartQuantity }}
                             </span>
                         </div>
