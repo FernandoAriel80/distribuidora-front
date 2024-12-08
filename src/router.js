@@ -25,7 +25,7 @@ const routes = [
     { path: '/', name: 'home', component: Home },
     { path: '/registar', name: 'register', component: Register },
     { path: '/inicia-sesion', name: 'login', component: Login },
-    { path: '/vista-productos-categoria', name: 'login', component: CategoryView },
+    { path: '/vista-productos-categoria', name: 'category-view', component: CategoryView },
     { path: '/carrito', name: 'cart', component: Cart,meta: { requiresAuth: true}},
     { path: '/perfil', name: 'profile', component: ProfileView,meta: { requiresAuth: true}},
     { path: '/metodo-pago', name: 'pay-method', component: PaymentMethod,meta: { requiresAuth: true}},

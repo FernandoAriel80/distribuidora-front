@@ -21,7 +21,7 @@ const route = useRoute();
 const fetchPage = async () => {
     try {
         const categoryId = route.query.id;
-        const response = await api.get('/api/categories/show/'+categoryId,
+        const response = await api.get('/api/categories/show/' + categoryId,
             {
                 params: {
                     search: search.value,
@@ -86,7 +86,7 @@ const formatNumber = (value) => {
 </script>
 <template>
     <Layout />
-    <div class="container mx-auto p-4">
+    <div class="mx-10 sm:mx-40 p-4">
         <h1 class="text-2xl font-bold mb-4 text-gray-800">Productos Disponibles</h1>
         <section class="md:col-span-3">
             <div>
@@ -105,26 +105,33 @@ const formatNumber = (value) => {
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 max-w-full">
                         <div v-for="product in products" :key="product.id"
                             class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col justify-between w-full">
-                            <div>
+                            <div class="max-w-48 h-100 ">
                                 <div class="relative">
                                     <img :src="`${BASE_URL}/storage/${product.image_url}`" alt="Imagen del producto"
-                                        class="w-full h-60 object-cover rounded-t-lg">
+                                        class="w-60 h-60 object-cover rounded-t-lg">
                                     <div v-if="product.percent_off > 0"
                                         class="absolute top-2 left-2 bg-red-500 text-white px-1 py-0.5 rounded text-xs">
                                         {{ product.percent_off }}% OFF
                                     </div>
                                 </div>
-                                <div class="p-2">
+                                <div class="p-2 min-h-40">
                                     <h2 class="text-sm font-semibold text-gray-800 mb-1">{{ product.name }}</h2>
-                                    <p class="text-gray-500 text-xs mb-1">{{ product.description }}</p>
+                                    <div class="p-2">
+                                        <p class="text-sm break-words text-gray-500">
+                                            {{ product.description }}
+                                        </p>
+                                    </div>
+
                                     <div v-if="product.offer" class="flex items-center justify-between mb-2">
                                         <span v-if="product.type.id == 1"
-                                            class="text-gray-800 font-bold text-xs">Unidad: $<p class="line-through">{{
+                                            class="text-gray-800 font-bold text-xs">Unidad: $
+                                            <p class="line-through">{{
                                                 formatNumber(product.old_price) }}</p>
                                         </span>
                                         <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: $
                                             <p class="line-through">{{
-                                                formatNumber(product.old_price) }}</p></span>
+                                                formatNumber(product.old_price) }}</p>
+                                        </span>
                                         <div>
                                             <span class="text-green-600 font-bold text-xs"> Oferta Unidad: ${{
                                                 formatNumber(product.price_offer) }}</span>
@@ -137,35 +144,36 @@ const formatNumber = (value) => {
                                     </div>
                                     <div v-else class="flex items-center justify-between mb-2">
                                         <span v-if="product.type.id == 1"
-                                            class="text-gray-800 font-bold text-xs">Unidad: ${{
+                                            class="text-gray-800 font-bold text-xs">Unidad:
+                                            ${{
                                                 formatNumber(product.unit_price) }}</span>
                                         <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg:
                                             ${{
                                                 formatNumber(product.unit_price) }}</span>
                                         <span v-if="product.bulk_unit_price"
-                                            class="text-gray-800 font-bold text-xs">Bulto: ${{
+                                            class="text-gray-800 font-bold text-xs">Bulto:
+                                            ${{
                                                 formatNumber(product.bulk_unit_price) }}</span>
                                     </div>
                                     <div v-if="product.stock == 0" class="flex items-center justify-between mb-2">
                                         <span class="text-red-500 text-xs">Sin stock</span>
                                     </div>
+                                    <div v-if="product.type.id == 1" class="p-2">
+                                        <label class="flex items-center text-sm">
+                                            <input type="radio" v-model="product.catalog_id" value="unit"
+                                                class="mr-1.5 h-3 w-3" />
+                                            x1 Unidad
+                                        </label>
+                                        <label class="flex items-center text-sm">
+                                            <input type="radio" v-model="product.catalog_id" value="bulk"
+                                                class="mr-1.5 h-3 w-3" />
+                                            x{{ product.bulk_unit }} Bulto
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div v-if="product.type.id == 1" class="p-2">
-                                <label class="flex items-center text-sm">
-                                    <input type="radio" v-model="product.catalog_id" value="unit"
-                                        class="mr-1.5 h-3 w-3" />
-                                    x1 Unidad
-                                </label>
-                                <label class="flex items-center text-sm">
-                                    <input type="radio" v-model="product.catalog_id" value="bulk"
-                                        class="mr-1.5 h-3 w-3" />
-                                    x{{ product.bulk_unit }} Bulto
-                                </label>
-                            </div>
-
-                            <div class="p-2 mt-auto">
+                            <div class=" p-2 mt-auto">
                                 <button
                                     @click="addProductToCart(product.id, isNumber(product.catalog_id) ? 'unit' : product.catalog_id)"
                                     :disabled="product.stock == 0"
@@ -173,6 +181,7 @@ const formatNumber = (value) => {
                                     Agregar
                                 </button>
                             </div>
+
                             <SuccessMessage class="fixed bottom-40 left-1/2 transform -translate-x-1/2"
                                 v-if="currentIdMessage == product.id" :message="successMessage" />
                         </div>
