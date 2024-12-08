@@ -3,8 +3,12 @@ import CategoryMenu from '@/components/CategoryMenu.vue';
 import { useAuth } from '@/composables/UserAuth';
 import { useCartStore } from '@/stores/UseCartStore'
 import logo from "@/assets/icon/La_viejita_navidad.png";
+import { useRouter } from 'vue-router';
 import { ref } from "vue";
+import api from '@/app';
+import { BASE_URL } from '@/config';
 
+const router = useRouter();
 const cartStore = useCartStore()
 const { logout, user, fetchUser } = useAuth();
 
@@ -19,19 +23,65 @@ const toggleMenu = () => {
     isOpen.value = !isOpen.value;
 };
 
+const searchQuery = ref("");
+const products = ref([]);
+
+const searchProducts = async () => {
+    if (searchQuery.value.trim() === "") {
+        products.value = [];
+        return;
+    }
+
+    try {
+        const response = await api.get("/api/search", {
+            params: { query: searchQuery.value },
+        });
+        console.log(response.data)
+        products.value = response.data.products;
+    } catch (error) {
+        console.error("Error fetching products:", error);
+    }
+};
+
+const selectProduct = (product) => {
+    router.push({
+        name: 'product-one-index',
+        query: { id: product.id }
+    });
+};
 
 </script>
 
 <template>
     <div>
         <header class=" text-slate-600">
-            <nav class="flex items-center justify-between p-4 px-10 mx-auto">
+            <nav class="flex items-center justify-between p-2 px-10 mx-auto">
                 <div>
-                    <img :src="logo" alt="Logo" class="w-40 h-15" />
+                    <img :src="logo" alt="Logo" class="w-44 h-full" />
                 </div>
 
-                <div v-if="user?.name" class="flex space-x-6 ml-auto">
-                    <router-link class="relative inline-block py-2 px-4 rounded-lg hover:bg-blue-800 hover:text-white" to="/">Inicio</router-link>
+                <!-- search -->
+                <div class="md:mx-20 relative p-4 w-3/5">
+                    <input v-model="searchQuery" @input="searchProducts" type="search" placeholder="Buscar productos..."
+                        class="md:w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" />
+                    <ul v-if="products.length && searchQuery.trim() !== ''"
+                        class="md:w-96 absolute top-full left-0 w-full bg-white border rounded shadow-lg z-50">
+                        <li v-for="product in products" :key="product.id" @click="selectProduct(product)"
+                            class="flex items-center justify-between p-2 hover:bg-gray-100 cursor-pointer">
+                            <img :src="`${BASE_URL}/storage/${product.image_url}`" alt="Imagen del producto"
+                                class="w-10 h-10 object-cover" />
+                            <div class="p-1">
+                                <h2 class="font-bold">{{ product.name }}</h2>
+                                <p class="mt-2 font-semibold text-green-600">$ {{ product.unit_price }}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!--  search end-->
+
+                <div v-if="user?.name" class="flex space-x-4 ml-auto">
+                    <router-link class="relative inline-block py-2 px-4 rounded-lg hover:bg-blue-800 hover:text-white"
+                        to="/">Inicio</router-link>
                     <h1 class="title relative inline-block py-2 px-4 rounded-lg">{{ user?.name }}</h1>
 
                     <router-link to="/carrito"
@@ -48,7 +98,8 @@ const toggleMenu = () => {
                     <!-- /////////////////////////////// -->
                     <div class="relative inline-block text-left">
                         <!-- Icono de perfil -->
-                        <button @click="toggleMenu"  class="relative inline-block py-2 px-4 rounded-lg hover:bg-blue-800 hover:text-white">
+                        <button @click="toggleMenu"
+                            class="relative inline-block py-2 px-4 rounded-lg hover:bg-blue-800 hover:text-white">
                             Menu
                         </button>
 
@@ -57,12 +108,14 @@ const toggleMenu = () => {
                             class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
                             <ul class="py-2">
                                 <li>
-                                    <router-link class="block px-4 py-2 text-gray-700 hover:bg-blue-600 hover:text-white"
+                                    <router-link
+                                        class="block px-4 py-2 text-gray-700 hover:bg-blue-600 hover:text-white"
                                         to="/perfil">Perfil</router-link>
                                 </li>
                                 <li>
                                     <div v-if="user?.role === 'admin' || user?.role === 'super_admin'">
-                                        <router-link class="block px-4 py-2 text-gray-700 hover:bg-blue-600 hover:text-white"
+                                        <router-link
+                                            class="block px-4 py-2 text-gray-700 hover:bg-blue-600 hover:text-white"
                                             to="/menu">Administración</router-link>
                                     </div>
                                 </li>
