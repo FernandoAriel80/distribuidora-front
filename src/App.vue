@@ -1,17 +1,13 @@
 <script setup>
-import Layout from './layout/Layout.vue';
-import { useAuth } from './composables/UserAuth';
-const { user,fetchUser } = useAuth();
+import Footer from './footer/Footer.vue';
 
-if (user.value == null) {
-  fetchUser();
-}
+
 </script>
 
 <template>
-  <div id="app">
-      <Layout :user="user" />
+  <div id="app" class="sm:mx-6">
       <router-view></router-view>
+      <Footer/>
   </div>
 </template>
 

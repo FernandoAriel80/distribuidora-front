@@ -69,6 +69,7 @@ const successMessage = ref(messageAlert);
 const errorMessage = ref('');
 
 import { useRoute } from 'vue-router';
+import Layout from '@/layout/Layout.vue';
 
 const route = useRoute();
 const message = route.query.message;
@@ -79,6 +80,7 @@ if (message) {
 </script>
 
 <template>
+  <Layout/>
   <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
   <SuccessMessage v-if="messageAlert" :message="successMessage" />
   <ErrorMessage v-if="messageAlert" :message="errorMessage" />
@@ -97,7 +99,7 @@ if (message) {
         <div>
           <p class="text-slate-600 mb-2">
             ¿Aún no tienes cuenta?
-            <router-link to="/register" class="text-link text-blue-400">Regístrate</router-link>
+            <router-link to="/registar" class="text-link text-blue-400">Regístrate</router-link>
           </p>
           <FormButton :name="'Iniciar Sesión'" :progress="form.progress" />
         </div>

@@ -12,6 +12,7 @@ import { showMessage,messageAlert } from '@/functions/MessageAlert';
 import CreateProduct from './Create.vue'
 import EditProduct from './Edit.vue'
 import { debounce } from 'lodash';
+import Layout from '@/layout/Layout.vue';
 
 const products = ref([]);
 const search = ref('');
@@ -129,9 +130,10 @@ function deleteProduct(value) {
 </script>
 
 <template>
+    <Layout/>
     <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
     <SuccessMessage v-if="messageAlert" :message="successMessage" />
-    <div class="mr-5 ml-5">
+    <div class="mx-6">
 
         <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Cargar Producto</button>
         <Modal :isOpen="showModalCreate" :closeModal="closeModalCreate">
@@ -153,6 +155,7 @@ function deleteProduct(value) {
         <div v-else>
 
             <h1 class="text-2xl font-bold mb-4">Lista de Empleados</h1>
+            <h4>Se puede buscar por (ID producto, cod. barra, nombre)</h4>
             <SearchInput v-model:searchValue="search" />
             <div v-if="products.length">
                 <div class="overflow-x-auto">
@@ -220,7 +223,7 @@ function deleteProduct(value) {
                                 <td class="px-2 py-3 text-sm text-gray-900">{{ product.catalog_id }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-900">{{ product.barcode }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.name }}</td>
-                                <td class="px-2 py-3 text-sm text-gray-500">{{ product.description }}</td>
+                                <td class="px-2 py-3 text-sm text-gray-500 break-words max-w-28">{{ product.description }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.bulk_unit }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.bulk_unit_price }}</td>
                                 <td class="px-2 py-3 text-sm text-gray-500">{{ product.unit_price }}</td>

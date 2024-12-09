@@ -109,8 +109,9 @@ const submit = async () => {
                         Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
                     }
                 });
-            emit('actionExecuted');
+            console.log(response);
             console.log(response.data);
+            emit('actionExecuted');
         }
     } catch (error) {
         console.error('Error al crear producto:', error);
