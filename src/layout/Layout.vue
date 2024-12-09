@@ -3,6 +3,9 @@ import CategoryMenu from '@/components/CategoryMenu.vue';
 import { useAuth } from '@/composables/UserAuth';
 import { useCartStore } from '@/stores/UseCartStore'
 import logo from "@/assets/icon/La_viejita_navidad.png";
+import logoHome from "@/assets/icon/casa.png";
+import logoCart from "@/assets/icon/carrito.png";
+import logoUser from "@/assets/icon/usuario.png";
 import { useRouter } from 'vue-router';
 import { ref } from "vue";
 import api from '@/app';
@@ -90,16 +93,24 @@ const selectProduct = (product) => {
                 <!--  search end-->
 
                 <div v-if="user?.name" class="flex space-x-4 ml-auto">
-                    <router-link class="relative inline-block py-2 px-4 rounded-lg hover:bg-blue-800 hover:text-white"
-                        to="/">Inicio</router-link>
-                    <h1 class="title relative inline-block py-2 px-4 rounded-lg">{{ user?.name }}</h1>
+                    <router-link class="relative inline-block rounded-lg p-2 hover:bg-blue-800 hover:text-white" to="/">
+                        <div>
+                            <img :src="logoHome" alt="Logo" class="w-10 h-8" />
+                        </div>
+                        Inicio
+                    </router-link>
 
                     <router-link to="/carrito"
-                        class="relative inline-block py-2 px-4 rounded-lg hover:bg-blue-800 hover:text-white">
+                        class="relative inline-block rounded-lg p-2 hover:bg-blue-800 hover:text-white">
                         <div class="flex items-center">
-                            <span>Carrito</span>
+                            <span>
+                                <div>
+                                    <img :src="logoCart" alt="Logo" class="w-10 h-8" />
+                                </div>
+                                Carrito
+                            </span>
                             <span v-if="cartStore.cartQuantity >= 0"
-                                class="absolute top-0 right-0 w-5 h-5 bg-blue-800 text-xs text-white font-bold rounded-full flex items-center justify-center -mt-2 -mr-2">
+                                class="absolute top-0 right-0 w-5 h-5 bg-blue-800  text-xs text-white font-bold rounded-full flex items-center justify-center -mt-0 -mr-0">
                                 {{ cartStore.cartQuantity }}
                             </span>
                         </div>
@@ -109,8 +120,11 @@ const selectProduct = (product) => {
                     <div class="relative inline-block text-left">
                         <!-- Icono de perfil -->
                         <button @click="toggleMenu"
-                            class="relative inline-block py-2 px-4 rounded-lg hover:bg-blue-800 hover:text-white">
-                            Menu
+                            class="relative inline-block rounded-lg p-2 hover:bg-blue-800 hover:text-white">
+                            <div>
+                                <img :src="logoUser" alt="Logo" class="w-10 h-8" />
+                            </div>
+                            {{ user?.name }}
                         </button>
 
                         <!-- Menú desplegable -->

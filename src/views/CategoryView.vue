@@ -83,6 +83,16 @@ const formatNumber = (value) => {
         minimumFractionDigits: 0,
     }).format(value);
 };
+
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const selectProduct = (product) => {
+    router.push({
+        name: 'product-one-index',
+        query: { id: product.id }
+    });
+};
 </script>
 <template>
     <Layout />
@@ -103,9 +113,9 @@ const formatNumber = (value) => {
             <div v-else>
                 <div v-if="products.length > 0">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 max-w-full">
-                        <div v-for="product in products" :key="product.id"
+                        <div v-for="product in products" :key="product.id" @click="selectProduct(product)"
                             class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col justify-between w-full">
-                            <div class="max-w-48 h-100 ">
+                            <div class="w-auto h-100 ">
                                 <div class="relative">
                                     <img :src="`${BASE_URL}/storage/${product.image_url}`" alt="Imagen del producto"
                                         class="w-60 h-60 object-cover rounded-t-lg">
