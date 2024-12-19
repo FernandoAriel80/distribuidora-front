@@ -6,6 +6,9 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  build: {
+    target: 'esnext', // O 'es2022' para navegadores modernos
+  },
   plugins: [
     vue(),
     vueDevTools(),
