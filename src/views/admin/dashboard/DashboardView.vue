@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import api from "@/app";
-import Layout from "@/layout/Layout.vue";
+import Layout from "@/layout/LayoutPc.vue";
 import { TOKEN } from "@/config";
 
 const currentMonth = ref(0);

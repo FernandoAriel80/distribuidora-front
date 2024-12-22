@@ -12,7 +12,7 @@ import { showMessage,messageAlert } from '@/functions/MessageAlert';
 import CreateProduct from './Create.vue'
 import EditProduct from './Edit.vue'
 import { debounce } from 'lodash';
-import Layout from '@/layout/Layout.vue';
+import Layout from '@/layout/LayoutPc.vue';
 
 const products = ref([]);
 const search = ref('');

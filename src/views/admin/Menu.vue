@@ -1,5 +1,5 @@
 <script setup>
-import Layout from '@/layout/Layout.vue';
+import Layout from '@/layout/LayoutPc.vue';
 
 
 </script>

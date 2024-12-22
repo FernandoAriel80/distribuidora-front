@@ -5,7 +5,7 @@ import { TOKEN } from "@/config";
 import SearchInput from '@/components/SearchInput.vue';
 import Pagination from '@/components/Pagination.vue';
 import { debounce } from 'lodash';
-import Layout from "@/layout/Layout.vue";
+import Layout from "@/layout/LayoutPc.vue";
 
 const orders = ref([]);
 const search = ref('');

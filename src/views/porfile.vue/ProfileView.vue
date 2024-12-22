@@ -4,7 +4,7 @@ import DataProfileView from "./components/DataProfileView.vue";
 import UpdateProfileView from "./components/UpdateProfileView.vue";
 import { useCartStore } from '@/stores/UseCartStore'
 import { useAuth } from '@/composables/UserAuth';
-import Layout from "@/layout/Layout.vue";
+import Layout from "@/layout/LayoutPc.vue";
 
 const { user, fetchUser } = useAuth();
 

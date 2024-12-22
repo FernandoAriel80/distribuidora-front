@@ -4,7 +4,7 @@ import api from '@/app';
 import { TOKEN } from '@/config';
 import { useRouter } from "vue-router";
 import { useCartStore } from '@/stores/UseCartStore'
-import Layout from '@/layout/Layout.vue';
+import Layout from '@/layout/LayoutPc.vue';
 
 
 const urlParams = new URLSearchParams(window.location.search);

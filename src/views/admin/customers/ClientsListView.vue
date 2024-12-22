@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import api from "@/app";
-import Layout from "@/layout/Layout.vue";
+import Layout from "@/layout/LayoutPc.vue";
 import SearchInput from '@/components/SearchInput.vue';
 import Pagination from '@/components/Pagination.vue';
 import { debounce } from 'lodash';

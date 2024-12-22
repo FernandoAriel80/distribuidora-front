@@ -8,7 +8,7 @@ import SuccessMessage from '@/components/SuccessMessage.vue';
 import { showMessage, messageAlert } from '@/functions/MessageAlert';
 import { useCartStore } from '@/stores/UseCartStore'
 import { debounce } from 'lodash'
-import Layout from '@/layout/Layout.vue';
+import Layout from '@/layout/LayoutPc.vue';
 
 const cartStore = useCartStore();
 const products = ref([]);
@@ -56,15 +56,31 @@ onMounted(() => {
     cartStore.fetchCartItems()
 })
 
+
+import { useRouter } from 'vue-router';
+import { useAuth } from '@/composables/UserAuth';
+
+const router = useRouter();
+const selectProduct = (product) => {
+    router.push({
+        name: 'product-one-index',
+        query: { id: product.id }
+    });
+};
+
 const currentIdMessage = ref();
-
+const currentUser = useAuth(); 
 const addProductToCart = debounce(async (productId, typePrice) => {
-    await cartStore.addToCart(productId, typePrice);
-    cartStore.fetchCartItems();
-    currentIdMessage.value = productId;
-    addCartMessage();
+    if (currentUser.user.value) {
+        await cartStore.addToCart(productId, typePrice);
+        cartStore.fetchCartItems();
+        currentIdMessage.value = productId;
+        addCartMessage();      
+    }else{
+        window.location.href= '/inicia-sesion'
+    }
+   
 }, 300)
-
 ///// message
 const successMessage = ref(messageAlert);
 
@@ -84,15 +100,6 @@ const formatNumber = (value) => {
     }).format(value);
 };
 
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-const selectProduct = (product) => {
-    router.push({
-        name: 'product-one-index',
-        query: { id: product.id }
-    });
-};
 </script>
 <template>
     <Layout />
@@ -113,9 +120,9 @@ const selectProduct = (product) => {
             <div v-else>
                 <div v-if="products.length > 0">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 max-w-full">
-                        <div v-for="product in products" :key="product.id" @click="selectProduct(product)"
+                        <div v-for="product in products" :key="product.id" 
                             class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col justify-between w-full">
-                            <div class="w-auto h-100 ">
+                            <div class="w-auto h-100 " @click="selectProduct(product)">
                                 <div class="relative">
                                     <img :src="`${BASE_URL}/storage/${product.image_url}`" alt="Imagen del producto"
                                         class="w-60 h-60 object-cover rounded-t-lg">

@@ -69,7 +69,7 @@ const successMessage = ref(messageAlert);
 const errorMessage = ref('');
 
 import { useRoute } from 'vue-router';
-import Layout from '@/layout/Layout.vue';
+import Layout from '@/layout/LayoutPc.vue';
 
 const route = useRoute();
 const message = route.query.message;

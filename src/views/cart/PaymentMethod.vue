@@ -3,7 +3,7 @@ import MercadoPagoButton from './components/MercadoPagoButton.vue';
 import OtherButton from './components/OtherButton.vue';
 import { onMounted } from 'vue'
 import { useCartStore } from '@/stores/UseCartStore'
-import Layout from '@/layout/Layout.vue';
+import Layout from '@/layout/LayoutPc.vue';
 
 const cartStore = useCartStore()
 

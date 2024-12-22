@@ -5,7 +5,7 @@ import TextInput from '@/components/TextInput.vue';
 import FormButton from '@/components/FormButton.vue';
 import { useRouter } from 'vue-router';
 import { validateForm, validateRegister } from '@/functions/ValidateForm';
-import Layout from '@/layout/Layout.vue';
+import Layout from '@/layout/LayoutPc.vue';
 
 const form = ref({
   name: '',

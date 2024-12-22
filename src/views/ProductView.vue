@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from "vue";
 import api from "@/app";
 import { useRoute } from 'vue-router';
-import Layout from "@/layout/Layout.vue";
+import Layout from "@/layout/LayoutPc.vue";
 import { BASE_URL } from "@/config";
 import { useCartStore } from '@/stores/UseCartStore'
 import SuccessMessage from '@/components/SuccessMessage.vue';

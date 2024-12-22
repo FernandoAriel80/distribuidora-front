@@ -10,7 +10,7 @@ import SuccessMessage from '@/components/SuccessMessage.vue';
 import { showMessage, messageAlert } from '@/functions/MessageAlert';
 import { debounce } from 'lodash'
 import router from '@/router';
-import Layout from '@/layout/Layout.vue';
+import Layout from '@/layout/LayoutPc.vue';
 
 const cartStore = useCartStore()
 const currentUser = useAuth()
