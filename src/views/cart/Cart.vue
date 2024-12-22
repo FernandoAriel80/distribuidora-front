@@ -3,6 +3,7 @@ import { onMounted, ref, computed } from 'vue'
 import { BASE_URL } from '@/config';
 import api from '@/app';
 import { useCartStore } from '@/stores/UseCartStore'
+import { useAuth } from '@/composables/UserAuth';
 import Modal from '@/components/Modal.vue';
 import Createaddress from '@/views/Auth/Address.vue'
 import SuccessMessage from '@/components/SuccessMessage.vue';
@@ -12,6 +13,7 @@ import router from '@/router';
 import Layout from '@/layout/Layout.vue';
 
 const cartStore = useCartStore()
+const currentUser = useAuth()
 
 onMounted(() => {
   cartStore.fetchCartItems()
@@ -136,7 +138,7 @@ const handleCreated = () => {
       <div class="mt-6 text-right">
         <h3 class="text-xl font-bold">Total: ${{ formatNumber(cartStore.cartTotal) }}</h3>
       </div>
-      <button v-if="user?.role != 'admin'" @click="hasAddress" :disabled="isOutOfStock"
+      <button v-if="currentUser.user.value?.role != 'admin'" @click="hasAddress" :disabled="isOutOfStock"
         class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400">
         Finalizar Compra
       </button>

@@ -16,12 +16,6 @@ import Layout from '@/layout/Layout.vue';
         </router-link>
       </li>
       <li>
-        <router-link to="/vista-empleados"
-          class="block px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transition duration-200">
-          Crea Empleado
-        </router-link>
-      </li>
-      <li>
         <router-link to="/vista-clientes"
           class="block px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transition duration-200">
           Clientes
@@ -31,6 +25,12 @@ import Layout from '@/layout/Layout.vue';
         <router-link to="/vista-pedidos"
           class="block px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transition duration-200">
           Pedidos
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/vista-empleados"
+          class="block px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transition duration-200">
+          Crea Empleado
         </router-link>
       </li>
       <li>

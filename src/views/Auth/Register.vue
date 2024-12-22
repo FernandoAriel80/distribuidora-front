@@ -83,7 +83,7 @@ const submit = async () => {
         <div>
           <p class="text-slate-600 mb-2">
             ¿Ya tienes cuenta?
-            <router-link to="/login" class="text-link text-blue-400">Iniciar Sesión</router-link>
+            <router-link to="/inicia-sesion" class="text-link text-blue-400">Iniciar Sesión</router-link>
           </p>
           <FormButton :name="'Registrarse'" :progress="form.progress" />
         </div>
