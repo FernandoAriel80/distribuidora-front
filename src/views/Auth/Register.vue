@@ -5,7 +5,8 @@ import TextInput from '@/components/TextInput.vue';
 import FormButton from '@/components/FormButton.vue';
 import { useRouter } from 'vue-router';
 import { validateForm, validateRegister } from '@/functions/ValidateForm';
-import Layout from '@/layout/LayoutPc.vue';
+import LayoutPc from '@/layout/LayoutPc.vue';
+import LayoutMovile from '@/layout/LayoutMovile.vue';
 
 const form = ref({
   name: '',
@@ -67,7 +68,14 @@ const submit = async () => {
 </script>
 
 <template>
-  <Layout/>
+  <div class="hidden sm:block">
+    <!-- Layout para PC -->
+    <LayoutPc />
+  </div>
+  <div class="sm:hidden">
+    <!-- Layout para móviles -->
+    <LayoutMovile />
+  </div>
   <div class="min-h-screen flex items-center justify-center">
     <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md w-full">
       <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Registrarse</label>

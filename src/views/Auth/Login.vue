@@ -10,6 +10,9 @@ import { validateForm, validateLogin } from '@/functions/ValidateForm';
 import { showMessage, messageAlert } from '@/functions/MessageAlert';
 import { useRouter } from 'vue-router';
 import { useAuth } from '@/composables/UserAuth';
+import LayoutPc from '@/layout/LayoutPc.vue';
+import LayoutMovile from '@/layout/LayoutMovile.vue';
+import { useRoute } from 'vue-router';
 
 const form = ref({
   email: '',
@@ -68,9 +71,6 @@ const submit = async () => {
 const successMessage = ref(messageAlert);
 const errorMessage = ref('');
 
-import { useRoute } from 'vue-router';
-import Layout from '@/layout/LayoutPc.vue';
-
 const route = useRoute();
 const message = route.query.message;
 
@@ -80,7 +80,14 @@ if (message) {
 </script>
 
 <template>
-  <Layout/>
+   <div class="hidden sm:block">
+    <!-- Layout para PC -->
+    <LayoutPc />
+  </div>
+  <div class="sm:hidden">
+    <!-- Layout para móviles -->
+    <LayoutMovile />
+  </div>
   <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
   <SuccessMessage v-if="messageAlert" :message="successMessage" />
   <ErrorMessage v-if="messageAlert" :message="errorMessage" />
