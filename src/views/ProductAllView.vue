@@ -108,13 +108,14 @@ const formatNumber = (value) => {
   <div class="mx-10 sm:mx-10 p-4">
     <h1 class="text-2xl font-bold mb-4 text-gray-800">Productos Disponibles</h1>
     <section class="md:col-span-3">
-      <div>
-        <SearchInput v-model:searchValue="search" />
+      <div class="sm:block md:flex justify-between ">
+        <SearchInput class="sm:hidden" v-model:searchValue="search" />
         <select v-model="sort" class="border p-2 mb-4 rounded">
           <option value="rel">Relevante</option>
           <option value="lPrice">Precio: Más barato</option>
           <option value="hPrice">Precio: Más caro</option>
         </select>
+        <SearchInput class="hidden sm:block" v-model:searchValue="search" />
       </div>
       <div v-if="loading">
         <h1>CARGANDO CONTENIDO......</h1>

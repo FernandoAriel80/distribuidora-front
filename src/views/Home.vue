@@ -41,13 +41,14 @@ const navidad = "navidad";
     </div>
 
     <h4 class="text-slate-600 text-2xl w-full sans-serif">Productos en Oferta</h4>
-    <ProductAllRow />
+    <ProductAllRow :filter="5"   class="hidden sm:block"/>
+    <ProductAllRow :filter="2"   class="sm:hidden"/>
     <div>
       <img :src="banner2" alt="Banner" class="w-full h-64" />
     </div>
     <h4 class="text-slate-600 text-2xl w-full sans-serif">Bebidas</h4>
-    <ProductRow :category="10" />
-
+    <ProductRow :category="10" :filter="5" class="hidden sm:block"/>
+    <ProductRow :category="10" :filter="2" class="sm:hidden"/>
     <div class="relative bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
       <div class="absolute inset-0">
         <img
@@ -65,6 +66,7 @@ const navidad = "navidad";
     </div>
 
     <h4 class="text-slate-600 text-2xl w-full sans-serif">Fideos y Pastas</h4>
-    <ProductRow :category="8" />
+    <ProductRow :category="8" :filter="5" class="hidden sm:block"/>
+    <ProductRow :category="8" :filter="2" class="sm:hidden"/>
   </div>
 </template>

@@ -91,7 +91,9 @@ const handleCreated = () => {
     <LayoutMovile />
   </div>
   <SuccessMessage v-if="messageAlert" :message="successMessage" />
-  <div class="container mx-auto p-6 max-w-4xl">
+  <div
+    class="container mx-auto md:p-6 md:max-w-4xl md:items-center flex flex-col items-center"
+  >
     <h1 class="text-2xl font-bold mb-4 text-center">Mi Carrito de Compras</h1>
 
     <div v-if="cartStore.cartItems == ''" class="text-center py-8">
@@ -102,56 +104,67 @@ const handleCreated = () => {
       <div
         v-for="item in cartStore.cartItems"
         :key="item.id"
-        class="flex items-center border-b py-4 space-x-4"
+        class="md:flex items-center border-b md:py-4 space-x-4"
       >
-        <img
-          :src="`${BASE_URL}/storage/${item.product.image_url}`"
-          alt="Product Image"
-          class="w-16 h-16 object-cover rounded"
-        />
-        <div v-if="item.product.stock == 1" class="flex-1">
-          <h3 class="text-lg font-semibold">{{ item.product.name }}</h3>
-          <p v-if="item.product.type_id == 1" class="text-gray-500">
-            Precio: ${{
-              item.type_price == "unit"
-                ? formatNumber(item.product.unit_price)
-                : formatNumber(item.product.bulk_unit_price)
-            }}
-          </p>
-          <p v-if="item.product.type_id == 2" class="text-gray-500">
-            Precio: ${{ formatNumber(item.product.unit_price) }}
-          </p>
-          <p class="text-gray-500">Subtotal: ${{ formatNumber(item.total) }}</p>
-          <p v-if="item.product.type_id == 1" class="text-gray-500">
-            Tipo de precio:
-            {{
-              item.type_price == "unit" ? "unico x1" : "bulto x" + item.product.bulk_unit
-            }}
-          </p>
+        <div class="flex">
+          <div class="flex items-center">
+            <img
+              :src="`${BASE_URL}/storage/${item.product.image_url}`"
+              alt="Product Image"
+              class="w-16 h-16 object-cover rounded"
+            />
+          </div>
+          <div>
+            <div v-if="item.product.stock == 1" class="flex-1 m-4">
+              <h3 class="text-lg font-semibold">{{ item.product.name }}</h3>
+              <p v-if="item.product.type_id == 1" class="text-gray-500">
+                Precio: ${{
+                  item.type_price == "unit"
+                    ? formatNumber(item.product.unit_price)
+                    : formatNumber(item.product.bulk_unit_price)
+                }}
+              </p>
+              <p v-if="item.product.type_id == 2" class="text-gray-500">
+                Precio: ${{ formatNumber(item.product.unit_price) }}
+              </p>
+              <p class="text-gray-500">Subtotal: ${{ formatNumber(item.total) }}</p>
+              <p v-if="item.product.type_id == 1" class="text-gray-500">
+                Tipo de precio:
+                {{
+                  item.type_price == "unit"
+                    ? "unico x1"
+                    : "bulto x" + item.product.bulk_unit
+                }}
+              </p>
+            </div>
+            <div v-else class="flex-1">
+              <h3 class="text-lg font-semibold line-through">{{ item.product.name }}</h3>
+              <p v-if="item.product.type_id == 1" class="text-gray-500 line-through">
+                Precio: ${{
+                  item.type_price == "unit"
+                    ? formatNumber(item.product.unit_price)
+                    : formatNumber(item.product.bulk_unit_price)
+                }}
+              </p>
+              <p v-if="item.product.type_id == 2" class="text-gray-500 line-through">
+                Precio: ${{ formatNumber(item.product.unit_price) }}
+              </p>
+              <p class="text-gray-500 line-through">
+                Subtotal: ${{ formatNumber(item.total) }}
+              </p>
+              <p v-if="item.product.type_id == 1" class="text-gray-500 line-through">
+                Tipo de precio:
+                {{
+                  item.type_price == "unit"
+                    ? "unico x1"
+                    : "bulto x" + item.product.bulk_unit
+                }}
+              </p>
+            </div>
+          </div>
         </div>
-        <div v-else class="flex-1">
-          <h3 class="text-lg font-semibold line-through">{{ item.product.name }}</h3>
-          <p v-if="item.product.type_id == 1" class="text-gray-500 line-through">
-            Precio: ${{
-              item.type_price == "unit"
-                ? formatNumber(item.product.unit_price)
-                : formatNumber(item.product.bulk_unit_price)
-            }}
-          </p>
-          <p v-if="item.product.type_id == 2" class="text-gray-500 line-through">
-            Precio: ${{ formatNumber(item.product.unit_price) }}
-          </p>
-          <p class="text-gray-500 line-through">
-            Subtotal: ${{ formatNumber(item.total) }}
-          </p>
-          <p v-if="item.product.type_id == 1" class="text-gray-500 line-through">
-            Tipo de precio:
-            {{
-              item.type_price == "unit" ? "unico x1" : "bulto x" + item.product.bulk_unit
-            }}
-          </p>
-        </div>
-        <div v-if="item.product.stock == 1" class="flex items-center space-x-2">
+
+        <div v-if="item.product.stock == 1" class="flex justify-center space-x-2">
           <button
             @click="decreaseQuantity(item, item.quantity, item.type_price)"
             :disabled="item.quantity <= 1 || isUpdating"
@@ -174,13 +187,13 @@ const handleCreated = () => {
 
         <button
           @click="cartStore.removeItem(item), deleteItemMessage()"
-          class="text-red-500 ml-4"
+          class="text-red-500 ml-4 md:my-3 mt-6"
         >
           Eliminar
         </button>
       </div>
 
-      <div class="mt-6 text-right">
+      <div class="mt-6 md:text-right">
         <h3 class="text-xl font-bold">Total: ${{ formatNumber(cartStore.cartTotal) }}</h3>
       </div>
       <button

@@ -36,8 +36,8 @@ const setView = (view) => {
     <!-- Layout para móviles -->
     <LayoutMovile />
   </div>
-  <div class="flex max-w-8xl mx-auto p-6 space-x-4">
-    <div class="flex flex-col space-y-4 w-1/4">
+  <div class="md:flex max-w-8xl mx-auto p-6 space-x-4">
+    <div class="flex md:flex-col md:space-y-4 md:w-1/4">
       <button
         @click="setView('dataProfile')"
         :class="[

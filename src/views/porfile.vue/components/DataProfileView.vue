@@ -51,16 +51,16 @@ const formatNumber = (value) => {
 </script>
 
 <template>
-    <div class="max-w-4xl mx-auto p-6 space-y-8">
+    <div class="max-w-4xl mx-auto md:p-6 space-y-8">
         <h1 class="text-2xl font-bold mb-4">PERFIL</h1>
-        <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="bg-white shadow-md rounded-lg md:p-6 p-3">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Detalles de Usuario</h2>
             <p><span class="font-medium">Nombre:</span> {{ user?.name }}</p>
             <p><span class="font-medium">Apellido:</span> {{ user?.last_name }}</p>
             <p><span class="font-medium">Mail:</span> {{ user?.email }}</p>
         </div>
 
-        <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="bg-white shadow-md rounded-lg md:p-6 p-3">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Dirección</h2>
             <p><span class="font-medium">DNI:</span> {{ address?.dni }}</p>
             <p><span class="font-medium">Numero Telefono:</span> {{ address?.phone_number }}</p>
@@ -73,7 +73,7 @@ const formatNumber = (value) => {
 
         <div class="bg-white shadow-md rounded-lg p-4">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Mis Pedidos</h2>
-            <div v-if="orders.length" class="overflow-x-auto">
+            <div v-if="orders.length" class="overflow-x-auto ">
                 <table class="table-auto w-full border-collapse border border-gray-200">
                     <thead>
                         <tr class="bg-gray-100">
@@ -128,7 +128,7 @@ const formatNumber = (value) => {
             </div>
             <!-- Modal para mostrar productos -->
             <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                <div class="bg-white p-6 rounded-lg w-1/2">
+                <div class="bg-white md:p-6 p-2 rounded-lg md:w-1/2">
                     <h2 class="text-xl font-bold mb-4">Productos</h2>
                     <ul>
                         <li v-for="item in currenlyProducts" :key="item.id" class="border-b py-2">

@@ -91,7 +91,7 @@ if (message) {
   <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
   <SuccessMessage v-if="messageAlert" :message="successMessage" />
   <ErrorMessage v-if="messageAlert" :message="errorMessage" />
-  <div class="min-h-screen flex items-center justify-center">
+  <div class=" flex m-5 md:m-20 items-start justify-center">
     <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md w-full">
       <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Iniciar Sesión</label>
       <div class="mb-6">

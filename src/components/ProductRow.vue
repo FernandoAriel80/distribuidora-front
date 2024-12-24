@@ -11,6 +11,10 @@ const props = defineProps({
     category: {
         type: Number,
         required: true,
+    },
+    filter: {
+        type: Number,
+        required: true,
     }
 });
 
@@ -21,7 +25,7 @@ const pagination = ref({
     last_page: 1,
 });
 
-const perPage = 5;
+const perPage = props.filter;
 const loading = ref(true)
 const fetchProducts = async () => {
 
@@ -121,7 +125,7 @@ const formatNumber = (value) => {
                 <h1>CARGANDO CONTENIDO......</h1>
             </div>
             <div v-else v-for="product in products" :key="product.id" class="p-2 m-1 bg-white rounded-2xl">
-                <div class="max-w-52 h-100 mx-6" @click="selectProduct(product)">
+                <div class="max-w-52 h-100 "  @click="selectProduct(product)">
                     <div class="relative">
                         <img :src="`${BASE_URL}/storage/${product.image_url}`" alt="Imagen del producto"
                             class="w-60 h-60 object-cover rounded-t-lg">

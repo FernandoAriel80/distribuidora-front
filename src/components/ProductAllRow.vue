@@ -21,7 +21,7 @@ const pagination = ref({
     last_page: 1,
 });
 
-const perPage = 5;
+const perPage = props.filter;
 const loading = ref(true)
 const fetchProducts = async () => {
 

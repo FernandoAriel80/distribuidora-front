@@ -23,7 +23,7 @@ onMounted(() => {
     <LayoutMovile />
   </div>
   <div class="flex justify-center items-center min-h-screen bg-gray-100">
-    <div class="bg-white rounded-lg shadow-lg p-8 flex w-2/3 max-w-4xl">
+    <div class="bg-white rounded-lg shadow-lg p-8 md:flex md:w-2/3 max-w-4xl">
       <div class="flex-1 pr-6">
         <h2 class="text-2xl font-semibold text-gray-800 mb-4">Métodos de Pago</h2>
         <p class="text-gray-600">
