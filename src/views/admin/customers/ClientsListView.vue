@@ -1,19 +1,21 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import api from "@/app";
-import Layout from "@/layout/Layout.vue";
-import SearchInput from '@/components/SearchInput.vue';
-import Pagination from '@/components/Pagination.vue';
-import { debounce } from 'lodash';
+import SearchInput from "@/components/SearchInput.vue";
+import Pagination from "@/components/Pagination.vue";
+import { debounce } from "lodash";
 import { TOKEN } from "@/config";
+import LayoutPc from "@/layout/LayoutPc.vue";
+import LayoutMovile from "@/layout/LayoutMovile.vue";
 
 const clients = ref([]);
-const search = ref('');
+const search = ref("");
 const pagination = ref(null);
 
-const fetchPage = async (url ="/api/admin/customers") => {
+const fetchPage = async (url = "/api/admin/customers") => {
   try {
-    const response = await api.get(url,
+    const response = await api.get(
+      url,
       {
         params: {
           search: search.value,
@@ -21,10 +23,11 @@ const fetchPage = async (url ="/api/admin/customers") => {
       },
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem(TOKEN)}`
+          Authorization: `Bearer ${localStorage.getItem(TOKEN)}`,
         },
-      });
-    console.log(response.data)
+      }
+    );
+    console.log(response.data);
     clients.value = response.data.clients.data;
     pagination.value = {
       current_page: response.data.clients.current_page,
@@ -47,11 +50,17 @@ watch([search], () => {
 const searchDebounced = debounce(() => {
   fetchPage();
 }, 300);
-
 </script>
 
 <template>
-  <Layout/>
+  <div class="hidden sm:block">
+    <!-- Layout para PC -->
+    <LayoutPc />
+  </div>
+  <div class="sm:hidden">
+    <!-- Layout para móviles -->
+    <LayoutMovile />
+  </div>
   <div class="max-w-6xl mx-auto p-6">
     <h1 class="text-2xl font-bold mb-6">Clientes</h1>
     <h4>Se puede buscar por (nombre, apellido, dni)</h4>

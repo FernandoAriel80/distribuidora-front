@@ -5,7 +5,8 @@ import TextInput from '@/components/TextInput.vue';
 import FormButton from '@/components/FormButton.vue';
 import { useRouter } from 'vue-router';
 import { validateForm, validateRegister } from '@/functions/ValidateForm';
-import Layout from '@/layout/Layout.vue';
+import LayoutPc from '@/layout/LayoutPc.vue';
+import LayoutMovile from '@/layout/LayoutMovile.vue';
 
 const form = ref({
   name: '',
@@ -67,8 +68,15 @@ const submit = async () => {
 </script>
 
 <template>
-  <Layout/>
-  <div class="min-h-screen flex items-center justify-center">
+  <div class="hidden sm:block">
+    <!-- Layout para PC -->
+    <LayoutPc />
+  </div>
+  <div class="sm:hidden">
+    <!-- Layout para móviles -->
+    <LayoutMovile />
+  </div>
+  <div class=" flex items-center justify-center md:m-20 m-5">
     <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md w-full">
       <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Registrarse</label>
 
@@ -83,7 +91,7 @@ const submit = async () => {
         <div>
           <p class="text-slate-600 mb-2">
             ¿Ya tienes cuenta?
-            <router-link to="/login" class="text-link text-blue-400">Iniciar Sesión</router-link>
+            <router-link to="/inicia-sesion" class="text-link text-blue-400">Iniciar Sesión</router-link>
           </p>
           <FormButton :name="'Registrarse'" :progress="form.progress" />
         </div>

@@ -10,6 +10,9 @@ import { validateForm, validateLogin } from '@/functions/ValidateForm';
 import { showMessage, messageAlert } from '@/functions/MessageAlert';
 import { useRouter } from 'vue-router';
 import { useAuth } from '@/composables/UserAuth';
+import LayoutPc from '@/layout/LayoutPc.vue';
+import LayoutMovile from '@/layout/LayoutMovile.vue';
+import { useRoute } from 'vue-router';
 
 const form = ref({
   email: '',
@@ -68,9 +71,6 @@ const submit = async () => {
 const successMessage = ref(messageAlert);
 const errorMessage = ref('');
 
-import { useRoute } from 'vue-router';
-import Layout from '@/layout/Layout.vue';
-
 const route = useRoute();
 const message = route.query.message;
 
@@ -80,11 +80,18 @@ if (message) {
 </script>
 
 <template>
-  <Layout/>
+   <div class="hidden sm:block">
+    <!-- Layout para PC -->
+    <LayoutPc />
+  </div>
+  <div class="sm:hidden">
+    <!-- Layout para móviles -->
+    <LayoutMovile />
+  </div>
   <!-- Mensaje de éxito, visible solo si successMessage tiene valor -->
   <SuccessMessage v-if="messageAlert" :message="successMessage" />
   <ErrorMessage v-if="messageAlert" :message="errorMessage" />
-  <div class="min-h-screen flex items-center justify-center">
+  <div class=" flex m-5 md:m-20 items-start justify-center">
     <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md w-full">
       <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Iniciar Sesión</label>
       <div class="mb-6">

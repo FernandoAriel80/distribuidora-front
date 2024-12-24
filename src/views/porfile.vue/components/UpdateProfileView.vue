@@ -156,8 +156,8 @@ const closeModalAlert = () => {
     <ModalAsk :isOpen="showAlert" :closeNo="closeModalAlert" :closeYes="deleteAccount"
         message="¿Está seguro de eliminar tu cuenta? No se puede recuperar." />
     <SuccessMessage v-if="messageAlert" :message="successMessage" />
-    <div class="max-w-4xl mx-auto p-6 space-y-8">
-        <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="max-w-4xl mx-auto md:p-6 space-y-8">
+        <div class="bg-white shadow-md rounded-lg md:p-6 p-3">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Actualizar información</h2>
             <form @submit.prevent="updateInfo">
                 <div class="space-y-4">
@@ -177,7 +177,7 @@ const closeModalAlert = () => {
                 </div>
             </form>
         </div>
-        <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="bg-white shadow-md rounded-lg md:p-6 p-3">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Actualizar Clave</h2>
             <form @submit.prevent="updatePassword">
                 <div class="space-y-4">
@@ -200,7 +200,7 @@ const closeModalAlert = () => {
         </div>
 
         <!-- Update Address -->
-        <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="bg-white shadow-md rounded-lg md:p-6 p-3">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Actualizar Dirección </h2>
             <form @submit.prevent="updateAddress">
                 <div class="space-y-4">
@@ -244,9 +244,9 @@ const closeModalAlert = () => {
         </div>
 
         <!-- Delete Account -->
-        <div class="bg-white shadow-md rounded-lg p-6 flex items-center justify-between">
+        <div class="bg-white shadow-md rounded-lg md:p-6 p-2 flex items-center justify-between">
             <span class="text-red-500 font-semibold">Eliminar tu cuenta es irreversible.</span>
-            <button @click="openModalAlert" class="bg-red-500 text-white px-4 py-2 rounded">Eliminar Cuenta</button>
+            <button @click="openModalAlert" class="bg-red-500 text-white md:px-4 ms:py-2 rounded">Eliminar Cuenta</button>
         </div>
     </div>
 </template>

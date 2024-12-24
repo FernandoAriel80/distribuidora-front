@@ -15,7 +15,7 @@ watch(search, (newValue) => {
 </script>
 
 <template>
-  <div class="flex justify-end mb-4">
+  <div class="flex justify-start mb-4">
     <div class="w-1/8">
       <input
         type="search"
